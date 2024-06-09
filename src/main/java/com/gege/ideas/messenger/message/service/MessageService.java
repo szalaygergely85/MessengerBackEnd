@@ -51,10 +51,15 @@ public class MessageService {
                messageRepository.findTopByConversationIdOrderByTimestampDesc(
                   conversationIds.get(i)
                );
-
-            messageBoard.add(
-               new MessageBoard(conversationIds.get(i), message, participants)
-            );
+            if (message != null) {
+               messageBoard.add(
+                  new MessageBoard(
+                     conversationIds.get(i),
+                     message,
+                     participants
+                  )
+               );
+            }
          }
          return messageBoard;
       }

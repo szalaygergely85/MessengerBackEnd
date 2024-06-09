@@ -78,4 +78,6 @@ public class UserToken {
    }
 
    public UserToken() {}
+
+   public void setTokenId(long l) {}
 }

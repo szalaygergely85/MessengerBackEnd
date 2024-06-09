@@ -15,7 +15,7 @@ public class UserService {
    private final UserTokenService userTokenService;
 
    @Autowired
-   UserService(
+   public UserService(
       UserRepository userRepository,
       UserTokenService userTokenService
    ) {

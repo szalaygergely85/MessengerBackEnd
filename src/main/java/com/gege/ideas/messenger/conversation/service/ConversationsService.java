@@ -92,7 +92,10 @@ public class ConversationsService {
             conversationParticipantsService.getParticipantIds(conversationId);
          if (participants.size() == participantIds.size()) {
             for (User participant : participants) {
-               if (participantIds.contains(participant.getUserId()) && !participant.equals(participants.getFirst())) {
+               if (
+                  participantIds.contains(participant.getUserId()) &&
+                  !participant.equals(participants.getFirst())
+               ) {
                   return conversationId;
                }
             }
