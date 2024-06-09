@@ -22,6 +22,9 @@ public class Message {
    @Column
    private String content;
 
+   @Column
+   private boolean isRead;
+
    public Long getMessageId() {
       return messageId;
    }
@@ -60,5 +63,13 @@ public class Message {
 
    public void setContent(String content) {
       this.content = content;
+   }
+
+   public boolean isRead() {
+      return isRead;
+   }
+
+   public void setRead(boolean read) {
+      isRead = read;
    }
 }

@@ -62,6 +62,7 @@ public class MessageService {
    }
 
    public Message createMessage(Message message) {
+      message.setRead(false);
       return messageRepository.save(message);
    }
 
