@@ -1,0 +1,64 @@
+package com.gege.ideas.messenger.message.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "message")
+public class Message {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long messageId;
+
+   @Column(nullable = false)
+   private long conversationId;
+
+   @Column(nullable = false)
+   private long senderId;
+
+   @Column(nullable = false)
+   private long timestamp;
+
+   @Column
+   private String content;
+
+   public Long getMessageId() {
+      return messageId;
+   }
+
+   public void setMessageId(Long messageId) {
+      this.messageId = messageId;
+   }
+
+   public long getConversationId() {
+      return conversationId;
+   }
+
+   public void setConversationId(long conversationId) {
+      this.conversationId = conversationId;
+   }
+
+   public long getSenderId() {
+      return senderId;
+   }
+
+   public void setSenderId(long senderId) {
+      this.senderId = senderId;
+   }
+
+   public long getTimestamp() {
+      return timestamp;
+   }
+
+   public void setTimestamp(long timestamp) {
+      this.timestamp = timestamp;
+   }
+
+   public String getContent() {
+      return content;
+   }
+
+   public void setContent(String content) {
+      this.content = content;
+   }
+}
