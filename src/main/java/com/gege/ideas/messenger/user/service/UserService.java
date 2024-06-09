@@ -32,7 +32,7 @@ public class UserService {
       return null;
    }
 
-   public User addUser(User user) {
+   public UserToken addUser(User user) {
       UserToken userToken = userTokenService.createUserToken();
       user.setUserTokenId(userToken.getUserTokenId());
       User savedUser = userRepository.save(user);
@@ -40,7 +40,7 @@ public class UserService {
          userToken,
          savedUser.getUserId()
       );
-      return savedUser;
+      return userToken;
    }
 
    public User getUser(Long id) {
