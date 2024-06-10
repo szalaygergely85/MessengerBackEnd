@@ -36,6 +36,9 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
+    - name: Format Source
+      run: ./gradlew :spotlessApply
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
