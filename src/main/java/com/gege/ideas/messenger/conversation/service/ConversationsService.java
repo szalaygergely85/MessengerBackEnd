@@ -80,7 +80,7 @@ public class ConversationsService {
    }
 
    private Long _getExistingConversationId(List<User> participants) {
-      User user = participants.getFirst();
+      User user = participants.get(0);
 
       List<Long> conversationIds =
          conversationParticipantsService.getConversationIdsByUserId(
@@ -94,7 +94,7 @@ public class ConversationsService {
             for (User participant : participants) {
                if (
                   participantIds.contains(participant.getUserId()) &&
-                  !participant.equals(participants.getFirst())
+                  !participant.equals(participants.get(0))
                ) {
                   return conversationId;
                }
