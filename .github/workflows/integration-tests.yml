@@ -3,7 +3,7 @@ name: Run Integration Tests
 on:
   pull_request:
     branches:
-      - main  # Replace with your target branch if different
+      - master  # Replace with your target branch if different
 
 jobs:
   integration-tests:
