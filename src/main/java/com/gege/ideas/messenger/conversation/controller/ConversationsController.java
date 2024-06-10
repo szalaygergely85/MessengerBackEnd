@@ -18,12 +18,6 @@ public class ConversationsController {
       this.conversationsService = conversationsService;
    }
 
-   @Deprecated
-   @GetMapping("/id/{id}")
-   public HashMap getConversation(@PathVariable Long id) {
-      return conversationsService.getConversation(id);
-   }
-
    @PostMapping
    public Long addConversation(@RequestBody List<User> participants) {
       return conversationsService.addConversation(participants);

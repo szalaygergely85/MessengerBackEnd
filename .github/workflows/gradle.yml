@@ -17,6 +17,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container: ubuntu
+    services:
+        mydb:
+          image: mysql:5.7
+          env:
+            MYSQL_ROOT_PASSWORD: password
+          options: --health-cmd="mysqladmin ping" --health-interval=10s
     permissions:
       contents: read
 
@@ -35,6 +42,12 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
+
+    - name: Verify MySQL connection from container
+      run: |
+            apt-get update
+            apt-get install -y mysql-client
+            mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
 
     - name: Format Source
       run: ./gradlew :spotlessApply
