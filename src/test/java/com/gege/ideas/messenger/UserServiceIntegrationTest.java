@@ -18,8 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional
 @ExtendWith(MockitoExtension.class)
 public class UserServiceIntegrationTest {
 
@@ -85,4 +87,30 @@ public class UserServiceIntegrationTest {
 
       assertEquals(null, userToken);
    }
+/*
+   @Test
+   public void testAddUser() {
+
+      User testUser = new User(
+              "Doe",
+              "John",
+              "john.doe@example.com",
+              "password123",
+              null,
+              1234567890L
+      );
+
+      UserToken userToken = userService.addUser(testUser);
+
+      UserToken mockUserToken = new UserToken();
+
+      // Assertions
+      assertNotNull(mockUserToken);
+      assertNotNull(mockUserToken.getUserTokenId());
+      assertEquals("testUser", userRepository.findByUserId(user.getUserId()).getUsername());
+
+   }*/
+
+
+
 }

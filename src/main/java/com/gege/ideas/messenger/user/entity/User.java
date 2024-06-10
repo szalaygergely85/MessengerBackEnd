@@ -88,6 +88,15 @@ public class User {
 
    public User() {}
 
+   public User(String surName, String firstName, String email, String password, Long userTokenId, Long phoneNumber) {
+      this.surName = surName;
+      this.firstName = firstName;
+      this.email = email;
+      this.password = password;
+      this.userTokenId = userTokenId;
+      this.phoneNumber = phoneNumber;
+   }
+
    public User(
       Long userId,
       String surName,
