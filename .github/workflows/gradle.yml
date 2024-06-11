@@ -49,9 +49,6 @@ jobs:
             apt-get install -y mysql-client
             mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
 
-    - name: Format Source
-      run: ./gradlew :spotlessApply
-
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
