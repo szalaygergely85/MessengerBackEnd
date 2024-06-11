@@ -12,10 +12,10 @@ public class User {
    private Long userId;
 
    @Column(nullable = false)
-   private String surName;
+   private String displayName;
 
    @Column(nullable = false)
-   private String firstName;
+   private String fullName;
 
    @Column(nullable = false)
    private String email;
@@ -38,20 +38,20 @@ public class User {
       this.userId = id;
    }
 
-   public String getSurName() {
-      return surName;
+   public String getDisplayName() {
+      return displayName;
    }
 
-   public void setSurName(String surName) {
-      this.surName = surName;
+   public void setDisplayName(String surName) {
+      this.displayName = surName;
    }
 
-   public String getFirstName() {
-      return firstName;
+   public String getFullName() {
+      return fullName;
    }
 
-   public void setFirstName(String firstName) {
-      this.firstName = firstName;
+   public void setFullName(String firstName) {
+      this.fullName = firstName;
    }
 
    public String getEmail() {
@@ -88,9 +88,9 @@ public class User {
 
    public User() {}
 
-   public User(String surName, String firstName, String email, String password, Long userTokenId, Long phoneNumber) {
-      this.surName = surName;
-      this.firstName = firstName;
+   public User(String displayName, String fullName, String email, String password, Long userTokenId, Long phoneNumber) {
+      this.displayName = displayName;
+      this.fullName = fullName;
       this.email = email;
       this.password = password;
       this.userTokenId = userTokenId;
@@ -99,16 +99,16 @@ public class User {
 
    public User(
       Long userId,
-      String surName,
-      String firstName,
+      String displayName,
+      String fullName,
       String email,
       String password,
       Long userTokenId,
       Long phoneNumber
    ) {
       this.userId = userId;
-      this.surName = surName;
-      this.firstName = firstName;
+      this.displayName = displayName;
+      this.fullName = fullName;
       this.email = email;
       this.password = password;
       this.userTokenId = userTokenId;

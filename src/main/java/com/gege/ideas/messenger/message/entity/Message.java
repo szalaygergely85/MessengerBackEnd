@@ -25,6 +25,9 @@ public class Message {
    @Column
    private boolean isRead;
 
+   @Column
+   private int type;
+
    public Long getMessageId() {
       return messageId;
    }
@@ -67,6 +70,14 @@ public class Message {
 
    public boolean isRead() {
       return isRead;
+   }
+
+   public int getType() {
+      return type;
+   }
+
+   public void setType(int type) {
+      this.type = type;
    }
 
    public void setRead(boolean read) {
