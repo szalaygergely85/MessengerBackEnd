@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id "com.diffplug.spotless" version "7.0.0.BETA1"
+}
+
+group = 'com.gege.ideas'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    runtimeOnly 'org.hsqldb:hsqldb'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.mockito:mockito-core'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+
+spotless {
+    java {
+        importOrder()
+        indentWithTabs()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        prettier(['prettier': '3.0.3', 'prettier-plugin-java': '2.3.0'])
+                .config([
+                        'parser': 'java',
+                        'tabWidth': 3,
+                        'printWidth': 80,
+                        'plugins': ['prettier-plugin-java']
+                ])
+    }
+}
