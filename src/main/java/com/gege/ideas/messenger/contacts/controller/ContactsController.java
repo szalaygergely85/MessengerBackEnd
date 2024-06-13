@@ -25,7 +25,7 @@ public class ContactsController {
 
    @GetMapping("/{token}/byToken")
    public List<User> getContactUsers(@PathVariable String token) {
-      Long userId = userService.getUserId(token);
+      Long userId = userService.getUserIdByToken(token);
       return contactsService.getContactUserByOwnerId(userId);
    }
 

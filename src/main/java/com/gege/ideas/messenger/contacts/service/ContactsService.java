@@ -28,7 +28,7 @@ public class ContactsService {
       List<User> contactUsers = new ArrayList<>();
       List<Contacts> contactsList = contactsRepository.findByOwnerId(id);
       for (Contacts contact : contactsList) {
-         User user = userService.getUser(contact.getContactUserId());
+         User user = userService.getUserById(contact.getContactUserId());
          contactUsers.add(user);
       }
       return contactUsers;

@@ -35,7 +35,7 @@ public class MessageService {
    }
 
    public List<MessageBoard> getLatestMessage(String token) {
-      User user = userService.getUser(token);
+      User user = userService.getUserByToken(token);
       if (user != null) {
          List<MessageBoard> messageBoard = new ArrayList<>();
          List<Long> conversationIds =

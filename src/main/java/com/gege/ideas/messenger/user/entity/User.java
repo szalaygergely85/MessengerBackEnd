@@ -30,6 +30,11 @@ public class User {
    @Column(nullable = false)
    private Long phoneNumber;
 
+   @Lob
+   @Column(columnDefinition = "LONGTEXT")
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+   private String publicKey;
+
    public Long getUserId() {
       return userId;
    }
@@ -84,6 +89,14 @@ public class User {
 
    public void setPhoneNumber(Long phoneNumber) {
       this.phoneNumber = phoneNumber;
+   }
+
+   public String getPublicKey() {
+      return publicKey;
+   }
+
+   public void setPublicKey(String publicKey) {
+      this.publicKey = publicKey;
    }
 
    public User() {}

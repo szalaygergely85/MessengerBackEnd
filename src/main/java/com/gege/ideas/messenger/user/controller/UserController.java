@@ -27,17 +27,27 @@ public class UserController {
    }
 
    @PostMapping
-   public UserToken putUser(@RequestBody User user) {
+   public UserToken putUser(@RequestBody User user) throws Exception {
       return userService.addUser(user);
    }
 
    @GetMapping("/id/{id}")
    public User getUser(@PathVariable Long id) {
-      return userService.getUser(id);
+      return userService.getUserById(id);
    }
 
    @GetMapping("/token/{token}")
    public User getUser(@PathVariable String token) {
-      return userService.getUser(token);
+      return userService.getUserByToken(token);
+   }
+
+   @GetMapping("/key/{token}")
+   public String getKeyByToken(@PathVariable String token) throws Exception {
+      return userService.getKeyByToken(token);
+   }
+
+   @GetMapping("/publickey/{userId}")
+   public String getPublicKeyByUerId(@PathVariable Long userId) {
+      return userService.getPublicKeyByToken(userId);
    }
 }
