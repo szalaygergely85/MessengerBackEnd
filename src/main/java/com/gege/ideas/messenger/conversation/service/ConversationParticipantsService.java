@@ -59,7 +59,9 @@ public class ConversationParticipantsService {
       List<User> users = new ArrayList<>();
 
       for (ConversationParticipant conversationParticipant : conversationParticipants) {
-         User user = userService.getUserById(conversationParticipant.getUserId());
+         User user = userService.getUserById(
+            conversationParticipant.getUserId()
+         );
          users.add(user);
       }
       return users;

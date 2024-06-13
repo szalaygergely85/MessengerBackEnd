@@ -12,7 +12,6 @@ import com.gege.ideas.messenger.user.service.UserTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,6 @@ public class UserServiceIntegrationTest {
 
    @Test
    public void testLogInUser_WithIncorrectPassword_ReturnsNull() {
-
       String email = "test@example.com";
       String password = "password123";
       User user = new User();
@@ -87,30 +85,28 @@ public class UserServiceIntegrationTest {
 
       assertEquals(null, userToken);
    }
-/*
-   @Test
-   public void testAddUser() {
+   /*
+@Test
+public void testAddUser() {
 
-      User testUser = new User(
-              "Doe",
-              "John",
-              "john.doe@example.com",
-              "password123",
-              null,
-              1234567890L
-      );
+	User testUser = new User(
+			"Doe",
+			"John",
+			"john.doe@example.com",
+			"password123",
+			null,
+			1234567890L
+	);
 
-      UserToken userToken = userService.addUser(testUser);
+	UserToken userToken = userService.addUser(testUser);
 
-      UserToken mockUserToken = new UserToken();
+	UserToken mockUserToken = new UserToken();
 
-      // Assertions
-      assertNotNull(mockUserToken);
-      assertNotNull(mockUserToken.getUserTokenId());
-      assertEquals("testUser", userRepository.findByUserId(user.getUserId()).getUsername());
+	// Assertions
+	assertNotNull(mockUserToken);
+	assertNotNull(mockUserToken.getUserTokenId());
+	assertEquals("testUser", userRepository.findByUserId(user.getUserId()).getUsername());
 
-   }*/
-
-
+}*/
 
 }

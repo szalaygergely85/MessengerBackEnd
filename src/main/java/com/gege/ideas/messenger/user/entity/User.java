@@ -101,7 +101,14 @@ public class User {
 
    public User() {}
 
-   public User(String displayName, String fullName, String email, String password, Long userTokenId, Long phoneNumber) {
+   public User(
+      String displayName,
+      String fullName,
+      String email,
+      String password,
+      Long userTokenId,
+      Long phoneNumber
+   ) {
       this.displayName = displayName;
       this.fullName = fullName;
       this.email = email;

@@ -2,7 +2,6 @@ package com.gege.ideas.messenger.conversation.controller;
 
 import com.gege.ideas.messenger.conversation.service.ConversationsService;
 import com.gege.ideas.messenger.user.entity.User;
-import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

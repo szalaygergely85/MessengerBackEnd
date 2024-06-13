@@ -35,14 +35,16 @@ public class UserService {
    }
 
    public UserToken addUser(User user) throws Exception {
-
       UserToken userToken = userTokenService.createUserToken();
 
       user.setUserTokenId(userToken.getUserTokenId());
 
       User savedUser = userRepository.save(user);
 
-      String publicKey = KeyStoreUtil.generateAndStoreKeys("private_" +user.getUserId()+".key", "aes" +user.getUserId()+".key");
+      String publicKey = KeyStoreUtil.generateAndStoreKeys(
+         "private_" + user.getUserId() + ".key",
+         "aes" + user.getUserId() + ".key"
+      );
       user.setPublicKey(publicKey);
 
       _update(user);
@@ -53,8 +55,6 @@ public class UserService {
       );
       return userToken;
    }
-
-
 
    public User getUserById(Long id) {
       Optional<User> userOptional = userRepository.findById(id);
@@ -88,7 +88,10 @@ public class UserService {
 
    public String getKeyByToken(String token) throws Exception {
       Long userId = getUserIdByToken(token);
-      return KeyLoadUtil.loadKeys("private_" +userId+".key", "aes" +userId+".key");
+      return KeyLoadUtil.loadKeys(
+         "private_" + userId + ".key",
+         "aes" + userId + ".key"
+      );
    }
 
    public String getPublicKeyByToken(Long userId) {
