@@ -37,6 +37,14 @@ jobs:
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Set up Node.js
+      uses: actions/setup-node@v2  # Sets up Node.js environment
+      with:
+          node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 

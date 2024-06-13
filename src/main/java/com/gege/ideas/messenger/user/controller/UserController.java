@@ -47,7 +47,7 @@ public class UserController {
    }
 
    @GetMapping("/publickey/{userId}")
-   public String getPublicKeyByUerId(@PathVariable Long userId) {
+   public String getPublicKeyByUserId(@PathVariable Long userId) {
       return userService.getPublicKeyByToken(userId);
    }
 }
