@@ -7,6 +7,8 @@ import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -18,7 +20,7 @@ public class UserController {
       this.userService = userService;
    }
 
-   @PostMapping("/login")
+   @PostMapping(value = "/login")
    public UserToken logInUser(@RequestBody LoginRequest loginRequest) {
       return userService.logInUser(
          loginRequest.getEmail(),
@@ -41,8 +43,8 @@ public class UserController {
       return userService.getUserByToken(token);
    }
 
-   @GetMapping("/key/{token}")
-   public String getKeyByToken(@PathVariable String token) throws Exception {
+   @GetMapping(value="/key/{token}")
+   public HashMap<String,String> getKeyByToken(@PathVariable String token) throws Exception {
       return userService.getKeyByToken(token);
    }
 

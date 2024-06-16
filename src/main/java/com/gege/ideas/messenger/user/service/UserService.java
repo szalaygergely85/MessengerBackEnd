@@ -5,6 +5,8 @@ import com.gege.ideas.messenger.key.util.KeyStoreUtil;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.repository.UserRepository;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,12 +88,14 @@ public class UserService {
       userRepository.save(user);
    }
 
-   public String getKeyByToken(String token) throws Exception {
+   public HashMap<String,String> getKeyByToken(String token) throws Exception {
       Long userId = getUserIdByToken(token);
-      return KeyLoadUtil.loadKeys(
-         "private_" + userId + ".key",
-         "aes" + userId + ".key"
-      );
+      HashMap<String,String> key = new HashMap<>();
+      key.put("private", KeyLoadUtil.loadKeys(
+              "private_" + userId + ".key",
+              "aes" + userId + ".key"
+      ));
+      return key;
    }
 
    public String getPublicKeyByToken(Long userId) {
