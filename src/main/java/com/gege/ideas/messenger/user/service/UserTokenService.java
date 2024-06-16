@@ -47,7 +47,7 @@ public class UserTokenService {
    }
 
    public UserToken getUserTokenByToken(String token) {
-      return userTokenRepository.findByToken(token);
+      return userTokenRepository.findUserTokenByToken(token);
    }
 
    public UserToken getUserTokenByTokenId(Long id) {

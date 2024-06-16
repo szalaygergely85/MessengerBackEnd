@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.conversation.service;
 
+import com.gege.ideas.messenger.DTO.ConversationContent;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.entity.Conversations;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
@@ -77,5 +78,20 @@ public class ConversationsService {
       }
 
       return null;
+   }
+
+   public ConversationContent getConversationContent(Long conversationId) {
+      ConversationContent conversationContent = new ConversationContent(
+         conversationId
+      );
+      conversationContent.setParticipants(
+         conversationParticipantsService.getUsersByConversationId(
+            conversationId
+         )
+      );
+      conversationContent.setMessages(
+         messageService.getConversationMessages(conversationId)
+      );
+      return conversationContent;
    }
 }
