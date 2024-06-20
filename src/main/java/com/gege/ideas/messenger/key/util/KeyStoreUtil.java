@@ -1,5 +1,4 @@
 package com.gege.ideas.messenger.key.util;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+@Deprecated
 public class KeyStoreUtil {
 
    private static final String RSA_ALGORITHM = "RSA";

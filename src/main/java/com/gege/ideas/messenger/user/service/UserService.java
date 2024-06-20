@@ -1,15 +1,15 @@
 package com.gege.ideas.messenger.user.service;
 
-import com.gege.ideas.messenger.key.util.KeyLoadUtil;
-import com.gege.ideas.messenger.key.util.KeyStoreUtil;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import com.gege.ideas.messenger.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,14 +42,6 @@ public class UserService {
       user.setUserTokenId(userToken.getUserTokenId());
 
       User savedUser = userRepository.save(user);
-
-      String publicKey = KeyStoreUtil.generateAndStoreKeys(
-         "private_" + user.getUserId() + ".key",
-         "aes" + user.getUserId() + ".key"
-      );
-      user.setPublicKey(publicKey);
-
-      _update(user);
 
       userTokenService.updateUserTokenWithUserId(
          userToken,
@@ -88,15 +80,13 @@ public class UserService {
       userRepository.save(user);
    }
 
-   public HashMap<String,String> getKeyByToken(String token) throws Exception {
+   public Resource getKeyByToken(String token) throws Exception {
       Long userId = getUserIdByToken(token);
-      HashMap<String,String> key = new HashMap<>();
-      key.put("private", KeyLoadUtil.loadKeys(
-              "private_" + userId + ".key",
-              "aes" + userId + ".key"
-      ));
-      return key;
+      return  FileUtil.loadAsResource (
+              "private_" + userId + ".key"
+      );
    }
+
 
    public String getPublicKeyByToken(Long userId) {
       User user = getUserById(userId);

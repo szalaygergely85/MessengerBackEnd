@@ -25,8 +25,8 @@ public class ConversationsController {
 
    @GetMapping("id/{id}")
    public ConversationContent getConversationAndContentById(
-      @PathVariable Long conversationId
+      @PathVariable Long id
    ) {
-      return conversationsService.getConversationContent(conversationId);
+      return conversationsService.getConversationContent(id);
    }
 }
