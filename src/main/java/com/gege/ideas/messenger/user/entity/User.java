@@ -32,7 +32,6 @@ public class User {
 
    @Lob
    @Column(columnDefinition = "LONGTEXT")
-   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private String publicKey;
 
    public Long getUserId() {

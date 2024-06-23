@@ -19,7 +19,8 @@ public class Message {
    @Column(nullable = false)
    private long timestamp;
 
-   @Column
+   @Lob
+   @Column(columnDefinition = "LONGTEXT")
    private String content;
 
    @Column

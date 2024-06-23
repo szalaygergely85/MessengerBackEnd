@@ -13,6 +13,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+@Deprecated
 public class KeyLoadUtil {
 
    private static final String AES_ALGORITHM = "AES";
@@ -31,14 +32,17 @@ public class KeyLoadUtil {
          .getInstance(RSA_ALGORITHM)
          .generatePrivate(new PKCS8EncodedKeySpec(privateKeyData));
 
-      return Base64.getEncoder().encodeToString(privateKey.getEncoded());
+      return Base64.getEncoder().encodeToString(privateKey.getEncoded()).toString();
    }
 
-   private static byte[] loadKey(String filePath) throws IOException {
+   public static byte[] loadKey(String filePath) throws IOException {
       return Base64
          .getDecoder()
          .decode(Files.readAllBytes(new File(filePath).toPath()));
    }
+
+
+
 
    private static byte[] decryptKey(
       byte[] encryptedKeyData,
