@@ -29,6 +29,10 @@ public class Message {
    @Column
    private int type;
 
+   @Lob
+   @Column(columnDefinition = "LONGTEXT")
+   private String contentSenderVersion;
+
    public Long getMessageId() {
       return messageId;
    }
@@ -83,5 +87,13 @@ public class Message {
 
    public void setRead(boolean read) {
       isRead = read;
+   }
+
+   public String getContentSenderVersion() {
+      return contentSenderVersion;
+   }
+
+   public void setContentSenderVersion(String contentSenderVersion) {
+      this.contentSenderVersion = contentSenderVersion;
    }
 }
