@@ -1,7 +1,5 @@
 package com.gege.ideas.messenger.key.util;
 
-import org.springframework.http.ResponseEntity;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +30,10 @@ public class KeyLoadUtil {
          .getInstance(RSA_ALGORITHM)
          .generatePrivate(new PKCS8EncodedKeySpec(privateKeyData));
 
-      return Base64.getEncoder().encodeToString(privateKey.getEncoded()).toString();
+      return Base64
+         .getEncoder()
+         .encodeToString(privateKey.getEncoded())
+         .toString();
    }
 
    public static byte[] loadKey(String filePath) throws IOException {
@@ -40,9 +41,6 @@ public class KeyLoadUtil {
          .getDecoder()
          .decode(Files.readAllBytes(new File(filePath).toPath()));
    }
-
-
-
 
    private static byte[] decryptKey(
       byte[] encryptedKeyData,

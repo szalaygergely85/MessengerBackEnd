@@ -3,11 +3,9 @@ package com.gege.ideas.messenger.user.service;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.repository.UserRepository;
-
+import com.gege.ideas.messenger.utils.FileUtil;
 import java.util.List;
 import java.util.Optional;
-
-import com.gege.ideas.messenger.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -82,11 +80,8 @@ public class UserService {
 
    public Resource getKeyByToken(String token) throws Exception {
       Long userId = getUserIdByToken(token);
-      return  FileUtil.loadAsResource (
-              "private_" + userId + ".key"
-      );
+      return FileUtil.loadAsResource("private_" + userId + ".key");
    }
-
 
    public String getPublicKeyByToken(Long userId) {
       User user = getUserById(userId);
