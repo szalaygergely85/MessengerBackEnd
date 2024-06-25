@@ -30,3 +30,4 @@ jobs:
           key: ${{ secrets.PI_SSH_KEY }}
           target: /usr/share/tomcat/webapps
           source: build/libs/Messenger-0.0.1-SNAPSHOT.jar
+
