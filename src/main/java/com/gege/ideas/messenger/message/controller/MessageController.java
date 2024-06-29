@@ -3,8 +3,11 @@ package com.gege.ideas.messenger.message.controller;
 import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
+import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,24 +15,52 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
    private final MessageService messageService;
+   private final PermissionService permissionService;
 
    @Autowired
-   MessageController(MessageService messageService) {
+   MessageController(
+      MessageService messageService,
+      PermissionService permissionService
+   ) {
       this.messageService = messageService;
+      this.permissionService = permissionService;
    }
 
-   @GetMapping("/{token}/messageboardentries")
-   public List<MessageBoard> getLatestMessage(@PathVariable String token) {
+   @GetMapping("/messageboardentries")
+   public List<MessageBoard> getLatestMessage(
+      @RequestHeader("Authorization") String token
+   ) {
       return messageService.getLatestMessage(token);
    }
 
    @PostMapping
-   public Message addMessage(@RequestBody Message message) {
-      return messageService.createMessage(message);
+   public ResponseEntity<?> addMessage(
+      @RequestBody Message message,
+      @RequestHeader("Authorization") String token
+   ) {
+      if (
+         permissionService.hasPermissionToConversation(
+            token,
+            message.getConversationId()
+         )
+      ) {
+         return ResponseEntity.ok().body(messageService.createMessage(message));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
-   @GetMapping("/byconversationid/{id}")
-   public List<Message> getConversationMessages(@PathVariable long id) {
-      return messageService.getConversationMessages(id);
+   @GetMapping("/byconversationid")
+   public ResponseEntity<?> getConversationMessages(
+      @RequestParam Long id,
+      @RequestHeader("Authorization") String token
+   ) {
+      if (permissionService.hasPermissionToConversation(token, id)) {
+         return ResponseEntity
+            .ok()
+            .body(messageService.getConversationMessages(id));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 }
