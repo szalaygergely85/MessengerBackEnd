@@ -2,9 +2,11 @@ package com.gege.ideas.messenger.message.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "message")
-public class Message {
+public class Message implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
