@@ -26,14 +26,6 @@ public class UserController {
       this.permissionService = permissionService;
    }
 
-   @PostMapping(value = "/login")
-   public UserToken logInUser(@RequestBody LoginRequest loginRequest) {
-      return userService.logInUser(
-         loginRequest.getEmail(),
-         loginRequest.getPassword()
-      );
-   }
-
    @PostMapping
    public UserToken addUser(@RequestBody User user) throws Exception {
       return userService.addUser(user);
@@ -53,10 +45,9 @@ public class UserController {
 
    @GetMapping("/token/{token}")
    public ResponseEntity<?> getUserByToken(
-      @PathVariable String token,
-      @RequestHeader("Authorization") String authToken
+      @PathVariable String token
    ) {
-      if (permissionService.hasPermissionToUser(token, authToken)) {
+      if (permissionService.isUserRegistered(token)) {
          return ResponseEntity.ok().body(userService.getUserByToken(token));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
@@ -75,5 +66,12 @@ public class UserController {
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+   @PostMapping(value = "/login")
+   public UserToken logInUser(@RequestBody LoginRequest loginRequest) {
+      return userService.logInUser(
+              loginRequest.getEmail(),
+              loginRequest.getPassword()
+      );
    }
 }

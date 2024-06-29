@@ -39,15 +39,12 @@ public class PermissionService {
       String userToken,
       Long conversationId
    ) {
-      User user = userService.getUserByToken(userToken);
-      List<Long> participantIds =
-         conversationParticipantsService.getParticipantIds(conversationId);
-      for (Long participantId : participantIds) {
-         if (participantId == user.getUserId()) {
-            return true;
-         }
-      }
-      return false;
+      List<User> participants =
+         conversationParticipantsService.getUsersByConversationId(
+            conversationId
+         );
+
+      return isInParticipants(participants, userToken);
    }
 
    public boolean hasPermissionToUser(String userToken, String authToken) {
@@ -59,6 +56,16 @@ public class PermissionService {
       User user = userService.getUserByToken(authToken);
       if (user != null) {
          return true;
+      }
+      return false;
+   }
+
+   public boolean isInParticipants(List<User> participants, String authToken) {
+      User user = userService.getUserByToken(authToken);
+      for (User participant : participants) {
+         if (user.getUserId() == participant.getUserId()) {
+            return true;
+         }
       }
       return false;
    }

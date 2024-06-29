@@ -19,13 +19,13 @@ public class FileUploadController {
    private MessageService _messageService;
 
    @Autowired
-   public FileUploadController(FileUploadService _fileUploadService, MessageService _messageService) {
+   public FileUploadController(
+      FileUploadService _fileUploadService,
+      MessageService _messageService
+   ) {
       this._fileUploadService = _fileUploadService;
       this._messageService = _messageService;
    }
-
-
-
 
    @GetMapping("/{filename}")
    @ResponseBody
@@ -45,9 +45,9 @@ public class FileUploadController {
 
    @PostMapping("/upload")
    public String handleFileUpload(
-           @RequestPart("file") MultipartFile file,
-           @RequestPart("messageEntry") Message message
-           ) {
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("messageEntry") Message message
+   ) {
       _fileUploadService.saveFile(file);
       _messageService.createMessage(message);
       return "redirect:/";
