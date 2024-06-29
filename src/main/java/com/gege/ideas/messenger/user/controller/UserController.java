@@ -44,9 +44,7 @@ public class UserController {
    }
 
    @GetMapping("/token/{token}")
-   public ResponseEntity<?> getUserByToken(
-      @PathVariable String token
-   ) {
+   public ResponseEntity<?> getUserByToken(@PathVariable String token) {
       if (permissionService.isUserRegistered(token)) {
          return ResponseEntity.ok().body(userService.getUserByToken(token));
       } else return ResponseEntity
@@ -67,11 +65,12 @@ public class UserController {
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
+
    @PostMapping(value = "/login")
    public UserToken logInUser(@RequestBody LoginRequest loginRequest) {
       return userService.logInUser(
-              loginRequest.getEmail(),
-              loginRequest.getPassword()
+         loginRequest.getEmail(),
+         loginRequest.getPassword()
       );
    }
 }
