@@ -4,6 +4,7 @@ import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
+import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import com.gege.ideas.messenger.user.service.UserTokenService;
@@ -18,20 +19,31 @@ public class MessageService {
    private final MessageRepository messageRepository;
    private final UserTokenService userTokenService;
    private final UserService userService;
-
    private final ConversationParticipantsService conversationParticipantsService;
+   private final PermissionService permissionService;
 
    @Autowired
    public MessageService(
       MessageRepository messageRepository,
       UserTokenService userTokenService,
       UserService userService,
-      ConversationParticipantsService conversationParticipantsService
+      ConversationParticipantsService conversationParticipantsService,
+      PermissionService permissionService
    ) {
       this.messageRepository = messageRepository;
       this.userTokenService = userTokenService;
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
+      this.permissionService = permissionService;
+   }
+
+   public Message createMessage(Message message) {
+      message.setRead(false);
+      return messageRepository.save(message);
+   }
+
+   public List<Message> getConversationMessages(Long id) {
+      return messageRepository.findByConversationIdOrderByTimestampAsc(id);
    }
 
    public List<MessageBoard> getLatestMessage(String token) {
@@ -64,14 +76,5 @@ public class MessageService {
          return messageBoard;
       }
       return null;
-   }
-
-   public Message createMessage(Message message) {
-      message.setRead(false);
-      return messageRepository.save(message);
-   }
-
-   public List<Message> getConversationMessages(long id) {
-      return messageRepository.findByConversationIdOrderByTimestampAsc(id);
    }
 }

@@ -30,6 +30,11 @@ public class PermissionService {
       this.conversationParticipantsService = conversationParticipantsService;
    }
 
+   public boolean hasPermissionToAddContact(String authToken, Long ownerId) {
+      User user = userService.getUserByToken(authToken);
+      return ownerId == user.getUserId();
+   }
+
    public boolean hasPermissionToConversation(
       String userToken,
       Long conversationId
@@ -47,10 +52,7 @@ public class PermissionService {
 
    public boolean hasPermissionToUser(String userToken, String authToken) {
       User user = userService.getUserByToken(authToken);
-      if (user != null && userToken == authToken) {
-         return true;
-      }
-      return false;
+      return (user != null && userToken == authToken);
    }
 
    public boolean isUserRegistered(String authToken) {
@@ -60,5 +62,4 @@ public class PermissionService {
       }
       return false;
    }
-
 }
