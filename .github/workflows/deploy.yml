@@ -35,6 +35,6 @@ jobs:
           host: ${{ secrets.PI_HOST }}
           username: ${{ secrets.PI_USER }}
           password: ${{ secrets.PI_PASSWORD}}
-          target: /usr/share/tomcat/webapps
-          source: build/libs/Messenger-0.0.1-SNAPSHOT.jar
+          target: /opt/tomcat/webapps
+          source: build/libs/Messenger.war
 

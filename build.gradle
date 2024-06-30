@@ -3,10 +3,11 @@ plugins {
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
     id "com.diffplug.spotless" version "7.0.0.BETA1"
+    id "war"
 }
 
+
 group = 'com.gege.ideas'
-version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
@@ -26,10 +27,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
 
 
 spotless {
@@ -46,4 +43,8 @@ spotless {
                         'plugins': ['prettier-plugin-java']
                 ])
     }
+}
+
+bootWar {
+    mainClass = 'com.gege.ideas.messenger.MessengerApplication'
 }
