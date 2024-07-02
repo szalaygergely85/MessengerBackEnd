@@ -50,9 +50,9 @@ public class MessageController {
          .body("Unauthorized");
    }
 
-   @GetMapping("/byconversationid")
+   @GetMapping("/byconversationid/{id}")
    public ResponseEntity<?> getConversationMessages(
-      @RequestParam Long id,
+      @PathVariable Long id,
       @RequestHeader("Authorization") String token
    ) {
       if (permissionService.hasPermissionToConversation(token, id)) {
