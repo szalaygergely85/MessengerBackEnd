@@ -35,6 +35,9 @@ public class UserService {
    }
 
    public UserToken addUser(User user) throws Exception {
+      if(userRepository.findByEmail(user.getEmail())!=null){
+         return null;
+      }
       UserToken userToken = userTokenService.createUserToken();
 
       user.setUserTokenId(userToken.getUserTokenId());
@@ -59,7 +62,7 @@ public class UserService {
 
    public User getUserByToken(String token) {
       UserToken userToken = userTokenService.getUserTokenByToken(token);
-
+      if (userToken==null){ return null;}
       return userRepository.findByUserTokenId(userToken.getUserTokenId());
    }
 

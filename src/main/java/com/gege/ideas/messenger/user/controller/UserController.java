@@ -27,8 +27,17 @@ public class UserController {
    }
 
    @PostMapping
-   public UserToken addUser(@RequestBody User user) throws Exception {
-      return userService.addUser(user);
+   public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
+      UserToken token = userService.addUser(user);
+      if (token!=null){
+         return ResponseEntity.ok().body(token);
+      }else {
+         return ResponseEntity
+                 .status(HttpStatus.CONFLICT)
+                 .body("User already exists");
+      }
+
+
    }
 
    @GetMapping("/id/{id}")
