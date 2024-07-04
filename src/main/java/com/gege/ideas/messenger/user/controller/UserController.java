@@ -29,15 +29,13 @@ public class UserController {
    @PostMapping
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
       UserToken token = userService.addUser(user);
-      if (token!=null){
+      if (token != null) {
          return ResponseEntity.ok().body(token);
-      }else {
+      } else {
          return ResponseEntity
-                 .status(HttpStatus.CONFLICT)
-                 .body("User already exists");
+            .status(HttpStatus.CONFLICT)
+            .body("User already exists");
       }
-
-
    }
 
    @GetMapping("/id/{id}")
