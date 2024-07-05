@@ -42,11 +42,11 @@ public class MessageService {
       return messageRepository.save(message);
    }
 
-   public List<Message> getConversationMessages(Long id) {
+   public List<Message> getMessagesByConversationIdOrderedByTimestamp(Long id) {
       return messageRepository.findByConversationIdOrderByTimestampAsc(id);
    }
 
-   public List<MessageBoard> getLatestMessage(String token) {
+   public List<MessageBoard> getMessagesBoardEntriesOrderedByTimestamp(String token) {
       User user = userService.getUserByToken(token);
       if (user != null) {
          List<MessageBoard> messageBoard = new ArrayList<>();
@@ -76,5 +76,8 @@ public class MessageService {
          return messageBoard;
       }
       return null;
+   }
+   public Message getLatestMassageByConversationId(Long conversationId) {
+       return  messageRepository.findTopByConversationIdOrderByTimestampDesc(conversationId);
    }
 }

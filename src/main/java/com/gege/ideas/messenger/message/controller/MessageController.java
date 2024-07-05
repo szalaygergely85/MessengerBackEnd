@@ -30,7 +30,7 @@ public class MessageController {
    public List<MessageBoard> getLatestMessage(
       @RequestHeader("Authorization") String token
    ) {
-      return messageService.getLatestMessage(token);
+      return messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
    }
 
    @PostMapping
@@ -58,7 +58,7 @@ public class MessageController {
       if (permissionService.hasPermissionToConversation(token, id)) {
          return ResponseEntity
             .ok()
-            .body(messageService.getConversationMessages(id));
+            .body(messageService.getMessagesByConversationIdOrderedByTimestamp(id));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

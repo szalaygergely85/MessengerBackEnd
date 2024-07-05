@@ -2,17 +2,20 @@ package com.gege.ideas.messenger.conversation.service;
 
 import com.gege.ideas.messenger.DTO.ConversationContent;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
-import com.gege.ideas.messenger.conversation.entity.Conversations;
+import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
+import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConversationsService {
+public class ConversationService {
 
    private UserService userService;
    private ConversationParticipantsService conversationParticipantsService;
@@ -20,7 +23,7 @@ public class ConversationsService {
    private ConversationsRepository conversationsRepository;
 
    @Autowired
-   public ConversationsService(
+   public ConversationService(
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
       MessageService messageService,
@@ -35,49 +38,23 @@ public class ConversationsService {
    public Long addConversation(List<User> participants) {
       Long conversationId = _getExistingConversationId(participants);
       if (conversationId == null) {
-         Conversations conversations = new Conversations(
-            System.currentTimeMillis()
+         Conversation conversation = new Conversation(
+            System.currentTimeMillis(), false
          );
-         conversationsRepository.save(conversations);
+         conversationsRepository.save(conversation);
          for (User participant : participants) {
             ConversationParticipant conversationParticipant =
                new ConversationParticipant(
-                  conversations.getConversationId(),
+                  conversation.getConversationId(),
                   participant.getUserId()
                );
             conversationParticipantsService.addConversationParticipant(
                conversationParticipant
             );
          }
-         return conversations.getConversationId();
+         return conversation.getConversationId();
       }
       return conversationId;
-   }
-
-   private Long _getExistingConversationId(List<User> participants) {
-      User user = participants.get(0);
-
-      List<Long> conversationIds =
-         conversationParticipantsService.getConversationIdsByUserId(
-            user.getUserId()
-         );
-
-      for (Long conversationId : conversationIds) {
-         List<Long> participantIds =
-            conversationParticipantsService.getParticipantIds(conversationId);
-         if (participants.size() == participantIds.size()) {
-            for (User participant : participants) {
-               if (
-                  participantIds.contains(participant.getUserId()) &&
-                  !participant.equals(participants.get(0))
-               ) {
-                  return conversationId;
-               }
-            }
-         }
-      }
-
-      return null;
    }
 
    public ConversationContent getConversationContent(Long conversationId) {
@@ -90,8 +67,56 @@ public class ConversationsService {
          )
       );
       conversationContent.setMessages(
-         messageService.getConversationMessages(conversationId)
+         messageService.getMessagesByConversationIdOrderedByTimestamp(conversationId)
       );
       return conversationContent;
+   }
+
+   public List<Message> getNewMessagesByUserToken(String userToken){
+      User user = userService.getUserByToken(userToken);
+      List<Long> conversationIds =  getConversationsHasNewMessage(user);
+   if(conversationIds!=null) {
+      List<Message> latestMessages = new ArrayList<>();
+      for (Long conversationId : conversationIds) {
+         latestMessages.add(messageService.getLatestMassageByConversationId(conversationId));
+
+         setConversationHasNewMessage(conversationId, true);
+      }
+      return latestMessages;
+   }else{
+      return null;
+   }
+
+   }
+   public void setConversationHasNewMessage(Long conversationId, boolean hasNewMessage){
+   }
+   public List<Long> getConversationsHasNewMessage(User user){
+      return conversationParticipantsService.getConversationHasNewMessageIdsByUserId(user.getUserId());
+   }
+
+   private Long _getExistingConversationId(List<User> participants) {
+      User user = participants.get(0);
+
+      List<Long> conversationIds =
+              conversationParticipantsService.getConversationIdsByUserId(
+                      user.getUserId()
+              );
+
+      for (Long conversationId : conversationIds) {
+         List<Long> participantIds =
+                 conversationParticipantsService.getParticipantIds(conversationId);
+         if (participants.size() == participantIds.size()) {
+            for (User participant : participants) {
+               if (
+                       participantIds.contains(participant.getUserId()) &&
+                               !participant.equals(participants.get(0))
+               ) {
+                  return conversationId;
+               }
+            }
+         }
+      }
+
+      return null;
    }
 }
