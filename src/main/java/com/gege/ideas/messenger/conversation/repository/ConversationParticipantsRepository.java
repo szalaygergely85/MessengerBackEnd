@@ -9,5 +9,4 @@ public interface ConversationParticipantsRepository
    List<ConversationParticipant> findByUserId(Long userId);
 
    List<ConversationParticipant> findByConversationId(Long id);
-   List<ConversationParticipant> findByUserIdAndHasNewMessageTrue(Long userId);
 }

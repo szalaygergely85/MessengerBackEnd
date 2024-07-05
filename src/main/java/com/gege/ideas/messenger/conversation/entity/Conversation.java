@@ -22,7 +22,7 @@ public class Conversation {
       this.timeStamp = timeStamp;
    }
 
-   public boolean isHasNewMessage() {
+   public boolean hasNewMessage() {
       return hasNewMessage;
    }
 

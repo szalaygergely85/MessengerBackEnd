@@ -14,37 +14,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/message")
 public class MessageController {
 
-   private final MessageService messageService;
-   private final PermissionService permissionService;
-
-   @Autowired
-   MessageController(
-      MessageService messageService,
-      PermissionService permissionService
-   ) {
-      this.messageService = messageService;
-      this.permissionService = permissionService;
-   }
-
-   @GetMapping("/messageboardentries")
-   public List<MessageBoard> getLatestMessage(
-      @RequestHeader("Authorization") String token
-   ) {
-      return messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
-   }
-
    @PostMapping
    public ResponseEntity<?> addMessage(
       @RequestBody Message message,
       @RequestHeader("Authorization") String token
    ) {
       if (
-         permissionService.hasPermissionToConversation(
+         _permissionService.hasPermissionToConversation(
             token,
             message.getConversationId()
          )
       ) {
-         return ResponseEntity.ok().body(messageService.createMessage(message));
+         return ResponseEntity
+            .ok()
+            .body(_messageService.createMessage(message));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
@@ -55,12 +38,33 @@ public class MessageController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String token
    ) {
-      if (permissionService.hasPermissionToConversation(token, id)) {
+      if (_permissionService.hasPermissionToConversation(token, id)) {
          return ResponseEntity
             .ok()
-            .body(messageService.getMessagesByConversationIdOrderedByTimestamp(id));
+            .body(
+               _messageService.getMessagesByConversationIdOrderedByTimestamp(id)
+            );
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
+
+   @GetMapping("/messageboardentries")
+   public List<MessageBoard> getLatestMessage(
+      @RequestHeader("Authorization") String token
+   ) {
+      return _messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
+   }
+
+   @Autowired
+   MessageController(
+      MessageService _messageService,
+      PermissionService _permissionService
+   ) {
+      this._messageService = _messageService;
+      this._permissionService = _permissionService;
+   }
+
+   private final MessageService _messageService;
+   private final PermissionService _permissionService;
 }

@@ -1,6 +1,7 @@
 package com.gege.ideas.messenger.conversation.controller;
 
 import com.gege.ideas.messenger.conversation.service.ConversationService;
+import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import java.util.List;
@@ -49,6 +50,20 @@ public class ConversationsController {
          return ResponseEntity
             .ok()
             .body(conversationService.getConversationContent(id));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
+
+   @GetMapping("new-message")
+   public ResponseEntity<?> getConversationWithNewMessage(
+      @RequestHeader("Authorization") String authToken
+   ) {
+      List<Message> messages = conversationService.getNewMessagesByUserToken(
+         authToken
+      );
+      if (permissionService.hasPermissionToMessages(authToken, messages)) {
+         return ResponseEntity.ok().body(messages);
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

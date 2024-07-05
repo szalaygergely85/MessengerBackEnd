@@ -72,16 +72,4 @@ public class ConversationParticipantsService {
    ) {
       conversationParticipantsRepository.save(conversationParticipant);
    }
-
-   public List<Long> getConversationHasNewMessageIdsByUserId(Long userId) {
-
-      List<ConversationParticipant> conversationParticipants =
-              conversationParticipantsRepository.findByUserIdAndHasNewMessageTrue(userId);
-      List<Long> conversationId = new ArrayList<>();
-      for (ConversationParticipant conversationParticipant : conversationParticipants) {
-         long id = conversationParticipant.getConversationId();
-         conversationId.add(id);
-      }
-      return conversationId;
-   }
 }
