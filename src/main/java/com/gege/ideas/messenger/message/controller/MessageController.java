@@ -58,16 +58,20 @@ public class MessageController {
 
    @GetMapping("new-message")
    public ResponseEntity<?> getConversationWithNewMessage(
-           @RequestHeader("Authorization") String authToken
+      @RequestHeader("Authorization") String authToken
    ) {
-      List<MessageBoard> messagesBoardEntries = _messageService.getNewMessagesByUserToken(
-              authToken
-      );
-      if (_permissionService.hasPermissionToMessageBoards(authToken, messagesBoardEntries)) {
+      List<MessageBoard> messagesBoardEntries =
+         _messageService.getNewMessagesByUserToken(authToken);
+      if (
+         _permissionService.hasPermissionToMessageBoards(
+            authToken,
+            messagesBoardEntries
+         )
+      ) {
          return ResponseEntity.ok().body(messagesBoardEntries);
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @Autowired

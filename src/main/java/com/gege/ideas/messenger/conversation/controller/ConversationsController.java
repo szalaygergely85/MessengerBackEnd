@@ -1,8 +1,6 @@
 package com.gege.ideas.messenger.conversation.controller;
 
-import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
-import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import java.util.List;
@@ -55,6 +53,4 @@ public class ConversationsController {
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
-
-
 }

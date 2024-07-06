@@ -93,25 +93,27 @@ public class MessageService {
    public List<MessageBoard> getNewMessagesByUserToken(String authToken) {
       User user = userService.getUserByToken(authToken);
       List<Long> conversationIds =
-              conversationParticipantsService.getConversationIdsByUserId(
-                      user.getUserId()
-              );
-      List<Long> filteredIds = conversationService.getConversationsWithNewMessage(conversationIds);
+         conversationParticipantsService.getConversationIdsByUserId(
+            user.getUserId()
+         );
+      List<Long> filteredIds =
+         conversationService.getConversationsWithNewMessage(conversationIds);
       if (filteredIds != null) {
          List<MessageBoard> messageBoards = new ArrayList<>();
          for (Long conversationId : filteredIds) {
             messageBoards.add(
-                    new MessageBoard(
-                            conversationId,
-                            getLatestMassageByConversationId(
-                                    conversationId
-                            ),
-                            conversationParticipantsService.getUsersByConversationId(
-                                    conversationId
-                            )
-                    )
+               new MessageBoard(
+                  conversationId,
+                  getLatestMassageByConversationId(conversationId),
+                  conversationParticipantsService.getUsersByConversationId(
+                     conversationId
+                  )
+               )
             );
-            conversationService.setConversationHasNewMessage(conversationId, false);
+            conversationService.setConversationHasNewMessage(
+               conversationId,
+               false
+            );
          }
          return messageBoards;
       } else {

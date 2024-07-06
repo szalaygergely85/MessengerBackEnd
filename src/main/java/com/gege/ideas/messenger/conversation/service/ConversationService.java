@@ -1,7 +1,6 @@
 package com.gege.ideas.messenger.conversation.service;
 
 import com.gege.ideas.messenger.DTO.ConversationContent;
-import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
@@ -70,7 +69,14 @@ public class ConversationService {
    public void setConversationHasNewMessage(
       Long conversationId,
       boolean hasNewMessage
-   ) {}
+   ) {
+      Conversation conversation =
+         _conversationsRepository.findConversationByConversationId(
+            conversationId
+         );
+      conversation.setHasNewMessage(hasNewMessage);
+      _conversationsRepository.save(conversation);
+   }
 
    public List<Long> getConversationsWithNewMessage(
       List<Long> conversationIds
