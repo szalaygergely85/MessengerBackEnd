@@ -1,10 +1,10 @@
 package com.gege.ideas.messenger.conversation.service;
 
 import com.gege.ideas.messenger.DTO.ConversationContent;
+import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
-import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
@@ -67,7 +67,7 @@ public class ConversationService {
       return conversationContent;
    }
 
-   public List<Message> getNewMessagesByUserToken(String userToken) {
+   public List<MessageBoard> getNewMessagesByUserToken(String userToken) {
       User user = userService.getUserByToken(userToken);
       List<Long> conversationIds =
          conversationParticipantsService.getConversationIdsByUserId(
@@ -75,15 +75,23 @@ public class ConversationService {
          );
       List<Long> filteredIds = _getConversationsWithNewMessage(conversationIds);
       if (filteredIds != null) {
-         List<Message> latestMessages = new ArrayList<>();
+         List<MessageBoard> messageBoards = new ArrayList<>();
          for (Long conversationId : filteredIds) {
-            latestMessages.add(
-               messageService.getLatestMassageByConversationId(conversationId)
+            messageBoards.add(
+               new MessageBoard(
+                  conversationId,
+                  messageService.getLatestMassageByConversationId(
+                     conversationId
+                  ),
+                  conversationParticipantsService.getUsersByConversationId(
+                     conversationId
+                  )
+               )
             );
 
             setConversationHasNewMessage(conversationId, false);
          }
-         return latestMessages;
+         return messageBoards;
       } else {
          return null;
       }

@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.conversation.controller;
 
+import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.permission.service.PermissionService;
@@ -59,11 +60,11 @@ public class ConversationsController {
    public ResponseEntity<?> getConversationWithNewMessage(
       @RequestHeader("Authorization") String authToken
    ) {
-      List<Message> messages = conversationService.getNewMessagesByUserToken(
+      List<MessageBoard> messagesBoardEntries = conversationService.getNewMessagesByUserToken(
          authToken
       );
-      if (permissionService.hasPermissionToMessages(authToken, messages)) {
-         return ResponseEntity.ok().body(messages);
+      if (permissionService.hasPermissionToMessageBoards(authToken, messagesBoardEntries)) {
+         return ResponseEntity.ok().body(messagesBoardEntries);
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

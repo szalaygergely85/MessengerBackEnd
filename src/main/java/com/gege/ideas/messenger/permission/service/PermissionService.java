@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.permission.service;
 
+import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
@@ -71,11 +72,11 @@ public class PermissionService {
       return false;
    }
 
-   public boolean hasPermissionToMessages(
+   public boolean hasPermissionToMessageBoards(
       String authToken,
-      List<Message> messages
+      List<MessageBoard> messages
    ) {
-      for (Message message : messages) {
+      for (MessageBoard message : messages) {
          if (
             !hasPermissionToConversation(authToken, message.getConversationId())
          ) {
