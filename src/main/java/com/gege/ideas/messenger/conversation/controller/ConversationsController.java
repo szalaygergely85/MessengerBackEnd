@@ -5,6 +5,7 @@ import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,6 @@ public class ConversationsController {
    private final ConversationService conversationService;
 
    private final PermissionService permissionService;
-
    @Autowired
    public ConversationsController(
       ConversationService conversationService,

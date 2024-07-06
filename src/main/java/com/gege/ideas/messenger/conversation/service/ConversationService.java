@@ -5,6 +5,7 @@ import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
 import com.gege.ideas.messenger.message.service.MessageService;
+import com.gege.ideas.messenger.servicelocator.ServiceLocator;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ public class ConversationService {
 
    private UserService userService;
    private ConversationParticipantsService conversationParticipantsService;
-   private MessageService messageService;
    private ConversationsRepository _conversationsRepository;
+
+   private final ServiceLocator serviceLocator;
 
    public Long addConversation(List<User> participants) {
       Long conversationId = _getExistingConversationId(participants);
@@ -58,6 +60,7 @@ public class ConversationService {
             conversationId
          )
       );
+      MessageService messageService = serviceLocator.getMessageService();
       conversationContent.setMessages(
          messageService.getMessagesByConversationIdOrderedByTimestamp(
             conversationId
@@ -129,12 +132,12 @@ public class ConversationService {
    public ConversationService(
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
-      MessageService messageService,
+      ServiceLocator serviceLocator,
       ConversationsRepository _conversationsRepository
    ) {
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
-      this.messageService = messageService;
+      this.serviceLocator = serviceLocator;
       this._conversationsRepository = _conversationsRepository;
    }
 }
