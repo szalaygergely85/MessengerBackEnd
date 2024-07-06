@@ -2,6 +2,7 @@ package com.gege.ideas.messenger.message.service;
 
 import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
+import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.permission.service.PermissionService;
@@ -21,6 +22,7 @@ public class MessageService {
    private final UserService userService;
    private final ConversationParticipantsService conversationParticipantsService;
    private final PermissionService permissionService;
+   private final ConversationService conversationService;
 
    @Autowired
    public MessageService(
@@ -28,13 +30,15 @@ public class MessageService {
       UserTokenService userTokenService,
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
-      PermissionService permissionService
+      PermissionService permissionService,
+      ConversationService conversationService
    ) {
       this.messageRepository = messageRepository;
       this.userTokenService = userTokenService;
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
       this.permissionService = permissionService;
+      this.conversationService = conversationService;
    }
 
    public Message createMessage(Message message) {
@@ -84,5 +88,34 @@ public class MessageService {
       return messageRepository.findTopByConversationIdOrderByTimestampDesc(
          conversationId
       );
+   }
+
+   public List<MessageBoard> getNewMessagesByUserToken(String authToken) {
+      User user = userService.getUserByToken(authToken);
+      List<Long> conversationIds =
+              conversationParticipantsService.getConversationIdsByUserId(
+                      user.getUserId()
+              );
+      List<Long> filteredIds = conversationService.getConversationsWithNewMessage(conversationIds);
+      if (filteredIds != null) {
+         List<MessageBoard> messageBoards = new ArrayList<>();
+         for (Long conversationId : filteredIds) {
+            messageBoards.add(
+                    new MessageBoard(
+                            conversationId,
+                            getLatestMassageByConversationId(
+                                    conversationId
+                            ),
+                            conversationParticipantsService.getUsersByConversationId(
+                                    conversationId
+                            )
+                    )
+            );
+            conversationService.setConversationHasNewMessage(conversationId, false);
+         }
+         return messageBoards;
+      } else {
+         return null;
+      }
    }
 }

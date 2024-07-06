@@ -67,42 +67,12 @@ public class ConversationService {
       return conversationContent;
    }
 
-   public List<MessageBoard> getNewMessagesByUserToken(String userToken) {
-      User user = userService.getUserByToken(userToken);
-      List<Long> conversationIds =
-         conversationParticipantsService.getConversationIdsByUserId(
-            user.getUserId()
-         );
-      List<Long> filteredIds = _getConversationsWithNewMessage(conversationIds);
-      if (filteredIds != null) {
-         List<MessageBoard> messageBoards = new ArrayList<>();
-         for (Long conversationId : filteredIds) {
-            messageBoards.add(
-               new MessageBoard(
-                  conversationId,
-                  messageService.getLatestMassageByConversationId(
-                     conversationId
-                  ),
-                  conversationParticipantsService.getUsersByConversationId(
-                     conversationId
-                  )
-               )
-            );
-
-            setConversationHasNewMessage(conversationId, false);
-         }
-         return messageBoards;
-      } else {
-         return null;
-      }
-   }
-
    public void setConversationHasNewMessage(
       Long conversationId,
       boolean hasNewMessage
    ) {}
 
-   private List<Long> _getConversationsWithNewMessage(
+   public List<Long> getConversationsWithNewMessage(
       List<Long> conversationIds
    ) {
       List<Long> filteredConversationIds = new ArrayList<>();

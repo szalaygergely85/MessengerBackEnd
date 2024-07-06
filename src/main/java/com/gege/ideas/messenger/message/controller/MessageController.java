@@ -56,6 +56,20 @@ public class MessageController {
       return _messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
    }
 
+   @GetMapping("new-message")
+   public ResponseEntity<?> getConversationWithNewMessage(
+           @RequestHeader("Authorization") String authToken
+   ) {
+      List<MessageBoard> messagesBoardEntries = _messageService.getNewMessagesByUserToken(
+              authToken
+      );
+      if (_permissionService.hasPermissionToMessageBoards(authToken, messagesBoardEntries)) {
+         return ResponseEntity.ok().body(messagesBoardEntries);
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
    @Autowired
    MessageController(
       MessageService _messageService,
