@@ -5,6 +5,8 @@ import com.gege.ideas.messenger.conversation.service.ConversationParticipantsSer
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
+import com.gege.ideas.messenger.notifcation.entity.Notification;
+import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
@@ -23,6 +25,7 @@ public class MessageService {
    private final ConversationParticipantsService conversationParticipantsService;
    private final PermissionService permissionService;
    private final ConversationService conversationService;
+   private final NotificationService notificationService;
 
    @Autowired
    public MessageService(
@@ -31,7 +34,8 @@ public class MessageService {
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
       PermissionService permissionService,
-      ConversationService conversationService
+      ConversationService conversationService,
+      NotificationService notificationService
    ) {
       this.messageRepository = messageRepository;
       this.userTokenService = userTokenService;
@@ -39,10 +43,31 @@ public class MessageService {
       this.conversationParticipantsService = conversationParticipantsService;
       this.permissionService = permissionService;
       this.conversationService = conversationService;
+      this.notificationService = notificationService;
    }
 
    public Message createMessage(Message message) {
       message.setRead(false);
+
+      List<User> recipientUsers =
+         conversationParticipantsService.getUsersByConversationId(
+            message.getConversationId()
+         );
+      for (User recipientUser : recipientUsers) {
+         if (recipientUser.getUserId() != message.getSenderId()) {
+            String title = "Message from: " + recipientUser.getDisplayName();
+            notificationService.addNotification(
+               new Notification(
+                  message.getContent(),
+                  message.getConversationId(),
+                  true,
+                  message.getTimestamp(),
+                  title,
+                  recipientUser.getUserId()
+               )
+            );
+         }
+      }
       return messageRepository.save(message);
    }
 

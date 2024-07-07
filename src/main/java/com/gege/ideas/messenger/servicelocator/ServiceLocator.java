@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceLocator {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+   @Autowired
+   private ApplicationContext applicationContext;
 
-    public ConversationService getConversationService() {
-        return applicationContext.getBean(ConversationService.class);
-    }
+   public ConversationService getConversationService() {
+      return applicationContext.getBean(ConversationService.class);
+   }
 
-    public MessageService getMessageService() {
-        return applicationContext.getBean(MessageService.class);
-    }
+   public MessageService getMessageService() {
+      return applicationContext.getBean(MessageService.class);
+   }
 }
