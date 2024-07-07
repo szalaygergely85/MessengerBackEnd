@@ -13,6 +13,7 @@ public class Notification {
    @Lob
    @Column(columnDefinition = "LONGTEXT")
    private String content;
+
    private Long conversationId;
    private boolean isActive;
    private Long timeStamp;

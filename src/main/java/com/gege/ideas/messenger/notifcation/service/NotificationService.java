@@ -11,13 +11,23 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
    public List<Notification> getActiveNotifications(String token) {
-      return notificationRepository.findByUserIdAndIsActiveTrue(
-         userService.getUserIdByToken(token)
-      );
+      List<Notification> notifications =
+         notificationRepository.findByUserIdAndIsActiveTrue(
+            userService.getUserIdByToken(token)
+         );
+      _setNotificationInActive(notifications);
+      return notifications;
    }
 
    public Notification addNotification(Notification notification) {
       return notificationRepository.save(notification);
+   }
+
+   private void _setNotificationInActive(List<Notification> notifications) {
+      for (Notification notification : notifications) {
+         notification.setActive(false);
+         notificationRepository.save(notification);
+      }
    }
 
    @Autowired
