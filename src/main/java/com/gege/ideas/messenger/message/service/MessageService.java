@@ -115,6 +115,7 @@ public class MessageService {
       );
    }
 
+   @Deprecated
    public List<MessageBoard> getNewMessagesByUserToken(String authToken) {
       User user = userService.getUserByToken(authToken);
       List<Long> conversationIds =

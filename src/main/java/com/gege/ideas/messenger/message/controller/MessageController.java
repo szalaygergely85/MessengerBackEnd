@@ -56,6 +56,7 @@ public class MessageController {
       return _messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
    }
 
+   @Deprecated
    @GetMapping("new-message")
    public ResponseEntity<?> getConversationWithNewMessage(
       @RequestHeader("Authorization") String authToken
