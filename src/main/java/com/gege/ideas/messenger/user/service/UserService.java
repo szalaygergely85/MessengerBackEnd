@@ -4,6 +4,7 @@ import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,20 @@ public class UserService {
    public String getPublicKeyByToken(Long userId) {
       User user = getUserById(userId);
       return user.getPublicKey();
+   }
+
+   public void deleteUser(User user) {
+      Long userTokenId = user.getUserTokenId();
+
+      userRepository.delete(user);
+      userTokenService.deleteToken(userTokenId);
+   }
+
+   public List<User> getUsersByIds(List<Long> participantsId) {
+      List<User> users = new ArrayList<>();
+      for (Long userId : participantsId) {
+         users.add(getUserById(userId));
+      }
+      return users;
    }
 }

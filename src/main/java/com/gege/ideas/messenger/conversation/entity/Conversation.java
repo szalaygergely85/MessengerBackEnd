@@ -11,8 +11,8 @@ public class Conversation {
    private Long conversationId;
 
    private Long timeStamp;
-
-   private boolean hasNewMessage;
+   private Long creatorUserId;
+   private int numberOfParticipants;
 
    public Long getTimeStamp() {
       return timeStamp;
@@ -22,17 +22,18 @@ public class Conversation {
       this.timeStamp = timeStamp;
    }
 
-   public boolean hasNewMessage() {
-      return hasNewMessage;
-   }
-
-   public void setHasNewMessage(boolean hasNewMessage) {
-      this.hasNewMessage = hasNewMessage;
-   }
-
    public Conversation(Long timeStamp, boolean hasNewMessage) {
       this.timeStamp = timeStamp;
-      this.hasNewMessage = hasNewMessage;
+   }
+
+   public Conversation(
+      Long timeStamp,
+      Long creatorUserId,
+      int numberOfParticipants
+   ) {
+      this.timeStamp = timeStamp;
+      this.creatorUserId = creatorUserId;
+      this.numberOfParticipants = numberOfParticipants;
    }
 
    public Long getConversationId() {
@@ -41,6 +42,22 @@ public class Conversation {
 
    public void setConversationId(Long conversationId) {
       this.conversationId = conversationId;
+   }
+
+   public Long getCreatorUserId() {
+      return creatorUserId;
+   }
+
+   public void setCreatorUserId(Long creatorUserId) {
+      this.creatorUserId = creatorUserId;
+   }
+
+   public int getNumberOfParticipants() {
+      return numberOfParticipants;
+   }
+
+   public void setNumberOfParticipants(int numberOfParticipants) {
+      this.numberOfParticipants = numberOfParticipants;
    }
 
    public Conversation() {}

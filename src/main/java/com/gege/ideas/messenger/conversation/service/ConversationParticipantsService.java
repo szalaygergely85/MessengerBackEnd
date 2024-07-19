@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ConversationParticipantsService {
@@ -71,5 +72,12 @@ public class ConversationParticipantsService {
       ConversationParticipant conversationParticipant
    ) {
       conversationParticipantsRepository.save(conversationParticipant);
+   }
+
+   @Transactional
+   public void deleteByConversationId(Long conversationId) {
+      conversationParticipantsRepository.deleteConversationParticipantsByConversationId(
+         conversationId
+      );
    }
 }

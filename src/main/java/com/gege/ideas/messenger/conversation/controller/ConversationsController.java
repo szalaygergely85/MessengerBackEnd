@@ -34,7 +34,26 @@ public class ConversationsController {
       if (permissionService.isInParticipants(participants, authToken)) {
          return ResponseEntity
             .ok()
-            .body(conversationService.addConversation(participants));
+            .body(conversationService.addConversation(participants, authToken));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
+
+   @PostMapping("id")
+   public ResponseEntity<?> addConversationById(
+      @RequestBody List<Long> participantsId,
+      @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isInParticipantsIds(participantsId, authToken)) {
+         return ResponseEntity
+            .ok()
+            .body(
+               conversationService.addConversationById(
+                  participantsId,
+                  authToken
+               )
+            );
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

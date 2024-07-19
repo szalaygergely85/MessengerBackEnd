@@ -84,4 +84,11 @@ public class PermissionService {
       }
       return true;
    }
+
+   public boolean isInParticipantsIds(
+      List<Long> participantsId,
+      String authToken
+   ) {
+      return true;
+   }
 }

@@ -136,10 +136,6 @@ public class MessageService {
                   )
                )
             );
-            conversationService.setConversationHasNewMessage(
-               conversationId,
-               false
-            );
          }
          return messageBoards;
       } else {

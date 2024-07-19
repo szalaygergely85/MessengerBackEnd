@@ -53,4 +53,8 @@ public class UserTokenService {
    public UserToken getUserTokenByTokenId(Long id) {
       return userTokenRepository.findByUserTokenId(id);
    }
+
+   public void deleteToken(Long userTokenId) {
+      userTokenRepository.deleteById(userTokenId);
+   }
 }

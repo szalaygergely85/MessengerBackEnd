@@ -9,4 +9,6 @@ public interface ConversationParticipantsRepository
    List<ConversationParticipant> findByUserId(Long userId);
 
    List<ConversationParticipant> findByConversationId(Long id);
+
+   void deleteConversationParticipantsByConversationId(Long conversationId);
 }

@@ -22,12 +22,14 @@ public class ConversationService {
 
    private final ServiceLocator serviceLocator;
 
-   public Long addConversation(List<User> participants) {
+   public Long addConversation(List<User> participants, String authToken) {
       Long conversationId = _getExistingConversationId(participants);
+
       if (conversationId == null) {
          Conversation conversation = new Conversation(
             System.currentTimeMillis(),
-            false
+            userService.getUserIdByToken(authToken),
+            participants.size()
          );
          _conversationsRepository.save(conversation);
          for (User participant : participants) {
@@ -43,6 +45,16 @@ public class ConversationService {
          return conversation.getConversationId();
       }
       return conversationId;
+   }
+
+   public Long addConversationById(
+      List<Long> participantsId,
+      String authToken
+   ) {
+      return addConversation(
+         userService.getUsersByIds(participantsId),
+         authToken
+      );
    }
 
    public Conversation getConversationById(Long conversationId) {
@@ -67,18 +79,6 @@ public class ConversationService {
          )
       );
       return conversationContent;
-   }
-
-   public void setConversationHasNewMessage(
-      Long conversationId,
-      boolean hasNewMessage
-   ) {
-      Conversation conversation =
-         _conversationsRepository.findConversationByConversationId(
-            conversationId
-         );
-      conversation.setHasNewMessage(hasNewMessage);
-      _conversationsRepository.save(conversation);
    }
 
    public List<Long> getConversationsWithNewMessage(
@@ -120,12 +120,13 @@ public class ConversationService {
       return null;
    }
 
+   @Deprecated
    private boolean _hasNewMessage(Long conversationId) {
       Conversation conversation =
          _conversationsRepository.findConversationByConversationId(
             conversationId
          );
-      return conversation.hasNewMessage();
+      return true;
    }
 
    @Autowired
@@ -139,5 +140,11 @@ public class ConversationService {
       this.conversationParticipantsService = conversationParticipantsService;
       this.serviceLocator = serviceLocator;
       this._conversationsRepository = _conversationsRepository;
+   }
+
+   public void deleteConversation(Conversation conversation) {
+      Long conversationId = conversation.getConversationId();
+      conversationParticipantsService.deleteByConversationId(conversationId);
+      _conversationsRepository.delete(conversation);
    }
 }
