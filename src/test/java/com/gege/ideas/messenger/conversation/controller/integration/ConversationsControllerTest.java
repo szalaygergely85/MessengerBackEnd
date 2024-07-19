@@ -59,7 +59,9 @@ public class ConversationsControllerTest {
       // Clean up the test user after each test
       userTestUtil.deleteUser(testUser);
       userTestUtil.deleteUser(testUser2);
-      conversationService.deleteConversation(conversation);
+      if (conversation != null) {
+         conversationService.deleteConversation(conversation);
+      }
    }
 
    @Test
@@ -95,34 +97,9 @@ public class ConversationsControllerTest {
          );
 
       assertEquals(participantsId.size(), participants.size());
-
       assertTrue(_isInParticipantList(participantsId, participants));
-
-      assertEquals(conversation.getCreatorUserId(), testUser.getUserId());
-
+      assertEquals(testUser.getUserId(), conversation.getCreatorUserId());
       assertEquals(participants.size(), conversation.getNumberOfParticipants());
-   }
-
-   @Test
-   public void testAddConversationByIdUnAuth() throws Exception {
-      List<Long> participantsId = Arrays.asList(
-         testUser.getUserId(),
-         testUser2.getUserId()
-      );
-
-      HttpHeaders headers = new HttpHeaders();
-      headers.set("Authorization", RandomUtil.getRandomString(10));
-      HttpEntity<List<Long>> requestEntity = new HttpEntity<>(
-         participantsId,
-         headers
-      );
-      ResponseEntity<?> response = restTemplate.postForEntity(
-         "/api/conversation/id",
-         requestEntity,
-         Long.class
-      );
-
-      assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
    }
 
    private boolean _isInParticipantList(

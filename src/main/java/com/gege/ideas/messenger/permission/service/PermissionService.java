@@ -63,9 +63,11 @@ public class PermissionService {
 
    public boolean isInParticipants(List<User> participants, String authToken) {
       User user = userService.getUserByToken(authToken);
-      for (User participant : participants) {
-         if (user.getUserId() == participant.getUserId()) {
-            return true;
+      if(user != null) {
+         for (User participant : participants) {
+            if (user.getUserId() == participant.getUserId()) {
+               return true;
+            }
          }
       }
       return false;
@@ -89,6 +91,6 @@ public class PermissionService {
       List<Long> participantsId,
       String authToken
    ) {
-      return true;
+      return isInParticipants(userService.getUsersByIds(participantsId), authToken);
    }
 }
