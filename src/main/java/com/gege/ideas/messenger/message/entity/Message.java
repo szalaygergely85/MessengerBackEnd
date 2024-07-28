@@ -97,10 +97,18 @@ public class Message implements Serializable {
    public void setContentSenderVersion(String contentSenderVersion) {
       this.contentSenderVersion = contentSenderVersion;
    }
-   public Message() {
-   }
 
-   public Message(long conversationId, long senderId, long timestamp, String content, boolean isRead, int type, String contentSenderVersion) {
+   public Message() {}
+
+   public Message(
+      long conversationId,
+      long senderId,
+      long timestamp,
+      String content,
+      boolean isRead,
+      int type,
+      String contentSenderVersion
+   ) {
       this.conversationId = conversationId;
       this.senderId = senderId;
       this.timestamp = timestamp;
@@ -109,6 +117,4 @@ public class Message implements Serializable {
       this.type = type;
       this.contentSenderVersion = contentSenderVersion;
    }
-
-
 }

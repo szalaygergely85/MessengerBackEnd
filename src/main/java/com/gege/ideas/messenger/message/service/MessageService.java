@@ -143,22 +143,25 @@ public class MessageService {
       }
    }
 
-    public void deleteMessage(Message message) {
+   public void deleteMessage(Message message) {
       messageRepository.delete(message);
-    }
+   }
 
    public Object getAllMessagesForUser(String token) {
       User user = userService.getUserByToken(token);
-      List<Long> conversationIds = conversationParticipantsService.getConversationIdsByUserId(user.getUserId());
+      List<Long> conversationIds =
+         conversationParticipantsService.getConversationIdsByUserId(
+            user.getUserId()
+         );
 
       List<Message> messages = new ArrayList<>();
-      for (Long conversationId : conversationIds){
-         List <Message> messagesOfConversation = messageRepository.findByConversationId(conversationId);
-         if (messagesOfConversation!= null){
+      for (Long conversationId : conversationIds) {
+         List<Message> messagesOfConversation =
+            messageRepository.findByConversationId(conversationId);
+         if (messagesOfConversation != null) {
             messages.addAll(messagesOfConversation);
          }
       }
       return messages;
-
    }
 }

@@ -51,19 +51,18 @@ public class MessageController {
 
    @GetMapping("/validate")
    public ResponseEntity<?> getMessagesAndCompareWithLocal(
-           @RequestHeader("Authorization") String token,
-           @RequestParam("count") Long count
+      @RequestHeader("Authorization") String token,
+      @RequestParam("count") Long count
    ) {
       if (_permissionService.isUserRegistered(token)) {
          return ResponseEntity
-                 .ok()
-                 .body(
-                         _messageService.getAllMessagesForUser(token)
-                 );
+            .ok()
+            .body(_messageService.getAllMessagesForUser(token));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
+
    @GetMapping("/messageboardentries")
    public List<MessageBoard> getLatestMessage(
       @RequestHeader("Authorization") String token

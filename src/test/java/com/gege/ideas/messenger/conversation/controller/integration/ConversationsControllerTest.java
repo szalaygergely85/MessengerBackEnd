@@ -7,7 +7,6 @@ import com.gege.ideas.messenger.conversation.service.ConversationParticipantsSer
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.entity.UserToken;
-import com.gege.ideas.messenger.utils.RandomUtil;
 import com.gege.ideas.messenger.utils.test.UserTestUtil;
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +59,9 @@ public class ConversationsControllerTest {
       userTestUtil.deleteUser(testUser);
       userTestUtil.deleteUser(testUser2);
       if (conversation != null) {
-         conversationService.clearConversation(conversation.getConversationId());
+         conversationService.clearConversation(
+            conversation.getConversationId()
+         );
       }
    }
 

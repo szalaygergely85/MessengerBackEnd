@@ -150,6 +150,8 @@ public class ConversationService {
 
    public void clearConversation(Long conversationId) {
       conversationParticipantsService.deleteByConversationId(conversationId);
-      _conversationsRepository.deleteConversationByConversationId(conversationId);
+      _conversationsRepository.deleteConversationByConversationId(
+         conversationId
+      );
    }
 }
