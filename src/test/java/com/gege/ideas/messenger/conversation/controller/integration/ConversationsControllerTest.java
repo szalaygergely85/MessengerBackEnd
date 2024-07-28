@@ -60,7 +60,7 @@ public class ConversationsControllerTest {
       userTestUtil.deleteUser(testUser);
       userTestUtil.deleteUser(testUser2);
       if (conversation != null) {
-         conversationService.deleteConversation(conversation);
+         conversationService.clearConversation(conversation.getConversationId());
       }
    }
 

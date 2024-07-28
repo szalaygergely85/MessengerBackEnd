@@ -147,4 +147,9 @@ public class ConversationService {
       conversationParticipantsService.deleteByConversationId(conversationId);
       _conversationsRepository.delete(conversation);
    }
+
+   public void clearConversation(Long conversationId) {
+      conversationParticipantsService.deleteByConversationId(conversationId);
+      _conversationsRepository.deleteConversationByConversationId(conversationId);
+   }
 }

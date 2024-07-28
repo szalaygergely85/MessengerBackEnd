@@ -35,7 +35,7 @@ public class MessageController {
 
    @GetMapping("/byconversationid/{id}")
    public ResponseEntity<?> getConversationMessages(
-      @PathVariable Long id,
+      @RequestParam Long id,
       @RequestHeader("Authorization") String token
    ) {
       if (_permissionService.hasPermissionToConversation(token, id)) {
@@ -49,6 +49,21 @@ public class MessageController {
          .body("Unauthorized");
    }
 
+   @GetMapping("/validate")
+   public ResponseEntity<?> getMessagesAndCompareWithLocal(
+           @RequestHeader("Authorization") String token,
+           @RequestParam("count") Long count
+   ) {
+      if (_permissionService.isUserRegistered(token)) {
+         return ResponseEntity
+                 .ok()
+                 .body(
+                         _messageService.getAllMessagesForUser(token)
+                 );
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
    @GetMapping("/messageboardentries")
    public List<MessageBoard> getLatestMessage(
       @RequestHeader("Authorization") String token
