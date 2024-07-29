@@ -34,6 +34,9 @@ public class Message implements Serializable {
    @Column(columnDefinition = "LONGTEXT")
    private String contentSenderVersion;
 
+   @Column
+   private String uUId;
+
    public Long getMessageId() {
       return messageId;
    }
@@ -98,6 +101,14 @@ public class Message implements Serializable {
       this.contentSenderVersion = contentSenderVersion;
    }
 
+   public String getuUId() {
+      return uUId;
+   }
+
+   public void setuUId(String uUId) {
+      this.uUId = uUId;
+   }
+
    public Message() {}
 
    public Message(
@@ -107,7 +118,8 @@ public class Message implements Serializable {
       String content,
       boolean isRead,
       int type,
-      String contentSenderVersion
+      String contentSenderVersion,
+      String uUId
    ) {
       this.conversationId = conversationId;
       this.senderId = senderId;
@@ -116,5 +128,6 @@ public class Message implements Serializable {
       this.isRead = isRead;
       this.type = type;
       this.contentSenderVersion = contentSenderVersion;
+      this.uUId = uUId;
    }
 }

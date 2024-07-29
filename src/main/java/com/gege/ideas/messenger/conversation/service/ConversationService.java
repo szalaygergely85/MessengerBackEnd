@@ -142,12 +142,6 @@ public class ConversationService {
       this._conversationsRepository = _conversationsRepository;
    }
 
-   public void deleteConversation(Conversation conversation) {
-      Long conversationId = conversation.getConversationId();
-      conversationParticipantsService.deleteByConversationId(conversationId);
-      _conversationsRepository.delete(conversation);
-   }
-
    public void clearConversation(Long conversationId) {
       conversationParticipantsService.deleteByConversationId(conversationId);
       _conversationsRepository.deleteConversationByConversationId(
