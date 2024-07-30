@@ -29,6 +29,20 @@ public class ContactsController {
       this.permissionService = permissionService;
    }
 
+   @GetMapping("/validate")
+   public ResponseEntity<?> getContactsAndCompareWithLocal(
+      @RequestHeader("Authorization") String authToken,
+      @RequestParam("count") int count
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+                 .ok()
+                 .body(contactsService.getContactsAndCompareWithLocal(authToken, count));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
    @GetMapping
    public List<User> getContactUsers(
       @RequestHeader("Authorization") String authToken

@@ -52,12 +52,12 @@ public class MessageController {
    @GetMapping("/validate")
    public ResponseEntity<?> getMessagesAndCompareWithLocal(
       @RequestHeader("Authorization") String token,
-      @RequestParam("count") Long count
+      @RequestParam("count") int count
    ) {
       if (_permissionService.isUserRegistered(token)) {
          return ResponseEntity
             .ok()
-            .body(_messageService.getAllMessagesForUser(token));
+            .body(_messageService.getMessagesAndCompareWithLocal(token, count));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

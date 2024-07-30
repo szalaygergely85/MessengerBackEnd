@@ -147,7 +147,7 @@ public class MessageService {
       messageRepository.delete(message);
    }
 
-   public Object getAllMessagesForUser(String token) {
+   public Object getMessagesAndCompareWithLocal(String token, int count) {
       User user = userService.getUserByToken(token);
       List<Long> conversationIds =
          conversationParticipantsService.getConversationIdsByUserId(
@@ -162,6 +162,11 @@ public class MessageService {
             messages.addAll(messagesOfConversation);
          }
       }
+
+      if(messages.size()== count){
+         return null;
+      }
+
       return messages;
    }
 }

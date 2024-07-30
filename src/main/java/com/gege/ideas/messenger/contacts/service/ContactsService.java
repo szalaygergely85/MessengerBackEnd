@@ -14,6 +14,7 @@ public class ContactsService {
 
    private ContactsRepository contactsRepository;
    private UserService userService;
+   List<User> contactUsers = new ArrayList<>();
 
    @Autowired
    public ContactsService(
@@ -25,7 +26,6 @@ public class ContactsService {
    }
 
    public List<User> getContactUserByOwnerId(Long id) {
-      List<User> contactUsers = new ArrayList<>();
       List<Contacts> contactsList = contactsRepository.findByOwnerId(id);
       for (Contacts contact : contactsList) {
          User user = userService.getUserById(contact.getContactUserId());
@@ -48,5 +48,20 @@ public class ContactsService {
          return true;
       }
       return false;
+   }
+
+   public Object getContactsAndCompareWithLocal(String authToken, int count) {
+      Long userId = userService.getUserIdByToken(authToken);
+      List<Contacts> contactsList = contactsRepository.findByOwnerId(userId);
+
+      if (contactsList.size()==count){
+         return null;
+      }
+
+      for (Contacts contact : contactsList) {
+         User user = userService.getUserById(contact.getContactUserId());
+         contactUsers.add(user);
+      }
+      return contactUsers;
    }
 }
