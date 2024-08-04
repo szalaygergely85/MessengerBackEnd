@@ -16,8 +16,6 @@ public class ConversationParticipant {
    @Column(nullable = false)
    private Long userId;
 
-   @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-   private Long keyStatus = 0L;
 
    public Long getConversationParticipantId() {
       return conversationParticipantId;
@@ -43,13 +41,6 @@ public class ConversationParticipant {
       this.userId = userId;
    }
 
-   public Long getKeyStatus() {
-      return keyStatus;
-   }
-
-   public void setKeyStatus(Long keyStatus) {
-      this.keyStatus = keyStatus;
-   }
 
    public ConversationParticipant(Long conversationId, Long userId) {
       this.conversationId = conversationId;

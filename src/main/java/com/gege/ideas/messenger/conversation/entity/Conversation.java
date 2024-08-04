@@ -9,7 +9,7 @@ public class Conversation {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long conversationId;
-
+   private String conversationName;
    private Long timeStamp;
    private Long creatorUserId;
    private int numberOfParticipants;
@@ -22,6 +22,14 @@ public class Conversation {
       this.timeStamp = timeStamp;
    }
 
+   public String getConversationName() {
+      return conversationName;
+   }
+
+   public void setConversationName(String conversationName) {
+      this.conversationName = conversationName;
+   }
+
    public Conversation(Long timeStamp, boolean hasNewMessage) {
       this.timeStamp = timeStamp;
    }
@@ -31,6 +39,13 @@ public class Conversation {
       Long creatorUserId,
       int numberOfParticipants
    ) {
+      this.timeStamp = timeStamp;
+      this.creatorUserId = creatorUserId;
+      this.numberOfParticipants = numberOfParticipants;
+   }
+
+   public Conversation(String conversationName, Long timeStamp, Long creatorUserId, int numberOfParticipants) {
+      this.conversationName = conversationName;
       this.timeStamp = timeStamp;
       this.creatorUserId = creatorUserId;
       this.numberOfParticipants = numberOfParticipants;
