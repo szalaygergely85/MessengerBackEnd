@@ -16,7 +16,6 @@ public class ConversationParticipant {
    @Column(nullable = false)
    private Long userId;
 
-
    public Long getConversationParticipantId() {
       return conversationParticipantId;
    }
@@ -40,7 +39,6 @@ public class ConversationParticipant {
    public void setUserId(Long userId) {
       this.userId = userId;
    }
-
 
    public ConversationParticipant(Long conversationId, Long userId) {
       this.conversationId = conversationId;

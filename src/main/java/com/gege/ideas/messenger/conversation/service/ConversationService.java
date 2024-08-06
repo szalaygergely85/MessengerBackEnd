@@ -148,4 +148,57 @@ public class ConversationService {
          conversationId
       );
    }
+
+   public List<Conversation> getConversationAndCompareWithLocal(
+      Long count,
+      String authToken
+   ) {
+      Long userId = userService.getUserIdByToken(authToken);
+      List<Long> conversationIds =
+         conversationParticipantsService.getConversationIdsByUserId(userId);
+
+      if (conversationIds.size() == count) {
+         return null;
+      }
+
+      List<Conversation> conversations = new ArrayList<>();
+      for (Long conversationId : conversationIds) {
+         conversations.add(
+            _conversationsRepository.findConversationByConversationId(
+               conversationId
+            )
+         );
+      }
+      return conversations;
+   }
+
+   public List<
+      ConversationParticipant
+   > getConversationParticipantAndCompareWithLocal(
+      Long count,
+      String authToken
+   ) {
+      Long userId = userService.getUserIdByToken(authToken);
+      List<Long> conversationIds =
+         conversationParticipantsService.getConversationIdsByUserId(userId);
+
+      List<ConversationParticipant> participants = new ArrayList<>();
+
+      for (Long conversationId : conversationIds) {
+         List<ConversationParticipant> conversationP =
+            conversationParticipantsService.getParticipantByConversationId(
+               conversationId
+            );
+         for (ConversationParticipant participant : conversationP) {
+            if (participant.getUserId() != userId) {
+               participants.add(participant);
+            }
+         }
+      }
+      if (participants.size() == count) {
+         return null;
+      }
+
+      return participants;
+   }
 }

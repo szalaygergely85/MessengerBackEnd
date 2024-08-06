@@ -36,11 +36,13 @@ public class ContactsController {
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
-                 .ok()
-                 .body(contactsService.getContactsAndCompareWithLocal(authToken, count));
+            .ok()
+            .body(
+               contactsService.getContactsAndCompareWithLocal(authToken, count)
+            );
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @GetMapping

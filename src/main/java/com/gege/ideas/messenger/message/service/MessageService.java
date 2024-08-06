@@ -163,7 +163,7 @@ public class MessageService {
          }
       }
 
-      if(messages.size()== count){
+      if (messages.size() == count) {
          return null;
       }
 

@@ -9,6 +9,7 @@ public class Conversation {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long conversationId;
+
    private String conversationName;
    private Long timeStamp;
    private Long creatorUserId;
@@ -44,7 +45,12 @@ public class Conversation {
       this.numberOfParticipants = numberOfParticipants;
    }
 
-   public Conversation(String conversationName, Long timeStamp, Long creatorUserId, int numberOfParticipants) {
+   public Conversation(
+      String conversationName,
+      Long timeStamp,
+      Long creatorUserId,
+      int numberOfParticipants
+   ) {
       this.conversationName = conversationName;
       this.timeStamp = timeStamp;
       this.creatorUserId = creatorUserId;

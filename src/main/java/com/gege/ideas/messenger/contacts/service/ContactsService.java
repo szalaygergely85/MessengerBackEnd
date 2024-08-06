@@ -54,7 +54,7 @@ public class ContactsService {
       Long userId = userService.getUserIdByToken(authToken);
       List<Contacts> contactsList = contactsRepository.findByOwnerId(userId);
 
-      if (contactsList.size()==count){
+      if (contactsList.size() == count) {
          return null;
       }
 

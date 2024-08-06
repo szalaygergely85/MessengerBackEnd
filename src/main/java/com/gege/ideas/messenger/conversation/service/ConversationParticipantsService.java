@@ -80,4 +80,12 @@ public class ConversationParticipantsService {
          conversationId
       );
    }
+
+   public List<ConversationParticipant> getParticipantByConversationId(
+      Long conversationId
+   ) {
+      return conversationParticipantsRepository.findByConversationId(
+         conversationId
+      );
+   }
 }

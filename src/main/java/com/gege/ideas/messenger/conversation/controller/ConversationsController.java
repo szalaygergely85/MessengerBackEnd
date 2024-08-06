@@ -72,4 +72,42 @@ public class ConversationsController {
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
+
+   @GetMapping("validate")
+   public ResponseEntity<?> getConversationAndCompareWithLocal(
+      @RequestParam("count") Long count,
+      @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+            .ok()
+            .body(
+               conversationService.getConversationAndCompareWithLocal(
+                  count,
+                  authToken
+               )
+            );
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
+
+   @GetMapping("validate-participant")
+   public ResponseEntity<?> getConversationParticipantAndCompareWithLocal(
+      @RequestParam("count") Long count,
+      @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+            .ok()
+            .body(
+               conversationService.getConversationParticipantAndCompareWithLocal(
+                  count,
+                  authToken
+               )
+            );
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
 }
