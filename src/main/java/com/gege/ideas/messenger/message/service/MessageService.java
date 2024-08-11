@@ -48,6 +48,7 @@ public class MessageService {
 
    public Message createMessage(Message message) {
       message.setRead(false);
+      message.setDownloaded(false);
 
       List<User> recipientUsers =
          conversationParticipantsService.getUsersByConversationId(
@@ -115,29 +116,27 @@ public class MessageService {
       );
    }
 
-   @Deprecated
-   public List<MessageBoard> getNewMessagesByUserToken(String authToken) {
+   public List<Message> getNewMessagesByConversationId(Long conversationId) {
+      return messageRepository.findByConversationIdAndIsDownloaded(
+         conversationId,
+         false
+      );
+   }
+
+   public List<Message> getNewMessagesByUserToken(String authToken) {
       User user = userService.getUserByToken(authToken);
+
       List<Long> conversationIds =
          conversationParticipantsService.getConversationIdsByUserId(
             user.getUserId()
          );
-      List<Long> filteredIds =
-         conversationService.getConversationsWithNewMessage(conversationIds);
-      if (filteredIds != null) {
-         List<MessageBoard> messageBoards = new ArrayList<>();
-         for (Long conversationId : filteredIds) {
-            messageBoards.add(
-               new MessageBoard(
-                  conversationId,
-                  getLatestMassageByConversationId(conversationId),
-                  conversationParticipantsService.getUsersByConversationId(
-                     conversationId
-                  )
-               )
-            );
+
+      if (conversationIds != null) {
+         List<Message> messages = new ArrayList<>();
+         for (Long conversationId : conversationIds) {
+            messages.addAll(getNewMessagesByConversationId(conversationId));
          }
-         return messageBoards;
+         return messages;
       } else {
          return null;
       }
@@ -168,5 +167,16 @@ public class MessageService {
       }
 
       return messages;
+   }
+
+   public List<Message> markMessagesAsDownloaded(List<Long> messageIds) {
+      List<Message> messages = messageRepository.findAllById(messageIds);
+      if (messages != null) {
+         for (Message message : messages) {
+            message.setDownloaded(true);
+         }
+         messageRepository.saveAll(messages);
+         return messages;
+      } else return null;
    }
 }

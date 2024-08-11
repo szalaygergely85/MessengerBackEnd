@@ -75,7 +75,7 @@ public class ConversationsController {
 
    @GetMapping("validate")
    public ResponseEntity<?> getConversationAndCompareWithLocal(
-      @RequestParam("count") Long count,
+      @RequestParam("count") int count,
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {

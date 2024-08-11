@@ -70,23 +70,34 @@ public class MessageController {
       return _messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
    }
 
-   @Deprecated
    @GetMapping("new-message")
-   public ResponseEntity<?> getConversationWithNewMessage(
+   public ResponseEntity<?> getNewMessagesByUserToken(
       @RequestHeader("Authorization") String authToken
    ) {
-      List<MessageBoard> messagesBoardEntries =
-         _messageService.getNewMessagesByUserToken(authToken);
-      if (
-         _permissionService.hasPermissionToMessageBoards(
-            authToken,
-            messagesBoardEntries
-         )
-      ) {
-         return ResponseEntity.ok().body(messagesBoardEntries);
+      List<Message> messages = _messageService.getNewMessagesByUserToken(
+         authToken
+      );
+      if (_permissionService.hasPermissionToMessages(authToken, messages)) {
+         return ResponseEntity.ok().body(messages);
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+
+   @PatchMapping("/mark-as-downloaded")
+   public ResponseEntity<String> markMessagesAsDownloaded(
+      @RequestBody List<Long> messageIds
+   ) {
+      List<Message> messages = _messageService.markMessagesAsDownloaded(
+         messageIds
+      );
+      if (messages.isEmpty()) {
+         return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body("No messages found with the provided IDs");
+      }
+
+      return ResponseEntity.ok("Messages marked as downloaded");
    }
 
    @Autowired

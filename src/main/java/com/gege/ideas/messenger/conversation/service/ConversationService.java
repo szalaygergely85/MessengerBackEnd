@@ -150,7 +150,7 @@ public class ConversationService {
    }
 
    public List<Conversation> getConversationAndCompareWithLocal(
-      Long count,
+      int count,
       String authToken
    ) {
       Long userId = userService.getUserIdByToken(authToken);
