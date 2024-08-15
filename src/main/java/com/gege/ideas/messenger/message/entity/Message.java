@@ -35,9 +35,6 @@ public class Message implements Serializable {
    private String contentSenderVersion;
 
    @Column
-   private String uUId;
-
-   @Column
    private boolean isDownloaded;
 
    public Long getMessageId() {
@@ -104,14 +101,6 @@ public class Message implements Serializable {
       this.contentSenderVersion = contentSenderVersion;
    }
 
-   public String getuUId() {
-      return uUId;
-   }
-
-   public void setuUId(String uUId) {
-      this.uUId = uUId;
-   }
-
    public boolean isDownloaded() {
       return isDownloaded;
    }
@@ -130,7 +119,6 @@ public class Message implements Serializable {
       boolean isRead,
       int type,
       String contentSenderVersion,
-      String uUId,
       boolean isDownloaded
    ) {
       this.conversationId = conversationId;
@@ -140,7 +128,6 @@ public class Message implements Serializable {
       this.isRead = isRead;
       this.type = type;
       this.contentSenderVersion = contentSenderVersion;
-      this.uUId = uUId;
       this.isDownloaded = isDownloaded;
    }
 }
