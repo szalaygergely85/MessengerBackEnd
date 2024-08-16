@@ -40,14 +40,17 @@ public class ContactsService {
       return contactUsers;
    }
 
-   public Boolean addContact(Long ownerId, Long contactId) {
-      Contacts contact = new Contacts(ownerId, contactId);
+   public User addContact(Long ownerId, Long contactUserId) {
 
-      Contacts savedContact = contactsRepository.save(contact);
-      if (savedContact != null) {
-         return true;
+      if((contactsRepository.findByOwnerIdAndContactUserId(ownerId, contactUserId)).size()==0) {
+         Contacts contact = new Contacts(ownerId, contactUserId);
+         Contacts savedContact = contactsRepository.save(contact);
+         if (savedContact != null) {
+           return userService.getUserById(savedContact.getContactUserId());
+         }
+
       }
-      return false;
+      return null;
    }
 
    public Object getContactsAndCompareWithLocal(String authToken, int count) {

@@ -33,7 +33,7 @@ public class PermissionService {
 
    public boolean hasPermissionToAddContact(String authToken, Long ownerId) {
       User user = userService.getUserByToken(authToken);
-      return ownerId == user.getUserId();
+      return ownerId.equals(user.getUserId());
    }
 
    public boolean hasPermissionToConversation(
