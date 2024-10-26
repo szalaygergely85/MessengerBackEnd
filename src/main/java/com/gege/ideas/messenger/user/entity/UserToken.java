@@ -23,6 +23,7 @@ public class UserToken {
    @Column
    private Date expirationDate;
 
+
    public Long getUserTokenId() {
       return userTokenId;
    }

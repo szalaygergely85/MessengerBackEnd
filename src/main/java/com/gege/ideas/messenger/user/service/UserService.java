@@ -45,11 +45,11 @@ public class UserService {
 
       User savedUser = userRepository.save(user);
 
-      userTokenService.updateUserTokenWithUserId(
+      UserToken newUserToken = userTokenService.updateUserTokenWithUserId(
          userToken,
          savedUser.getUserId()
       );
-      return userToken;
+      return newUserToken;
    }
 
    public User getUserById(Long id) {
