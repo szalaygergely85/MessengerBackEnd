@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.jboss.logging:jboss-logging:3.4.1.Final'
     runtimeOnly 'org.hsqldb:hsqldb'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -34,8 +35,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0") // Ensure you use compatible version
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0") // Optional, if you use parameterized tests
     implementation 'org.springframework.boot:spring-boot-starter'
-
-
 
 }
 

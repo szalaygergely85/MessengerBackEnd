@@ -7,23 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-
 @Service
 public class ImageService {
 
-    private final ImageRepository imageRepository;
+   private final ImageRepository imageRepository;
 
-    private final FileUploadService fileUploadService;
+   private final FileUploadService fileUploadService;
 
-    @Autowired
-    public ImageService(ImageRepository imageRepository, FileUploadService fileUploadService) {
-        this.imageRepository = imageRepository;
-        this.fileUploadService = fileUploadService;
-    }
+   @Autowired
+   public ImageService(
+      ImageRepository imageRepository,
+      FileUploadService fileUploadService
+   ) {
+      this.imageRepository = imageRepository;
+      this.fileUploadService = fileUploadService;
+   }
 
-    public ImageEntry addImage(MultipartFile file, ImageEntry imageEntry){
-        fileUploadService.saveFile(file, imageEntry.getUserId().toString());
-        return imageRepository.save(imageEntry);
-    }
+   public ImageEntry addImage(MultipartFile file, ImageEntry imageEntry) {
+      fileUploadService.saveFile(file, imageEntry.getUserId().toString());
+      return imageRepository.save(imageEntry);
+   }
 }

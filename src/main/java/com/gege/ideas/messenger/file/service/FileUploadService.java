@@ -30,28 +30,35 @@ public class FileUploadService {
             throw new RuntimeException("Failed to store empty file.");
          }
 
+         Path userFolderPath =
+            this.rootLocation.resolve(userFolder).normalize();
+         Path destinationFile = userFolderPath
+            .resolve(Paths.get(file.getOriginalFilename()))
+            .normalize()
+            .toAbsolutePath();
 
-         Path userFolderPath = this.rootLocation.resolve(userFolder).normalize();
-         Path destinationFile = userFolderPath.resolve(Paths.get(file.getOriginalFilename())).normalize().toAbsolutePath();
-
-
-         if (!destinationFile.getParent().equals(userFolderPath.toAbsolutePath())) {
-            throw new RuntimeException("Cannot store file outside current directory.");
+         if (
+            !destinationFile.getParent().equals(userFolderPath.toAbsolutePath())
+         ) {
+            throw new RuntimeException(
+               "Cannot store file outside current directory."
+            );
          }
 
          Files.createDirectories(userFolderPath);
 
          try (var inputStream = file.getInputStream()) {
             Files.copy(
-                    inputStream,
-                    destinationFile,
-                    StandardCopyOption.REPLACE_EXISTING
+               inputStream,
+               destinationFile,
+               StandardCopyOption.REPLACE_EXISTING
             );
          }
       } catch (IOException e) {
          throw new RuntimeException("Failed to store file.", e);
       }
    }
+
    public Resource loadAsResource(String filename) {
       try {
          Path file = rootLocation.resolve(filename);

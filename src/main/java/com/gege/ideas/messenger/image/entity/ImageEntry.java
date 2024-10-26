@@ -1,148 +1,171 @@
 package com.gege.ideas.messenger.image.entity;
 
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "image")
 public class ImageEntry {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false)
-    private String fileName;
-    @Column(nullable = false)
-    private Long userId;
-    @Column(nullable = false)
-    private String imageUri;
-    @Column(nullable = false)
-    private String mimeType;
-    @Column(nullable = false)
-    private int width;
-    @Column(nullable = false)
-    private int height;
-    @Column(nullable = false)
-    private long size;
-    @Column(nullable = false)
-    private long dateAdded;
-    @Column(nullable = false)
-    private String status;
-    @Column(nullable = false)
-    private String tags;
-    @Column(nullable = false)
-    private String uuid;
 
-    public ImageEntry() {
-    }
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private int id;
 
-    public ImageEntry(int id, String fileName, Long userId, String imageUri, String mimeType, int width, int height, long size, long dateAdded, String status, String tags, String uuid) {
-        this.id = id;
-        this.fileName = fileName;
-        this.userId = userId;
-        this.imageUri = imageUri;
-        this.mimeType = mimeType;
-        this.width = width;
-        this.height = height;
-        this.size = size;
-        this.dateAdded = dateAdded;
-        this.status = status;
-        this.tags = tags;
-        this.uuid = uuid;
-    }
+   @Column(nullable = false)
+   private String fileName;
 
-    public int getId() {
-        return id;
-    }
+   @Column(nullable = false)
+   private Long userId;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   @Column(nullable = false)
+   private String imageUri;
 
-    public String getFileName() {
-        return fileName;
-    }
+   @Column(nullable = false)
+   private String mimeType;
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+   @Column(nullable = false)
+   private int width;
 
-    public Long getUserId() {
-        return userId;
-    }
+   @Column(nullable = false)
+   private int height;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+   @Column(nullable = false)
+   private long size;
 
-    public String getImageUri() {
-        return imageUri;
-    }
+   @Column(nullable = false)
+   private long dateAdded;
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
-    }
+   @Column(nullable = false)
+   private String status;
 
-    public String getMimeType() {
-        return mimeType;
-    }
+   @Column(nullable = false)
+   private String tags;
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
+   @Column(nullable = false)
+   private String uuid;
 
-    public int getWidth() {
-        return width;
-    }
+   public ImageEntry() {}
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+   public ImageEntry(
+      int id,
+      String fileName,
+      Long userId,
+      String imageUri,
+      String mimeType,
+      int width,
+      int height,
+      long size,
+      long dateAdded,
+      String status,
+      String tags,
+      String uuid
+   ) {
+      this.id = id;
+      this.fileName = fileName;
+      this.userId = userId;
+      this.imageUri = imageUri;
+      this.mimeType = mimeType;
+      this.width = width;
+      this.height = height;
+      this.size = size;
+      this.dateAdded = dateAdded;
+      this.status = status;
+      this.tags = tags;
+      this.uuid = uuid;
+   }
 
-    public int getHeight() {
-        return height;
-    }
+   public int getId() {
+      return id;
+   }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public long getSize() {
-        return size;
-    }
+   public String getFileName() {
+      return fileName;
+   }
 
-    public void setSize(long size) {
-        this.size = size;
-    }
+   public void setFileName(String fileName) {
+      this.fileName = fileName;
+   }
 
-    public long getDateAdded() {
-        return dateAdded;
-    }
+   public Long getUserId() {
+      return userId;
+   }
 
-    public void setDateAdded(long dateAdded) {
-        this.dateAdded = dateAdded;
-    }
+   public void setUserId(Long userId) {
+      this.userId = userId;
+   }
 
-    public String getStatus() {
-        return status;
-    }
+   public String getImageUri() {
+      return imageUri;
+   }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+   public void setImageUri(String imageUri) {
+      this.imageUri = imageUri;
+   }
 
-    public String getTags() {
-        return tags;
-    }
+   public String getMimeType() {
+      return mimeType;
+   }
 
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+   public void setMimeType(String mimeType) {
+      this.mimeType = mimeType;
+   }
 
-    public String getUuid() {
-        return uuid;
-    }
+   public int getWidth() {
+      return width;
+   }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+   public void setWidth(int width) {
+      this.width = width;
+   }
+
+   public int getHeight() {
+      return height;
+   }
+
+   public void setHeight(int height) {
+      this.height = height;
+   }
+
+   public long getSize() {
+      return size;
+   }
+
+   public void setSize(long size) {
+      this.size = size;
+   }
+
+   public long getDateAdded() {
+      return dateAdded;
+   }
+
+   public void setDateAdded(long dateAdded) {
+      this.dateAdded = dateAdded;
+   }
+
+   public String getStatus() {
+      return status;
+   }
+
+   public void setStatus(String status) {
+      this.status = status;
+   }
+
+   public String getTags() {
+      return tags;
+   }
+
+   public void setTags(String tags) {
+      this.tags = tags;
+   }
+
+   public String getUuid() {
+      return uuid;
+   }
+
+   public void setUuid(String uuid) {
+      this.uuid = uuid;
+   }
 }

@@ -41,14 +41,18 @@ public class ContactsService {
    }
 
    public User addContact(Long ownerId, Long contactUserId) {
-
-      if((contactsRepository.findByOwnerIdAndContactUserId(ownerId, contactUserId)).size()==0) {
+      if (
+         (contactsRepository.findByOwnerIdAndContactUserId(
+               ownerId,
+               contactUserId
+            )).size() ==
+         0
+      ) {
          Contacts contact = new Contacts(ownerId, contactUserId);
          Contacts savedContact = contactsRepository.save(contact);
          if (savedContact != null) {
-           return userService.getUserById(savedContact.getContactUserId());
+            return userService.getUserById(savedContact.getContactUserId());
          }
-
       }
       return null;
    }
