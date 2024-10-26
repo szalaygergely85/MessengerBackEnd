@@ -48,7 +48,8 @@ public class FileUploadController {
       @RequestPart("file") MultipartFile file,
       @RequestPart("messageEntry") Message message
    ) {
-      _fileUploadService.saveFile(file);
+      Long id = message.getSenderId();
+      _fileUploadService.saveFile(file, id.toString());
       _messageService.createMessage(message);
       return "redirect:/";
    }
