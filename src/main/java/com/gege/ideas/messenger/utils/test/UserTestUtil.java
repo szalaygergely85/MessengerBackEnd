@@ -22,8 +22,6 @@ public class UserTestUtil {
       user.setEmail(RandomUtil.getRandomString(10));
       user.setPassword(RandomUtil.getRandomString(10));
       user.setDisplayName(RandomUtil.getRandomString(10));
-      user.setFullName(RandomUtil.getRandomString(10));
-      user.setPhoneNumber(RandomUtil.getRandomLong());
       return userService.addUser(user);
    }
 

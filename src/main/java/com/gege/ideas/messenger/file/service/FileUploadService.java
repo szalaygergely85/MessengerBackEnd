@@ -59,9 +59,10 @@ public class FileUploadService {
       }
    }
 
-   public Resource loadAsResource(String filename) {
+   public Resource loadAsResource(String filename, String userFolder) {
       try {
-         Path file = rootLocation.resolve(filename);
+         Path userFolderPath = rootLocation.resolve(userFolder).normalize();
+         Path file = userFolderPath.resolve(filename).normalize();
          Resource resource = new UrlResource(file.toUri());
          if (resource.exists() || resource.isReadable()) {
             return resource;

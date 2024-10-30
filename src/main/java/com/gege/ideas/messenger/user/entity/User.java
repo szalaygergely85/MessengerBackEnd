@@ -15,9 +15,6 @@ public class User {
    private String displayName;
 
    @Column(nullable = false)
-   private String fullName;
-
-   @Column(nullable = false)
    private String email;
 
    @Column(nullable = false)
@@ -26,13 +23,42 @@ public class User {
 
    @Column(nullable = false)
    private Long userTokenId;
-
-   @Column(nullable = false)
-   private Long phoneNumber;
-
    @Lob
    @Column(columnDefinition = "LONGTEXT")
    private String publicKey;
+
+   @Column
+   String profilePictureUuid;
+
+   @Column
+   String status;
+
+   @Column
+   String tags;
+
+   public String getProfilePictureUuid() {
+      return profilePictureUuid;
+   }
+
+   public void setProfilePictureUuid(String profilePictureUuid) {
+      this.profilePictureUuid = profilePictureUuid;
+   }
+
+   public String getStatus() {
+      return status;
+   }
+
+   public void setStatus(String status) {
+      this.status = status;
+   }
+
+   public String getTags() {
+      return tags;
+   }
+
+   public void setTags(String tags) {
+      this.tags = tags;
+   }
 
    public Long getUserId() {
       return userId;
@@ -48,14 +74,6 @@ public class User {
 
    public void setDisplayName(String surName) {
       this.displayName = surName;
-   }
-
-   public String getFullName() {
-      return fullName;
-   }
-
-   public void setFullName(String firstName) {
-      this.fullName = firstName;
    }
 
    public String getEmail() {
@@ -82,13 +100,6 @@ public class User {
       this.userTokenId = userTokenId;
    }
 
-   public Long getPhoneNumber() {
-      return phoneNumber;
-   }
-
-   public void setPhoneNumber(Long phoneNumber) {
-      this.phoneNumber = phoneNumber;
-   }
 
    public String getPublicKey() {
       return publicKey;
@@ -102,35 +113,28 @@ public class User {
 
    public User(
       String displayName,
-      String fullName,
       String email,
       String password,
-      Long userTokenId,
-      Long phoneNumber
+      Long userTokenId
    ) {
       this.displayName = displayName;
-      this.fullName = fullName;
       this.email = email;
       this.password = password;
       this.userTokenId = userTokenId;
-      this.phoneNumber = phoneNumber;
    }
 
    public User(
       Long userId,
       String displayName,
-      String fullName,
       String email,
       String password,
-      Long userTokenId,
-      Long phoneNumber
+      Long userTokenId
    ) {
       this.userId = userId;
       this.displayName = displayName;
-      this.fullName = fullName;
       this.email = email;
       this.password = password;
       this.userTokenId = userTokenId;
-      this.phoneNumber = phoneNumber;
+
    }
 }

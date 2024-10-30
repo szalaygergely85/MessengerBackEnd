@@ -30,7 +30,7 @@ public class FileUploadController {
    @GetMapping("/{filename}")
    @ResponseBody
    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-      Resource file = _fileUploadService.loadAsResource(filename);
+      Resource file = _fileUploadService.loadAsResource(filename, null);
 
       if (file == null) return ResponseEntity.notFound().build();
 
