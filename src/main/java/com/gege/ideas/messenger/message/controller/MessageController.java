@@ -33,20 +33,20 @@ public class MessageController {
          .body("Unauthorized");
    }
 
-   @GetMapping("/byconversationid/{id}")
+   @GetMapping("/get-messages")
    public ResponseEntity<?> getConversationMessages(
-      @RequestParam Long id,
-      @RequestHeader("Authorization") String token
+           @RequestHeader("Authorization") String token,
+           @RequestParam("conversationId") Long conversationId
    ) {
-      if (_permissionService.hasPermissionToConversation(token, id)) {
+      if (_permissionService.hasPermissionToConversation(token, conversationId)) {
          return ResponseEntity
-            .ok()
-            .body(
-               _messageService.getMessagesByConversationIdOrderedByTimestamp(id)
-            );
+                 .ok()
+                 .body(
+                         _messageService.getMessagesByConversationIdOrderedByTimestamp(conversationId)
+                 );
       } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
    }
 
    @GetMapping("/validate")
@@ -61,13 +61,6 @@ public class MessageController {
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
-   }
-
-   @GetMapping("/messageboardentries")
-   public List<MessageBoard> getLatestMessage(
-      @RequestHeader("Authorization") String token
-   ) {
-      return _messageService.getMessagesBoardEntriesOrderedByTimestamp(token);
    }
 
    @GetMapping("new-message")
