@@ -59,7 +59,7 @@ public class MessageService {
             String title = "Message from: " + recipientUser.getDisplayName();
             notificationService.addNotification(
                new Notification(
-                  message.getContent(),
+                  message.getContentEncrypted(),
                   message.getConversationId(),
                   true,
                   message.getTimestamp(),

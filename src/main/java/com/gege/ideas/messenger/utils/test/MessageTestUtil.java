@@ -31,7 +31,6 @@ public class MessageTestUtil {
             RandomUtil.getRandomString(10),
             RandomUtil.getRandomBoolean(),
             RandomUtil.getRandomInt(),
-            RandomUtil.getRandomString(10),
             false
          )
       );

@@ -22,17 +22,13 @@ public class Message implements Serializable {
 
    @Lob
    @Column(columnDefinition = "LONGTEXT")
-   private String content;
+   private String contentEncrypted;
 
    @Column
    private boolean isRead;
 
    @Column
    private int type;
-
-   @Lob
-   @Column(columnDefinition = "LONGTEXT")
-   private String contentSenderVersion;
 
    @Column
    private boolean isDownloaded;
@@ -69,12 +65,12 @@ public class Message implements Serializable {
       this.timestamp = timestamp;
    }
 
-   public String getContent() {
-      return content;
+   public String getContentEncrypted() {
+      return contentEncrypted;
    }
 
-   public void setContent(String content) {
-      this.content = content;
+   public void setContentEncrypted(String content) {
+      this.contentEncrypted = content;
    }
 
    public boolean isRead() {
@@ -93,14 +89,6 @@ public class Message implements Serializable {
       isRead = read;
    }
 
-   public String getContentSenderVersion() {
-      return contentSenderVersion;
-   }
-
-   public void setContentSenderVersion(String contentSenderVersion) {
-      this.contentSenderVersion = contentSenderVersion;
-   }
-
    public boolean isDownloaded() {
       return isDownloaded;
    }
@@ -115,19 +103,17 @@ public class Message implements Serializable {
       long conversationId,
       long senderId,
       long timestamp,
-      String content,
+      String contentEncrypted,
       boolean isRead,
       int type,
-      String contentSenderVersion,
       boolean isDownloaded
    ) {
       this.conversationId = conversationId;
       this.senderId = senderId;
       this.timestamp = timestamp;
-      this.content = content;
+      this.contentEncrypted = contentEncrypted;
       this.isRead = isRead;
       this.type = type;
-      this.contentSenderVersion = contentSenderVersion;
       this.isDownloaded = isDownloaded;
    }
 }
