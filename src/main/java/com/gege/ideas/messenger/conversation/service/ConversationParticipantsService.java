@@ -81,11 +81,46 @@ public class ConversationParticipantsService {
       );
    }
 
-   public List<ConversationParticipant> getParticipantByConversationId(
+   public List<ConversationParticipant> getParticipants(
+      String authToken,
       Long conversationId
    ) {
-      return conversationParticipantsRepository.findByConversationId(
-         conversationId
-      );
+      if (conversationId != null) {
+         return getParticipantsByConversationId(conversationId);
+      } else {
+         return getParticipantsByAuthToken(authToken);
+      }
+   }
+
+   public List<ConversationParticipant> getParticipantsByConversationId(
+      Long conversationId
+   ) {
+      if (conversationId != null) {
+         return conversationParticipantsRepository.findByConversationId(
+            conversationId
+         );
+      } else {
+         return null;
+      }
+   }
+
+   public List<ConversationParticipant> getParticipantsByAuthToken(
+      String authToken
+   ) {
+      Long userId = userService.getUserIdByToken(authToken);
+      List<Long> conversationIds = getConversationIdsByUserId(userId);
+
+      List<ConversationParticipant> participants = new ArrayList<>();
+
+      for (Long conversationId : conversationIds) {
+         List<ConversationParticipant> conversationP =
+            getParticipantsByConversationId(conversationId);
+         for (ConversationParticipant participant : conversationP) {
+            if (participant.getUserId() != userId) {
+               participants.add(participant);
+            }
+         }
+      }
+      return participants;
    }
 }

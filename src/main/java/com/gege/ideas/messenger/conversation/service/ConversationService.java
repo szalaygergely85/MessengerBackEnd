@@ -172,33 +172,19 @@ public class ConversationService {
       return conversations;
    }
 
-   public List<
-      ConversationParticipant
-   > getConversationParticipantAndCompareWithLocal(
-      Long count,
-      String authToken
-   ) {
+   public List<Conversation> getConversationByAuthToken(String authToken) {
       Long userId = userService.getUserIdByToken(authToken);
       List<Long> conversationIds =
          conversationParticipantsService.getConversationIdsByUserId(userId);
 
-      List<ConversationParticipant> participants = new ArrayList<>();
-
+      List<Conversation> conversations = new ArrayList<>();
       for (Long conversationId : conversationIds) {
-         List<ConversationParticipant> conversationP =
-            conversationParticipantsService.getParticipantByConversationId(
+         conversations.add(
+            _conversationsRepository.findConversationByConversationId(
                conversationId
-            );
-         for (ConversationParticipant participant : conversationP) {
-            if (participant.getUserId() != userId) {
-               participants.add(participant);
-            }
-         }
+            )
+         );
       }
-      if (participants.size() == count) {
-         return null;
-      }
-
-      return participants;
+      return conversations;
    }
 }

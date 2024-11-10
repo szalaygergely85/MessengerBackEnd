@@ -23,6 +23,7 @@ public class User {
 
    @Column(nullable = false)
    private Long userTokenId;
+
    @Lob
    @Column(columnDefinition = "LONGTEXT")
    private String publicKey;
@@ -100,7 +101,6 @@ public class User {
       this.userTokenId = userTokenId;
    }
 
-
    public String getPublicKey() {
       return publicKey;
    }
@@ -135,6 +135,5 @@ public class User {
       this.email = email;
       this.password = password;
       this.userTokenId = userTokenId;
-
    }
 }

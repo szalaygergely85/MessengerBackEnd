@@ -1,6 +1,5 @@
 package com.gege.ideas.messenger.message.controller;
 
-import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
@@ -35,18 +34,22 @@ public class MessageController {
 
    @GetMapping("/get-messages")
    public ResponseEntity<?> getConversationMessages(
-           @RequestHeader("Authorization") String token,
-           @RequestParam("conversationId") Long conversationId
+      @RequestHeader("Authorization") String token,
+      @RequestParam("conversationId") Long conversationId
    ) {
-      if (_permissionService.hasPermissionToConversation(token, conversationId)) {
+      if (
+         _permissionService.hasPermissionToConversation(token, conversationId)
+      ) {
          return ResponseEntity
-                 .ok()
-                 .body(
-                         _messageService.getMessagesByConversationIdOrderedByTimestamp(conversationId)
-                 );
+            .ok()
+            .body(
+               _messageService.getMessagesByConversationIdOrderedByTimestamp(
+                  conversationId
+               )
+            );
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @GetMapping("/validate")

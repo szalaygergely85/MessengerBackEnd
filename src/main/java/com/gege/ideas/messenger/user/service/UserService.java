@@ -109,7 +109,7 @@ public class UserService {
       return users;
    }
 
-    public void updateUser(User user) {
-       userRepository.save(user);
-    }
+   public void updateUser(User user) {
+      userRepository.save(user);
+   }
 }
