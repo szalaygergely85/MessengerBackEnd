@@ -123,4 +123,11 @@ public class ConversationParticipantsService {
       }
       return participants;
    }
+
+    public Object addConversationParticipants(List<ConversationParticipant> participants) {
+      for (ConversationParticipant participant : participants){
+         conversationParticipantsRepository.save(participant);
+      }
+      return true;
+    }
 }
