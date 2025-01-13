@@ -48,17 +48,12 @@ public class ImageService {
       return imageRepository.save(imageEntry);
    }
 
-   public ImageEntry getImageByUUID(String uuid) {
-      return imageRepository.findByUuid(uuid);
-   }
-
-   public Resource getImageAsResource(String uuid) {
-      ImageEntry imageEntry = getImageByUUID(uuid);
+   public Resource getImageAsResource(ImageEntry imageEntry){
       String imageName = imageEntry.getFileName();
       try {
          Path userFolderPath = rootLocation
-            .resolve(imageEntry.getUserId().toString())
-            .normalize();
+                 .resolve(imageEntry.getUserId().toString())
+                 .normalize();
          Path file = userFolderPath.resolve(imageName).normalize();
          Resource resource = new UrlResource(file.toUri());
          if (resource.exists() || resource.isReadable()) {
@@ -70,4 +65,15 @@ public class ImageService {
          throw new RuntimeException("Could not read file: " + imageName, e);
       }
    }
+
+   public Resource getImageAsResourceByUserID(Long userId) {
+      User user = userService.getUserById(userId);
+      String uuid = user.getProfilePictureUuid();
+      return getImageAsResourceByUUID(uuid);
+   }
+   public Resource getImageAsResourceByUUID(String uuid) {
+      ImageEntry imageEntry = imageRepository.findByUuid(uuid);
+      return getImageAsResource(imageEntry);
+   }
+
 }
