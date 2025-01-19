@@ -24,14 +24,10 @@ public class Message implements Serializable {
    @Column(columnDefinition = "LONGTEXT")
    private String contentEncrypted;
 
-   @Column
-   private boolean isRead;
 
    @Column
    private int type;
 
-   @Column
-   private boolean isDownloaded;
 
    @Column(columnDefinition = "LONGTEXT")
    private String uuid;
@@ -76,9 +72,6 @@ public class Message implements Serializable {
       this.contentEncrypted = content;
    }
 
-   public boolean isRead() {
-      return isRead;
-   }
 
    public int getType() {
       return type;
@@ -88,17 +81,6 @@ public class Message implements Serializable {
       this.type = type;
    }
 
-   public void setRead(boolean read) {
-      isRead = read;
-   }
-
-   public boolean isDownloaded() {
-      return isDownloaded;
-   }
-
-   public void setDownloaded(boolean downloaded) {
-      isDownloaded = downloaded;
-   }
 
    public String getUuid() {
       return uuid;
@@ -115,9 +97,9 @@ public class Message implements Serializable {
       long senderId,
       long timestamp,
       String contentEncrypted,
-      boolean isRead,
+
       int type,
-      boolean isDownloaded,
+
       String uuid
    ) {
       this.messageId = messageId;
@@ -125,9 +107,9 @@ public class Message implements Serializable {
       this.senderId = senderId;
       this.timestamp = timestamp;
       this.contentEncrypted = contentEncrypted;
-      this.isRead = isRead;
+
       this.type = type;
-      this.isDownloaded = isDownloaded;
+
       this.uuid = uuid;
    }
 }

@@ -29,9 +29,7 @@ public class MessageTestUtil {
             user.getUserId(),
             RandomUtil.getRandomLong(),
             RandomUtil.getRandomString(10),
-            RandomUtil.getRandomBoolean(),
             RandomUtil.getRandomInt(),
-            false,
             RandomUtil.getRandomString(10)
          )
       );
