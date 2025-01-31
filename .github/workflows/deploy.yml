@@ -1,9 +1,9 @@
-name: CI/CD Pipeline
+name: CI/CD for RestServer App
 
 on:
   push:
     branches:
-      - master  # Trigger the workflow on push to the main branch
+      - prod
 
 jobs:
   build-and-deploy:
@@ -14,27 +14,51 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
-           java-version: '17'
-           distribution: 'temurin'
+          java-version: '17'
+          distribution: 'temurin'
 
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-
-      - name: Make gradlew executable
+      - name: Give executable permissions to gradlew
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build -x test
+      - name: Check Java version
+        run: java -version
 
-      - name: Deploy to Tomcat on Raspberry Pi
-        uses: appleboy/scp-action@v0.1.4
+      - name: Clean the project
+        run: ./gradlew clean
+
+      - name: Build the project
+        run: ./gradlew build
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.PI_HOST }}
-          username: ${{ secrets.PI_USER }}
-          password: ${{ secrets.PI_PASSWORD}}
-          target: /opt/tomcat/webapps
-          source: build/libs/Messenger.war
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Build Docker image for multiple architectures
+        run: |
+          docker buildx create --use
+          docker buildx build --no-cache --platform linux/arm/v7,linux/amd64  -t gery12492/rest-server:1.0.0 --push .
+
+      - name: Confirm Docker image push
+        run: docker images
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy to Raspberry Pi
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no pi@pingnest.ddns.net << 'EOF'
+          docker stop rest-server || true
+          docker rm rest-server || true
+          docker rmi gery12492/rest-server:1.0.0
+          docker pull gery12492/rest-server:1.0.0
+          docker run -d --name rest-server --network my-network -p 8080:8080 gery12492/rest-server:1.0.0
+          EOF
+        env:
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}

@@ -10,7 +10,7 @@ plugins {
 group = 'com.gege.ideas'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '17'
 }
 
 repositories {
