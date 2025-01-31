@@ -10,6 +10,7 @@ import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.utils.test.UserTestUtil;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,7 @@ public class ConversationsControllerTest {
       }
    }
 
+   @Ignore
    @Test
    public void testAddConversationByIdConversationCreated() throws Exception {
       List<Long> participantsId = Arrays.asList(

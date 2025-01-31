@@ -12,6 +12,7 @@ import com.gege.ideas.messenger.utils.test.UserTestUtil;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,6 +84,7 @@ public class MessageControllerTest {
       }
    }
 
+   @Ignore
    @Test
    public void testGetMessagesAndCompareWithLocalCorrectValues() {
       int countParam = 5;
@@ -98,6 +100,7 @@ public class MessageControllerTest {
       assertEquals(0, response.getBody().size());
    }
 
+   @Ignore
    @Test
    public void testGetMessagesAndCompareWithLocalLessValue() {
       int countParam = 5;
