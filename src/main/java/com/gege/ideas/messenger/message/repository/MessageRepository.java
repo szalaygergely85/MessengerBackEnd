@@ -12,5 +12,4 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
    Message findTopByConversationIdOrderByTimestampDesc(long id);
 
    List<Message> findByConversationId(long id);
-
 }

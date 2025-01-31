@@ -3,45 +3,50 @@ package com.gege.ideas.messenger.change;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Changes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "entity_type"}))
+@Table(
+   name = "Changes",
+   uniqueConstraints = @UniqueConstraint(
+      columnNames = { "user_id", "entity_type" }
+   )
+)
 public class ChangeRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
-    @Column(name = "entity_type", nullable = false)
-    private Long entityType;
+   @Column(name = "user_id", nullable = false)
+   private Long userId;
 
-    @Column(name = "last_modified", nullable = false)
-    private Long lastModified;
+   @Column(name = "entity_type", nullable = false)
+   private Long entityType;
 
-    public Long getUserId() {
-        return userId;
-    }
+   @Column(name = "last_modified", nullable = false)
+   private Long lastModified;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+   public Long getUserId() {
+      return userId;
+   }
 
-    public Long getEntityType() {
-        return entityType;
-    }
+   public void setUserId(Long userId) {
+      this.userId = userId;
+   }
 
-    public void setEntityType(Long entityType) {
-        this.entityType = entityType;
-    }
+   public Long getEntityType() {
+      return entityType;
+   }
 
-    public Long getLastModified() {
-        return lastModified;
-    }
+   public void setEntityType(Long entityType) {
+      this.entityType = entityType;
+   }
 
-    public void setLastModified(Long lastModified) {
-        this.lastModified = lastModified;
-    }
+   public Long getLastModified() {
+      return lastModified;
+   }
 
-    public ChangeRecord() {
-    }
+   public void setLastModified(Long lastModified) {
+      this.lastModified = lastModified;
+   }
+
+   public ChangeRecord() {}
 }

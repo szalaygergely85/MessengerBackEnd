@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ImageRepository extends JpaRepository<ImageEntry, Long> {
    public ImageEntry findByUuid(String uuid);
-
 }

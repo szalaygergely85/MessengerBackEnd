@@ -24,10 +24,8 @@ public class Message implements Serializable {
    @Column(columnDefinition = "LONGTEXT")
    private String contentEncrypted;
 
-
    @Column
    private int type;
-
 
    @Column(columnDefinition = "LONGTEXT")
    private String uuid;
@@ -72,7 +70,6 @@ public class Message implements Serializable {
       this.contentEncrypted = content;
    }
 
-
    public int getType() {
       return type;
    }
@@ -80,7 +77,6 @@ public class Message implements Serializable {
    public void setType(int type) {
       this.type = type;
    }
-
 
    public String getUuid() {
       return uuid;
@@ -97,9 +93,7 @@ public class Message implements Serializable {
       long senderId,
       long timestamp,
       String contentEncrypted,
-
       int type,
-
       String uuid
    ) {
       this.messageId = messageId;

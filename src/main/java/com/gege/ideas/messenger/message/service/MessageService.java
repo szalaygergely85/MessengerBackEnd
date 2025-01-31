@@ -47,7 +47,6 @@ public class MessageService {
    }
 
    public Message createMessage(Message message) {
-
       List<User> recipientUsers =
          conversationParticipantsService.getUsersByConversationId(
             message.getConversationId()
@@ -115,10 +114,10 @@ public class MessageService {
    }
 
    public List<Message> getNewMessagesByConversationId(Long conversationId) {
-     /* return messageRepository.findByConversationIdAndIsDownloaded(
-         conversationId,
-         false
-      );*/ return null;
+      /* return messageRepository.findByConversationIdAndIsDownloaded(
+		conversationId,
+		false
+	);*/return null;
    }
 
    public List<Message> getNewMessagesByUserToken(String authToken) {
@@ -171,9 +170,9 @@ public class MessageService {
       List<Message> messages = messageRepository.findAllById(messageIds);
       if (messages != null) {
          /*
-         for (Message message : messages) {
-            message.setDownloaded(true);
-         }*/
+		for (Message message : messages) {
+			message.setDownloaded(true);
+		}*/
          messageRepository.saveAll(messages);
          return messages;
       } else return null;
