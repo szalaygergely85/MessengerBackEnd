@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.contacts.controller;
 
+import com.gege.ideas.messenger.contacts.entity.Contacts;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
@@ -45,38 +46,43 @@ public class ContactsController {
          .body("Unauthorized");
    }
 
-   @GetMapping
-   public List<User> getContactUsers(
-      @RequestHeader("Authorization") String authToken
+   @GetMapping("/get-contact/{id}")
+   public ResponseEntity<?> getContactById(
+           @PathVariable Long id,
+           @RequestHeader("Authorization") String authToken
    ) {
-      Long userId = userService.getUserIdByToken(authToken);
-      return contactsService.getContactUserByOwnerId(userId);
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+                 .ok()
+                 .body(contactsService.getContactById(id));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
    }
 
-   @GetMapping("/{search}/search")
+   @GetMapping("/get-contacts")
    public ResponseEntity<?> searchContacts(
-      @PathVariable String search,
+      @RequestParam(required = false) String search ,
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
             .ok()
-            .body(contactsService.searchContacts(search));
+            .body(contactsService.getContacts(authToken, search));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
 
-   @PostMapping
+   @PostMapping("/add-contact")
    public ResponseEntity<?> addContact(
-      @RequestParam Long ownerId,
-      Long contactId,
+      @RequestBody Contacts contact,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.hasPermissionToAddContact(authToken, ownerId)) {
+      if (permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {
          return ResponseEntity
             .ok()
-            .body(contactsService.addContact(ownerId, contactId));
+            .body(contactsService.addContact(contact));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

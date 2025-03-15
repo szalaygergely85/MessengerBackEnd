@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ContactsRepository extends JpaRepository<Contacts, Long> {
    List<Contacts> findByOwnerId(Long id);
 
-   List<Contacts> findByOwnerIdAndContactUserId(Long ownerId, Long ContactId);
+   Contacts findByOwnerIdAndContactUserId(Long ownerId, Long ContactId);
 }

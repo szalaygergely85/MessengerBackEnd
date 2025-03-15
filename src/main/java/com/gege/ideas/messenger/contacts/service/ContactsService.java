@@ -34,24 +34,32 @@ public class ContactsService {
       return contactUsers;
    }
 
-   public List<User> searchContacts(String search) {
+   public List<Contacts> getContacts(String authToken, String search) {
+      User user = userService.getUserByToken(authToken);
+
+      if (search == null || search.isEmpty()) {
+         return contactsRepository.findByOwnerId(user.getUserId());
+      }
       List<User> contactUsers = userService.searchUsers(search);
 
-      return contactUsers;
+      List<Contacts> contactsList = new ArrayList<>();
+      for (User contactUser : contactUsers) {
+         Contacts contacts = contactsRepository.findByOwnerIdAndContactUserId(user.getUserId(), contactUser.getUserId());
+      }
+
+      return contactsList;
    }
 
-   public User addContact(Long ownerId, Long contactUserId) {
+   public Contacts addContact(Contacts contact) {
       if (
-         (contactsRepository.findByOwnerIdAndContactUserId(
-               ownerId,
-               contactUserId
-            )).size() ==
-         0
+         contactsRepository.findByOwnerIdAndContactUserId(
+               contact.getOwnerId(),
+               contact.getContactUserId()
+            ) != null
       ) {
-         Contacts contact = new Contacts(ownerId, contactUserId);
          Contacts savedContact = contactsRepository.save(contact);
          if (savedContact != null) {
-            return userService.getUserById(savedContact.getContactUserId());
+            return savedContact;
          }
       }
       return null;
@@ -70,5 +78,9 @@ public class ContactsService {
          contactUsers.add(user);
       }
       return contactUsers;
+   }
+
+   public Object getContactById(Long id) {
+      return contactsRepository.findById(id);
    }
 }
