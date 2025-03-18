@@ -28,9 +28,9 @@ public class UserController {
 
    @PostMapping
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
-      UserToken token = userService.addUser(user);
-      if (token != null) {
-         return ResponseEntity.ok().body(token);
+      User localUser = userService.addUser(user);
+      if (localUser != null) {
+         return ResponseEntity.ok().body(localUser);
       } else {
          return ResponseEntity
             .status(HttpStatus.CONFLICT)
@@ -49,6 +49,19 @@ public class UserController {
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
    }
+
+   @GetMapping("/search/{search}")
+   public ResponseEntity<?> getUser(
+           @PathVariable String search,
+           @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity.ok().body(userService.search(search));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
 
    @GetMapping("/token/{token}")
    public ResponseEntity<?> getUserByToken(@PathVariable String token) {
@@ -74,7 +87,7 @@ public class UserController {
    }
 
    @PostMapping(value = "/login")
-   public UserToken logInUser(@RequestBody LoginRequest loginRequest) {
+   public User logInUser(@RequestBody LoginRequest loginRequest) {
       return userService.logInUser(
          loginRequest.getEmail(),
          loginRequest.getPassword()

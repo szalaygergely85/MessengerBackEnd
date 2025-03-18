@@ -47,14 +47,15 @@ public class ConversationService {
       return conversationId;
    }
 
-   public Long addConversationById(
+   public Conversation addConversationById(
       List<Long> participantsId,
       String authToken
    ) {
-      return addConversation(
+      Long conversationId = addConversation(
          userService.getUsersByIds(participantsId),
          authToken
       );
+      return getConversationById(conversationId);
    }
 
    public Conversation getConversationById(Long conversationId) {

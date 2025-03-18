@@ -7,6 +7,8 @@ import com.gege.ideas.messenger.utils.FileUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -26,30 +28,22 @@ public class UserService {
       this.userTokenService = userTokenService;
    }
 
-   public UserToken logInUser(String email, String password) {
+   public User logInUser(String email, String password) {
       User user = userRepository.findByEmail(email);
 
       if (user != null && user.getPassword().equals(password)) {
-         return userTokenService.getUserTokenByTokenId(user.getUserTokenId());
+         return user);
       }
       return null;
    }
 
-   public UserToken addUser(User user) throws Exception {
+   public User addUser(User user) throws Exception {
       if (userRepository.findByEmail(user.getEmail()) != null) {
          return null;
       }
-      UserToken userToken = userTokenService.createUserToken();
+      user.setToken(TokenGeneratorUtil.generateNewToken());
 
-      user.setUserTokenId(userToken.getUserTokenId());
-
-      User savedUser = userRepository.save(user);
-
-      UserToken newUserToken = userTokenService.updateUserTokenWithUserId(
-         userToken,
-         savedUser.getUserId()
-      );
-      return newUserToken;
+      return  userRepository.save(user);
    }
 
    public User getUserById(Long id) {
@@ -95,10 +89,8 @@ public class UserService {
    }
 
    public void deleteUser(User user) {
-      Long userTokenId = user.getUserTokenId();
-
       userRepository.delete(user);
-      userTokenService.deleteToken(userTokenId);
+
    }
 
    public List<User> getUsersByIds(List<Long> participantsId) {
@@ -111,5 +103,9 @@ public class UserService {
 
    public void updateUser(User user) {
       userRepository.save(user);
+   }
+
+   public List<User> search(String search) {
+      return userRepository.searchUsers(search);
    }
 }

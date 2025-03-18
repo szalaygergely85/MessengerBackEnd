@@ -2,6 +2,7 @@ package com.gege.ideas.messenger.message.controller.integration;
 
 import static org.junit.Assert.*;
 
+import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
@@ -64,8 +65,6 @@ public class MessageControllerTest {
       List<User> participants = new ArrayList<>();
       participants.add(testUser);
       participants.add(testUser2);
-
-      conversationId =
       conversationService.addConversation(participants, authToken.getToken());
    }
 

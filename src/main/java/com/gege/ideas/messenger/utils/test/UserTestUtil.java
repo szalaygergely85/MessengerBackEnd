@@ -17,12 +17,13 @@ public class UserTestUtil {
       this.userService = userService;
    }
 
-   public UserToken createTestUser() throws Exception {
+   public String createTestUser() throws Exception {
       User user = new User();
       user.setEmail(RandomUtil.getRandomString(10));
       user.setPassword(RandomUtil.getRandomString(10));
       user.setDisplayName(RandomUtil.getRandomString(10));
-      return userService.addUser(user);
+      User newUser = userService.addUser(user);
+      return newUser.getToken();
    }
 
    public void deleteUser(User user) {

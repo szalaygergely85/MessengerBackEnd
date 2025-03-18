@@ -26,24 +26,7 @@ public class ConversationParticipantController {
       this.permissionService = permissionService;
    }
 
-   @GetMapping("get-participants")
-   public ResponseEntity<?> getConversationAndCompareWithLocal(
-      @RequestParam("conversationId") Long conversationId,
-      @RequestHeader("Authorization") String authToken
-   ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(
-               conversationParticipantsService.getParticipants(
-                  authToken,
-                  conversationId
-               )
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
-   }
+
 
    @PostMapping("add-participants")
    public ResponseEntity<?> addConversationParticipants(
@@ -61,5 +44,24 @@ public class ConversationParticipantController {
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+
+   @GetMapping("get-participants")
+   public ResponseEntity<?> getConversationAndCompareWithLocal(
+           @RequestParam("conversationId") Long conversationId,
+           @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+                 .ok()
+                 .body(
+                         conversationParticipantsService.getParticipants(
+                                 authToken,
+                                 conversationId
+                         )
+                 );
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
    }
 }

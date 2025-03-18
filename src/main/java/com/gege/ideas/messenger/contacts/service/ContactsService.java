@@ -34,20 +34,10 @@ public class ContactsService {
       return contactUsers;
    }
 
-   public List<Contacts> getContacts(String authToken, String search) {
+   public List<Contacts> getContacts(String authToken) {
       User user = userService.getUserByToken(authToken);
 
-      if (search == null || search.isEmpty()) {
-         return contactsRepository.findByOwnerId(user.getUserId());
-      }
-      List<User> contactUsers = userService.searchUsers(search);
-
-      List<Contacts> contactsList = new ArrayList<>();
-      for (User contactUser : contactUsers) {
-         Contacts contacts = contactsRepository.findByOwnerIdAndContactUserId(user.getUserId(), contactUser.getUserId());
-      }
-
-      return contactsList;
+      return contactsRepository.findByOwnerId(user.getUserId());
    }
 
    public Contacts addContact(Contacts contact) {

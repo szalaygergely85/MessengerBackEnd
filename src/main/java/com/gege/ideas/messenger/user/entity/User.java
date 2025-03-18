@@ -21,9 +21,6 @@ public class User {
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private String password;
 
-   @Column(nullable = false)
-   private Long userTokenId;
-
    @Lob
    @Column(columnDefinition = "LONGTEXT")
    private String publicKey;
@@ -36,6 +33,9 @@ public class User {
 
    @Column
    String tags;
+
+   @Column
+   private String token;
 
    public String getProfilePictureUuid() {
       return profilePictureUuid;
@@ -93,13 +93,6 @@ public class User {
       this.password = password;
    }
 
-   public Long getUserTokenId() {
-      return userTokenId;
-   }
-
-   public void setUserTokenId(Long userTokenId) {
-      this.userTokenId = userTokenId;
-   }
 
    public String getPublicKey() {
       return publicKey;
@@ -107,6 +100,14 @@ public class User {
 
    public void setPublicKey(String publicKey) {
       this.publicKey = publicKey;
+   }
+
+   public String getToken() {
+      return token;
+   }
+
+   public void setToken(String token) {
+      this.token = token;
    }
 
    public User() {}

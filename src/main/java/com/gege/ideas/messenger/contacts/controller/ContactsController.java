@@ -62,13 +62,13 @@ public class ContactsController {
 
    @GetMapping("/get-contacts")
    public ResponseEntity<?> searchContacts(
-      @RequestParam(required = false) String search ,
+
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
             .ok()
-            .body(contactsService.getContacts(authToken, search));
+            .body(contactsService.getContacts(authToken));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

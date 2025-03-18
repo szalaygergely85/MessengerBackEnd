@@ -26,7 +26,7 @@ public class ConversationsController {
       this.permissionService = permissionService;
    }
 
-   @PostMapping
+   @PostMapping("add-conversation/conversation")
    public ResponseEntity<?> addConversation(
       @RequestBody List<User> participants,
       @RequestHeader("Authorization") String authToken
@@ -40,7 +40,7 @@ public class ConversationsController {
          .body("Unauthorized");
    }
 
-   @PostMapping("id")
+   @PostMapping("add-conversation/user-ids")
    public ResponseEntity<?> addConversationById(
       @RequestBody List<Long> participantsId,
       @RequestHeader("Authorization") String authToken
@@ -59,7 +59,7 @@ public class ConversationsController {
          .body("Unauthorized");
    }
 
-   @GetMapping("id/{id}")
+   @GetMapping("get-conversation/{id}")
    public ResponseEntity<?> getConversationAndContentById(
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
