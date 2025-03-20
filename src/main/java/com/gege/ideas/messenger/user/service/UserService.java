@@ -1,7 +1,6 @@
 package com.gege.ideas.messenger.user.service;
 
 import com.gege.ideas.messenger.user.entity.User;
-import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
 import java.util.ArrayList;
@@ -17,22 +16,22 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
    private final UserRepository userRepository;
-   private final UserTokenService userTokenService;
+
 
    @Autowired
    public UserService(
-      UserRepository userRepository,
-      UserTokenService userTokenService
+      UserRepository userRepository
+
    ) {
       this.userRepository = userRepository;
-      this.userTokenService = userTokenService;
+
    }
 
    public User logInUser(String email, String password) {
       User user = userRepository.findByEmail(email);
 
       if (user != null && user.getPassword().equals(password)) {
-         return user);
+         return user;
       }
       return null;
    }
@@ -56,16 +55,13 @@ public class UserService {
    }
 
    public User getUserByToken(String token) {
-      UserToken userToken = userTokenService.getUserTokenByToken(token);
-      if (userToken == null) {
-         return null;
-      }
-      return userRepository.findByUserTokenId(userToken.getUserTokenId());
+
+      return userRepository.findByToken(token);
    }
 
    public Long getUserIdByToken(String token) {
-      UserToken userToken = userTokenService.getUserTokenByToken(token);
-      User user = userRepository.findByUserTokenId(userToken.getUserTokenId());
+
+      User user =userRepository.findByToken(token);
 
       return user.getUserId();
    }

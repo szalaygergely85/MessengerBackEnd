@@ -1,27 +1,7 @@
 package com.gege.ideas.messenger.conversation.controller.integration;
 
-import static org.junit.Assert.*;
-
-import com.gege.ideas.messenger.conversation.entity.Conversation;
-import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
-import com.gege.ideas.messenger.conversation.service.ConversationService;
-import com.gege.ideas.messenger.user.entity.User;
-import com.gege.ideas.messenger.user.entity.UserToken;
-import com.gege.ideas.messenger.utils.test.UserTestUtil;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.Ignore;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class) // JUnit4

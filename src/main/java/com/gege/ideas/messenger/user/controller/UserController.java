@@ -3,7 +3,6 @@ package com.gege.ideas.messenger.user.controller;
 import com.gege.ideas.messenger.DTO.LoginRequest;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
-import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

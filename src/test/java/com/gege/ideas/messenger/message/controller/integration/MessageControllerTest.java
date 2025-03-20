@@ -2,12 +2,10 @@ package com.gege.ideas.messenger.message.controller.integration;
 
 import static org.junit.Assert.*;
 
-import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.user.entity.User;
-import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.utils.test.MessageTestUtil;
 import com.gege.ideas.messenger.utils.test.UserTestUtil;
 import java.net.URI;

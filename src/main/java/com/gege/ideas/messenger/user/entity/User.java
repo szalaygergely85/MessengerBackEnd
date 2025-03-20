@@ -115,26 +115,24 @@ public class User {
    public User(
       String displayName,
       String email,
-      String password,
-      Long userTokenId
+      String password
    ) {
       this.displayName = displayName;
       this.email = email;
       this.password = password;
-      this.userTokenId = userTokenId;
    }
 
    public User(
       Long userId,
       String displayName,
       String email,
-      String password,
-      Long userTokenId
+      String password
+
    ) {
       this.userId = userId;
       this.displayName = displayName;
       this.email = email;
       this.password = password;
-      this.userTokenId = userTokenId;
+
    }
 }

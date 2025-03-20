@@ -1,7 +1,6 @@
 package com.gege.ideas.messenger.utils.test;
 
 import com.gege.ideas.messenger.user.entity.User;
-import com.gege.ideas.messenger.user.entity.UserToken;
 import com.gege.ideas.messenger.user.service.UserService;
 import com.gege.ideas.messenger.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;

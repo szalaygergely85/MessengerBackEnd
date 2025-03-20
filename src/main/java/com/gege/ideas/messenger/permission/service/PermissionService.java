@@ -5,7 +5,7 @@ import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-import com.gege.ideas.messenger.user.service.UserTokenService;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +14,19 @@ import org.springframework.stereotype.Service;
 public class PermissionService {
 
    private final MessageRepository messageRepository;
-   private final UserTokenService userTokenService;
+
    private final UserService userService;
    private final ConversationParticipantsService conversationParticipantsService;
 
    @Autowired
    public PermissionService(
       MessageRepository messageRepository,
-      UserTokenService userTokenService,
+
       UserService userService,
       ConversationParticipantsService conversationParticipantsService
    ) {
       this.messageRepository = messageRepository;
-      this.userTokenService = userTokenService;
+
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
    }

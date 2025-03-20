@@ -10,7 +10,7 @@ import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-import com.gege.ideas.messenger.user.service.UserTokenService;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class MessageService {
 
    private final MessageRepository messageRepository;
-   private final UserTokenService userTokenService;
+
    private final UserService userService;
    private final ConversationParticipantsService conversationParticipantsService;
    private final PermissionService permissionService;
@@ -30,7 +30,7 @@ public class MessageService {
    @Autowired
    public MessageService(
       MessageRepository messageRepository,
-      UserTokenService userTokenService,
+
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
       PermissionService permissionService,
@@ -38,7 +38,7 @@ public class MessageService {
       NotificationService notificationService
    ) {
       this.messageRepository = messageRepository;
-      this.userTokenService = userTokenService;
+
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
       this.permissionService = permissionService;
