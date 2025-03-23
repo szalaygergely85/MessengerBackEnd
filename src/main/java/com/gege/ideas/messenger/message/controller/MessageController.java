@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/message")
 public class MessageController {
 
-   @PostMapping
+   @PostMapping("/add-message")
    public ResponseEntity<?> addMessage(
       @RequestBody Message message,
       @RequestHeader("Authorization") String token
@@ -30,6 +30,12 @@ public class MessageController {
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+
+   @PostMapping("/add-messages")
+   public ResponseEntity<?> addMessage(){
+      //TODO finish this if needed
+      return null;
    }
 
    @GetMapping("/get-messages")
@@ -50,6 +56,26 @@ public class MessageController {
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+
+   @GetMapping("/get-latest-message")
+   public ResponseEntity<?> getLatestMessage(
+           @RequestHeader("Authorization") String token,
+           @RequestParam("conversationId") Long conversationId
+   ) {
+      if (
+              _permissionService.hasPermissionToConversation(token, conversationId)
+      ) {
+         return ResponseEntity
+                 .ok()
+                 .body(
+                         _messageService.getLatestMessageByConversationId(
+                                 conversationId
+                         )
+                 );
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
    }
 
    @GetMapping("/validate")

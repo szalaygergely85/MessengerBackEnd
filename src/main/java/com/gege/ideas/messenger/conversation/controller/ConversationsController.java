@@ -67,7 +67,7 @@ public class ConversationsController {
       if (permissionService.hasPermissionToConversation(authToken, id)) {
          return ResponseEntity
             .ok()
-            .body(conversationService.getConversationContent(id));
+            .body(conversationService.getConversationDTOById(id));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
@@ -93,13 +93,13 @@ public class ConversationsController {
    }
 
    @GetMapping("get-conversations")
-   public ResponseEntity<?> getConversationAndCompareWithLocal(
+   public ResponseEntity<?> getConversationsByToken(
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
             .ok()
-            .body(conversationService.getConversationByAuthToken(authToken));
+            .body(conversationService.getConversationsByAuthToken(authToken));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

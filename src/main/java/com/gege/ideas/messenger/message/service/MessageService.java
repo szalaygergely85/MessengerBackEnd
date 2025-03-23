@@ -177,4 +177,8 @@ public class MessageService {
          return messages;
       } else return null;
    }
+
+    public Message getLatestMessageByConversationId(Long conversationId) {
+     return messageRepository.findTopByConversationIdOrderByTimestampDesc(conversationId);
+    }
 }

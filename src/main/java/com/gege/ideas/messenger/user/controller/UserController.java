@@ -85,6 +85,18 @@ public class UserController {
          .body("Unauthorized");
    }
 
+   @PatchMapping
+   public ResponseEntity<?> updateUser(@RequestBody User user, @RequestHeader("Authorization") String authToken){
+      if (permissionService.hasPermissionToUser(user.getToken(), authToken)) {
+         return ResponseEntity
+                 .ok()
+                 .body(userService.updateUser(user));
+      }  else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
+
    @PostMapping(value = "/login")
    public User logInUser(@RequestBody LoginRequest loginRequest) {
       return userService.logInUser(
