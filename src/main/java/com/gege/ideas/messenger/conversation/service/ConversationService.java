@@ -48,7 +48,7 @@ public class ConversationService {
         return conversationId;
     }
 
-    public Conversation addConversationById(
+    public ConversationDTO addConversationById(
             List<Long> participantsId,
             String authToken
     ) {
@@ -56,7 +56,7 @@ public class ConversationService {
                 userService.getUsersByIds(participantsId),
                 authToken
         );
-        return getConversationById(conversationId);
+        return getConversationDTOById(conversationId);
     }
 
     public Conversation getConversationById(Long conversationId) {
