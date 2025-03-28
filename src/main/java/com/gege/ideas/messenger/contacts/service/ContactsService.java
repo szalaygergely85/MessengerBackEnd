@@ -1,6 +1,7 @@
 package com.gege.ideas.messenger.contacts.service;
 
-import com.gege.ideas.messenger.contacts.entity.Contacts;
+import com.gege.ideas.messenger.DTO.ContactsDTO;
+import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.repository.ContactsRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
@@ -26,28 +27,33 @@ public class ContactsService {
    }
 
    public List<User> getContactUserByOwnerId(Long id) {
-      List<Contacts> contactsList = contactsRepository.findByOwnerId(id);
-      for (Contacts contact : contactsList) {
+      List<Contact> contactList = contactsRepository.findByOwnerId(id);
+      for (Contact contact : contactList) {
          User user = userService.getUserById(contact.getContactUserId());
          contactUsers.add(user);
       }
       return contactUsers;
    }
 
-   public List<Contacts> getContacts(String authToken) {
+   public List<ContactsDTO> getContacts(String authToken) {
       User user = userService.getUserByToken(authToken);
+      List<ContactsDTO> contactsDTOS = new ArrayList<>();
+      List<Contact> contacts = contactsRepository.findByOwnerId(user.getUserId());
+      for (Contact contact : contacts) {
+         contactsDTOS.add( new ContactsDTO(contact, userService.getUserById(contact.getContactUserId())));
+      }
 
-      return contactsRepository.findByOwnerId(user.getUserId());
+      return contactsDTOS;
    }
 
-   public Contacts addContact(Contacts contact) {
+   public Contact addContact(Contact contact) {
       if (
          contactsRepository.findByOwnerIdAndContactUserId(
                contact.getOwnerId(),
                contact.getContactUserId()
             ) != null
       ) {
-         Contacts savedContact = contactsRepository.save(contact);
+         Contact savedContact = contactsRepository.save(contact);
          if (savedContact != null) {
             return savedContact;
          }
@@ -57,13 +63,13 @@ public class ContactsService {
 
    public Object getContactsAndCompareWithLocal(String authToken, int count) {
       Long userId = userService.getUserIdByToken(authToken);
-      List<Contacts> contactsList = contactsRepository.findByOwnerId(userId);
+      List<Contact> contactList = contactsRepository.findByOwnerId(userId);
 
-      if (contactsList.size() == count) {
+      if (contactList.size() == count) {
          return null;
       }
 
-      for (Contacts contact : contactsList) {
+      for (Contact contact : contactList) {
          User user = userService.getUserById(contact.getContactUserId());
          contactUsers.add(user);
       }

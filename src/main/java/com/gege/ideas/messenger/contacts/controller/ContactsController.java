@@ -1,11 +1,9 @@
 package com.gege.ideas.messenger.contacts.controller;
 
-import com.gege.ideas.messenger.contacts.entity.Contacts;
+import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
-import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +74,7 @@ public class ContactsController {
 
    @PostMapping("/add-contact")
    public ResponseEntity<?> addContact(
-      @RequestBody Contacts contact,
+      @RequestBody Contact contact,
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {

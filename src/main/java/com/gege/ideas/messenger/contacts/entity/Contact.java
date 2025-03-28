@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "contacts")
-public class Contacts {
+public class Contact {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,15 +16,15 @@ public class Contacts {
    @Column(nullable = false)
    private Long contactUserId;
 
-   public Contacts(Long contactId, Long ownerId, Long contactUserId) {
+   public Contact(Long contactId, Long ownerId, Long contactUserId) {
       this.contactId = contactId;
       this.ownerId = ownerId;
       this.contactUserId = contactUserId;
    }
 
-   public Contacts() {}
+   public Contact() {}
 
-   public Contacts(Long ownerId, Long contactUserId) {
+   public Contact(Long ownerId, Long contactUserId) {
       this.ownerId = ownerId;
       this.contactUserId = contactUserId;
    }

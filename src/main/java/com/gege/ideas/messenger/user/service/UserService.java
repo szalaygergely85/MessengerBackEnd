@@ -31,6 +31,10 @@ public class UserService {
       User user = userRepository.findByEmail(email);
 
       if (user != null && user.getPassword().equals(password)) {
+         if(user.getToken() == null) {
+            user.setToken(TokenGeneratorUtil.generateNewToken());
+            return  userRepository.save(user);
+         }
          return user;
       }
       return null;
