@@ -1,5 +1,7 @@
 package com.gege.ideas.messenger.permission.service;
 
+import com.gege.ideas.messenger.contacts.entity.Contact;
+import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
@@ -14,19 +16,19 @@ import org.springframework.stereotype.Service;
 public class PermissionService {
 
    private final MessageRepository messageRepository;
-
+   private final ContactsService contactsService;
    private final UserService userService;
    private final ConversationParticipantsService conversationParticipantsService;
 
    @Autowired
    public PermissionService(
       MessageRepository messageRepository,
-
+      ContactsService contactsService,
       UserService userService,
       ConversationParticipantsService conversationParticipantsService
    ) {
       this.messageRepository = messageRepository;
-
+this.contactsService = contactsService;
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
    }
@@ -34,6 +36,13 @@ public class PermissionService {
    public boolean hasPermissionToAddContact(String authToken, Long ownerId) {
       User user = userService.getUserByToken(authToken);
       return ownerId.equals(user.getUserId());
+   }
+
+   public boolean hasPermissionToDeleteContact(String authToken, Long contactUserId) {
+      User user = userService.getUserByToken(authToken);
+      Contact contact = contactsService.getContactByOwnerIDAndContactUserId(user.getUserId(), contactUserId);
+      Long userId = user.getUserId();
+      return userId.equals(contact.getOwnerId());
    }
 
    public boolean hasPermissionToConversation(

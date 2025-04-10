@@ -4,6 +4,8 @@ import com.gege.ideas.messenger.DTO.ConversationDTO;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
+import com.gege.ideas.messenger.message.repository.MessageRepository;
+import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.servicelocator.ServiceLocator;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConversationService {
 
+    private final MessageRepository messageRepository;
     private UserService userService;
     private ConversationParticipantsService conversationParticipantsService;
     private ConversationsRepository _conversationsRepository;
@@ -67,10 +70,9 @@ public class ConversationService {
 
     public ConversationDTO getConversationDTOById(Long conversationId) {
 
-        ConversationDTO conversationDTO = new ConversationDTO(getConversationById(conversationId),
-                conversationParticipantsService.getParticipantsByConversationId(conversationId), conversationParticipantsService.getUsersByConversationId(conversationId));
+        return new ConversationDTO(getConversationById(conversationId),
+                conversationParticipantsService.getParticipantsByConversationId(conversationId), conversationParticipantsService.getUsersByConversationId(conversationId), messageRepository.findTopByConversationIdOrderByTimestampDesc(conversationId));
 
-        return conversationDTO;
     }
 
     @Deprecated
@@ -127,12 +129,13 @@ public class ConversationService {
             UserService userService,
             ConversationParticipantsService conversationParticipantsService,
             ServiceLocator serviceLocator,
-            ConversationsRepository _conversationsRepository
-    ) {
+            ConversationsRepository _conversationsRepository,
+            MessageRepository messageRepository) {
         this.userService = userService;
         this.conversationParticipantsService = conversationParticipantsService;
         this.serviceLocator = serviceLocator;
         this._conversationsRepository = _conversationsRepository;
+        this.messageRepository = messageRepository;
     }
 
     public void clearConversation(Long conversationId) {

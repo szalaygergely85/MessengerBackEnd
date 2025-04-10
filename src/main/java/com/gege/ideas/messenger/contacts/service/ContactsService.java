@@ -51,7 +51,7 @@ public class ContactsService {
          contactsRepository.findByOwnerIdAndContactUserId(
                contact.getOwnerId(),
                contact.getContactUserId()
-            ) != null
+            ) == null
       ) {
          Contact savedContact = contactsRepository.save(contact);
          if (savedContact != null) {
@@ -78,5 +78,18 @@ public class ContactsService {
 
    public Object getContactById(Long id) {
       return contactsRepository.findById(id);
+   }
+
+   public Object deleteContact(String authToken, Long id) {
+      User user = userService.getUserByToken(authToken);
+      Contact localContact = contactsRepository.findByOwnerIdAndContactUserId(user.getUserId(), id);
+      if (localContact != null) {
+         contactsRepository.delete(localContact);
+      }
+      return true;
+   }
+
+   public Contact getContactByOwnerIDAndContactUserId(Long ownerId, Long contactUserId) {
+      return contactsRepository.findByOwnerIdAndContactUserId(ownerId, contactUserId);
    }
 }

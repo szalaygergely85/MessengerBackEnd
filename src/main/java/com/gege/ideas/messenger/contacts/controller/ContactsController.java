@@ -44,6 +44,22 @@ public class ContactsController {
          .body("Unauthorized");
    }
 
+
+   @DeleteMapping("/delete-contact")
+   public ResponseEntity<?> deleteContactById(
+           @RequestParam("ContactUserId") Long userId,
+           @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.hasPermissionToDeleteContact(authToken, userId)) {
+         return ResponseEntity
+                 .ok()
+                 .body(contactsService.deleteContact(authToken, userId));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
+
    @GetMapping("/get-contact/{id}")
    public ResponseEntity<?> getContactById(
            @PathVariable Long id,

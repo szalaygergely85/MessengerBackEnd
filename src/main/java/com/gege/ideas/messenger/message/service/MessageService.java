@@ -107,12 +107,6 @@ public class MessageService {
       return null;
    }
 
-   public Message getLatestMassageByConversationId(Long conversationId) {
-      return messageRepository.findTopByConversationIdOrderByTimestampDesc(
-         conversationId
-      );
-   }
-
    public List<Message> getNewMessagesByConversationId(Long conversationId) {
       /* return messageRepository.findByConversationIdAndIsDownloaded(
 		conversationId,

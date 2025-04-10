@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", indexes = {
+        @Index(name = "idx_display_name", columnList = "displayName")})
 public class User {
 
    @Id
