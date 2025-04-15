@@ -8,7 +8,7 @@ public class ImageEntry {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private int id;
+   private Long id;
 
    @Column(nullable = false)
    private String fileName;
@@ -46,7 +46,7 @@ public class ImageEntry {
    public ImageEntry() {}
 
    public ImageEntry(
-      int id,
+      Long id,
       String fileName,
       Long userId,
       String imageUri,
@@ -73,11 +73,11 @@ public class ImageEntry {
       this.uuid = uuid;
    }
 
-   public int getId() {
+   public Long getId() {
       return id;
    }
 
-   public void setId(int id) {
+   public void setId(Long id) {
       this.id = id;
    }
 
