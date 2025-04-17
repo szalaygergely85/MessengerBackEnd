@@ -3,7 +3,7 @@ name: CI/CD for RestServer App
 on:
   push:
     branches:
-      - prod
+      - master
 
 jobs:
   build-and-deploy:
