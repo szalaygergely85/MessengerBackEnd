@@ -38,6 +38,17 @@ public class User {
    @Column
    private String token;
 
+   @Column
+   private Long lastUpdated;
+
+   public Long getLastUpdated() {
+      return lastUpdated;
+   }
+
+   public void setLastUpdated(Long lastUpdated) {
+      this.lastUpdated = lastUpdated;
+   }
+
    public String getProfilePictureUuid() {
       return profilePictureUuid;
    }

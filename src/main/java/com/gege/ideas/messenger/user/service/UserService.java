@@ -45,7 +45,7 @@ public class UserService {
          return null;
       }
       user.setToken(TokenGeneratorUtil.generateNewToken());
-
+      user.setLastUpdated(System.currentTimeMillis());
       return  userRepository.save(user);
    }
 
@@ -102,10 +102,16 @@ public class UserService {
    }
 
    public User updateUser(User user) {
+      user.setLastUpdated(System.currentTimeMillis());
       return userRepository.save(user);
    }
 
    public List<User> search(String search) {
       return userRepository.searchUsers(search);
+   }
+
+   public Boolean deleteUser(Long id) {
+      userRepository.deleteById(id);
+      return true;
    }
 }

@@ -25,6 +25,19 @@ public class UserController {
       this.permissionService = permissionService;
    }
 
+   @DeleteMapping("remove-user/id/{id}")
+   public ResponseEntity<?> deleteUser(
+                                                     @PathVariable Long id,
+                                          @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity.ok().body(userService.deleteUser(id));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
+
    @PostMapping
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
       User localUser = userService.addUser(user);
@@ -32,8 +45,8 @@ public class UserController {
          return ResponseEntity.ok().body(localUser);
       } else {
          return ResponseEntity
-            .status(HttpStatus.CONFLICT)
-            .body("User already exists");
+                 .status(HttpStatus.CONFLICT)
+                 .body("User already exists");
       }
    }
 
@@ -50,7 +63,7 @@ public class UserController {
    }
 
    @GetMapping("/search/{search}")
-   public ResponseEntity<?> getUser(
+   public ResponseEntity<?> searchUser(
            @PathVariable String search,
            @RequestHeader("Authorization") String authToken
    ) {
