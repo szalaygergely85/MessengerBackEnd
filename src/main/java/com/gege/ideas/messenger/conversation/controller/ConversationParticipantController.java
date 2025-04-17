@@ -26,8 +26,6 @@ public class ConversationParticipantController {
       this.permissionService = permissionService;
    }
 
-
-
    @PostMapping("add-participants")
    public ResponseEntity<?> addConversationParticipants(
       @RequestBody List<ConversationParticipant> participants,
@@ -48,20 +46,20 @@ public class ConversationParticipantController {
 
    @GetMapping("get-participants")
    public ResponseEntity<?> getConversationAndCompareWithLocal(
-           @RequestParam("conversationId") Long conversationId,
-           @RequestHeader("Authorization") String authToken
+      @RequestParam("conversationId") Long conversationId,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
-                 .ok()
-                 .body(
-                         conversationParticipantsService.getParticipants(
-                                 authToken,
-                                 conversationId
-                         )
-                 );
+            .ok()
+            .body(
+               conversationParticipantsService.getParticipants(
+                  authToken,
+                  conversationId
+               )
+            );
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 }

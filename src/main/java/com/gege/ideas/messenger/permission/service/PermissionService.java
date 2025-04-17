@@ -7,7 +7,6 @@ import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class PermissionService {
       ConversationParticipantsService conversationParticipantsService
    ) {
       this.messageRepository = messageRepository;
-this.contactsService = contactsService;
+      this.contactsService = contactsService;
       this.userService = userService;
       this.conversationParticipantsService = conversationParticipantsService;
    }
@@ -38,9 +37,15 @@ this.contactsService = contactsService;
       return ownerId.equals(user.getUserId());
    }
 
-   public boolean hasPermissionToDeleteContact(String authToken, Long contactUserId) {
+   public boolean hasPermissionToDeleteContact(
+      String authToken,
+      Long contactUserId
+   ) {
       User user = userService.getUserByToken(authToken);
-      Contact contact = contactsService.getContactByOwnerIDAndContactUserId(user.getUserId(), contactUserId);
+      Contact contact = contactsService.getContactByOwnerIDAndContactUserId(
+         user.getUserId(),
+         contactUserId
+      );
       Long userId = user.getUserId();
       return userId.equals(contact.getOwnerId());
    }

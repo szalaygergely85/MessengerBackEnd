@@ -38,9 +38,16 @@ public class ContactsService {
    public List<ContactsDTO> getContacts(String authToken) {
       User user = userService.getUserByToken(authToken);
       List<ContactsDTO> contactsDTOS = new ArrayList<>();
-      List<Contact> contacts = contactsRepository.findByOwnerId(user.getUserId());
+      List<Contact> contacts = contactsRepository.findByOwnerId(
+         user.getUserId()
+      );
       for (Contact contact : contacts) {
-         contactsDTOS.add( new ContactsDTO(contact, userService.getUserById(contact.getContactUserId())));
+         contactsDTOS.add(
+            new ContactsDTO(
+               contact,
+               userService.getUserById(contact.getContactUserId())
+            )
+         );
       }
 
       return contactsDTOS;
@@ -49,9 +56,10 @@ public class ContactsService {
    public Contact addContact(Contact contact) {
       if (
          contactsRepository.findByOwnerIdAndContactUserId(
-               contact.getOwnerId(),
-               contact.getContactUserId()
-            ) == null
+            contact.getOwnerId(),
+            contact.getContactUserId()
+         ) ==
+         null
       ) {
          Contact savedContact = contactsRepository.save(contact);
          if (savedContact != null) {
@@ -82,14 +90,23 @@ public class ContactsService {
 
    public Object deleteContact(String authToken, Long id) {
       User user = userService.getUserByToken(authToken);
-      Contact localContact = contactsRepository.findByOwnerIdAndContactUserId(user.getUserId(), id);
+      Contact localContact = contactsRepository.findByOwnerIdAndContactUserId(
+         user.getUserId(),
+         id
+      );
       if (localContact != null) {
          contactsRepository.delete(localContact);
       }
       return true;
    }
 
-   public Contact getContactByOwnerIDAndContactUserId(Long ownerId, Long contactUserId) {
-      return contactsRepository.findByOwnerIdAndContactUserId(ownerId, contactUserId);
+   public Contact getContactByOwnerIDAndContactUserId(
+      Long ownerId,
+      Long contactUserId
+   ) {
+      return contactsRepository.findByOwnerIdAndContactUserId(
+         ownerId,
+         contactUserId
+      );
    }
 }

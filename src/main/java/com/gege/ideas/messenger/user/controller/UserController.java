@@ -27,16 +27,15 @@ public class UserController {
 
    @DeleteMapping("remove-user/id/{id}")
    public ResponseEntity<?> deleteUser(
-                                                     @PathVariable Long id,
-                                          @RequestHeader("Authorization") String authToken
+      @PathVariable Long id,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity.ok().body(userService.deleteUser(id));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
-
 
    @PostMapping
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
@@ -45,8 +44,8 @@ public class UserController {
          return ResponseEntity.ok().body(localUser);
       } else {
          return ResponseEntity
-                 .status(HttpStatus.CONFLICT)
-                 .body("User already exists");
+            .status(HttpStatus.CONFLICT)
+            .body("User already exists");
       }
    }
 
@@ -64,16 +63,15 @@ public class UserController {
 
    @GetMapping("/search/{search}")
    public ResponseEntity<?> searchUser(
-           @PathVariable String search,
-           @RequestHeader("Authorization") String authToken
+      @PathVariable String search,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
          return ResponseEntity.ok().body(userService.search(search));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
-
 
    @GetMapping("/token/{token}")
    public ResponseEntity<?> getUserByToken(@PathVariable String token) {
@@ -99,16 +97,16 @@ public class UserController {
    }
 
    @PatchMapping
-   public ResponseEntity<?> updateUser(@RequestBody User user, @RequestHeader("Authorization") String authToken){
+   public ResponseEntity<?> updateUser(
+      @RequestBody User user,
+      @RequestHeader("Authorization") String authToken
+   ) {
       if (permissionService.hasPermissionToUser(user.getToken(), authToken)) {
-         return ResponseEntity
-                 .ok()
-                 .body(userService.updateUser(user));
-      }  else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         return ResponseEntity.ok().body(userService.updateUser(user));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
-
 
    @PostMapping(value = "/login")
    public User logInUser(@RequestBody LoginRequest loginRequest) {

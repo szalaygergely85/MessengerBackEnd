@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user", indexes = {
-        @Index(name = "idx_display_name", columnList = "displayName")})
+@Table(
+   name = "user",
+   indexes = { @Index(name = "idx_display_name", columnList = "displayName") }
+)
 public class User {
 
    @Id
@@ -105,7 +107,6 @@ public class User {
       this.password = password;
    }
 
-
    public String getPublicKey() {
       return publicKey;
    }
@@ -124,27 +125,16 @@ public class User {
 
    public User() {}
 
-   public User(
-      String displayName,
-      String email,
-      String password
-   ) {
+   public User(String displayName, String email, String password) {
       this.displayName = displayName;
       this.email = email;
       this.password = password;
    }
 
-   public User(
-      Long userId,
-      String displayName,
-      String email,
-      String password
-
-   ) {
+   public User(Long userId, String displayName, String email, String password) {
       this.userId = userId;
       this.displayName = displayName;
       this.email = email;
       this.password = password;
-
    }
 }

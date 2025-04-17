@@ -10,7 +10,6 @@ import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ public class MessageService {
    @Autowired
    public MessageService(
       MessageRepository messageRepository,
-
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
       PermissionService permissionService,
@@ -172,7 +170,9 @@ public class MessageService {
       } else return null;
    }
 
-    public Message getLatestMessageByConversationId(Long conversationId) {
-     return messageRepository.findTopByConversationIdOrderByTimestampDesc(conversationId);
-    }
+   public Message getLatestMessageByConversationId(Long conversationId) {
+      return messageRepository.findTopByConversationIdOrderByTimestampDesc(
+         conversationId
+      );
+   }
 }

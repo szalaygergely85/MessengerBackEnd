@@ -1,11 +1,9 @@
 package com.gege.ideas.messenger.DTO;
 
-
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.user.entity.User;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,8 +15,12 @@ public class ConversationDTO implements Serializable {
 
    private Message messageEntry;
 
-
-   public ConversationDTO(Conversation conversation, List<ConversationParticipant> participants, List<User> users, Message messageEntry) {
+   public ConversationDTO(
+      Conversation conversation,
+      List<ConversationParticipant> participants,
+      List<User> users,
+      Message messageEntry
+   ) {
       this.conversation = conversation;
       this.participants = participants;
       this.users = users;
@@ -57,4 +59,3 @@ public class ConversationDTO implements Serializable {
       this.messageEntry = messageEntry;
    }
 }
-

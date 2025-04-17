@@ -33,7 +33,7 @@ public class MessageController {
    }
 
    @PostMapping("/add-messages")
-   public ResponseEntity<?> addMessage(){
+   public ResponseEntity<?> addMessage() {
       //TODO finish this if needed
       return null;
    }
@@ -60,22 +60,20 @@ public class MessageController {
 
    @GetMapping("/get-latest-message")
    public ResponseEntity<?> getLatestMessage(
-           @RequestHeader("Authorization") String token,
-           @RequestParam("conversationId") Long conversationId
+      @RequestHeader("Authorization") String token,
+      @RequestParam("conversationId") Long conversationId
    ) {
       if (
-              _permissionService.hasPermissionToConversation(token, conversationId)
+         _permissionService.hasPermissionToConversation(token, conversationId)
       ) {
          return ResponseEntity
-                 .ok()
-                 .body(
-                         _messageService.getLatestMessageByConversationId(
-                                 conversationId
-                         )
-                 );
+            .ok()
+            .body(
+               _messageService.getLatestMessageByConversationId(conversationId)
+            );
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @GetMapping("/validate")

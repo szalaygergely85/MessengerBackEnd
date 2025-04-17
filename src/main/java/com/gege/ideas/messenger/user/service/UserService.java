@@ -3,11 +3,10 @@ package com.gege.ideas.messenger.user.service;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
+import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -17,23 +16,18 @@ public class UserService {
 
    private final UserRepository userRepository;
 
-
    @Autowired
-   public UserService(
-      UserRepository userRepository
-
-   ) {
+   public UserService(UserRepository userRepository) {
       this.userRepository = userRepository;
-
    }
 
    public User logInUser(String email, String password) {
       User user = userRepository.findByEmail(email);
 
       if (user != null && user.getPassword().equals(password)) {
-         if(user.getToken() == null) {
+         if (user.getToken() == null) {
             user.setToken(TokenGeneratorUtil.generateNewToken());
-            return  userRepository.save(user);
+            return userRepository.save(user);
          }
          return user;
       }
@@ -46,7 +40,7 @@ public class UserService {
       }
       user.setToken(TokenGeneratorUtil.generateNewToken());
       user.setLastUpdated(System.currentTimeMillis());
-      return  userRepository.save(user);
+      return userRepository.save(user);
    }
 
    public User getUserById(Long id) {
@@ -59,13 +53,11 @@ public class UserService {
    }
 
    public User getUserByToken(String token) {
-
       return userRepository.findByToken(token);
    }
 
    public Long getUserIdByToken(String token) {
-
-      User user =userRepository.findByToken(token);
+      User user = userRepository.findByToken(token);
 
       return user.getUserId();
    }
@@ -90,7 +82,6 @@ public class UserService {
 
    public void deleteUser(User user) {
       userRepository.delete(user);
-
    }
 
    public List<User> getUsersByIds(List<Long> participantsId) {

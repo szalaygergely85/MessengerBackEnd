@@ -44,39 +44,34 @@ public class ContactsController {
          .body("Unauthorized");
    }
 
-
    @DeleteMapping("/delete-contact")
    public ResponseEntity<?> deleteContactById(
-           @RequestParam("ContactUserId") Long userId,
-           @RequestHeader("Authorization") String authToken
+      @RequestParam("ContactUserId") Long userId,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.hasPermissionToDeleteContact(authToken, userId)) {
          return ResponseEntity
-                 .ok()
-                 .body(contactsService.deleteContact(authToken, userId));
+            .ok()
+            .body(contactsService.deleteContact(authToken, userId));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
-
 
    @GetMapping("/get-contact/{id}")
    public ResponseEntity<?> getContactById(
-           @PathVariable Long id,
-           @RequestHeader("Authorization") String authToken
+      @PathVariable Long id,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-                 .ok()
-                 .body(contactsService.getContactById(id));
+         return ResponseEntity.ok().body(contactsService.getContactById(id));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @GetMapping("/get-contacts")
    public ResponseEntity<?> searchContacts(
-
       @RequestHeader("Authorization") String authToken
    ) {
       if (permissionService.isUserRegistered(authToken)) {
@@ -93,10 +88,13 @@ public class ContactsController {
       @RequestBody Contact contact,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {
-         return ResponseEntity
-            .ok()
-            .body(contactsService.addContact(contact));
+      if (
+         permissionService.hasPermissionToAddContact(
+            authToken,
+            contact.getOwnerId()
+         )
+      ) {
+         return ResponseEntity.ok().body(contactsService.addContact(contact));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");

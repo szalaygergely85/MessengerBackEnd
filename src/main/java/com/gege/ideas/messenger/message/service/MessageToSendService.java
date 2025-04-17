@@ -1,12 +1,11 @@
 package com.gege.ideas.messenger.message.service;
 
+import com.gege.ideas.messenger.message.entity.MessageToSend;
+import com.gege.ideas.messenger.message.repository.MessageToSendRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.gege.ideas.messenger.message.entity.MessageToSend;
-import com.gege.ideas.messenger.message.repository.MessageToSendRepository;
 
 @Service
 public class MessageToSendService {
