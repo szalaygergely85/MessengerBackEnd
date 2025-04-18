@@ -109,10 +109,17 @@ public class UserController {
    }
 
    @PostMapping(value = "/login")
-   public User logInUser(@RequestBody LoginRequest loginRequest) {
-      return userService.logInUser(
+   public ResponseEntity<?> logInUser(@RequestBody LoginRequest loginRequest) {
+      User user = userService.logInUser(
          loginRequest.getEmail(),
          loginRequest.getPassword()
       );
+      if (user != null) {
+         return ResponseEntity.ok().body(user);
+      } else {
+         return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .body("User not found");
+      }
    }
 }
