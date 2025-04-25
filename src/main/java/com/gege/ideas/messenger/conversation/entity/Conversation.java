@@ -10,10 +10,28 @@ public class Conversation {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long conversationId;
 
+   @Column
    private String conversationName;
+
+   @Column
    private Long timeStamp;
+
+   @Column
    private Long creatorUserId;
+
+   @Column
    private int numberOfParticipants;
+
+   @Column
+   private Long lastUpdated;
+
+   public Long getLastUpdated() {
+      return lastUpdated;
+   }
+
+   public void setLastUpdated(Long lastUpdated) {
+      this.lastUpdated = lastUpdated;
+   }
 
    public Long getTimeStamp() {
       return timeStamp;

@@ -32,6 +32,7 @@ public class ConversationService {
             userService.getUserIdByToken(authToken),
             participants.size()
          );
+         conversation.setLastUpdated(System.currentTimeMillis());
          _conversationsRepository.save(conversation);
          for (User participant : participants) {
             ConversationParticipant conversationParticipant =

@@ -38,6 +38,19 @@ public class MessageController {
       return null;
    }
 
+   @GetMapping("/get-message/{uuid}")
+   public ResponseEntity<?> getConversationMessages(
+      @RequestHeader("Authorization") String token,
+      @PathVariable String uuid
+   ) {
+      Message message = _messageService.getMessageByUUID(uuid);
+      if (_permissionService.hasPermissionToMessage(message, token)) {
+         return ResponseEntity.ok().body(message);
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
+
    @GetMapping("/get-messages")
    public ResponseEntity<?> getConversationMessages(
       @RequestHeader("Authorization") String token,

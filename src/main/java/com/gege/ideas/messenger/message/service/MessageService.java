@@ -5,7 +5,6 @@ import com.gege.ideas.messenger.conversation.service.ConversationParticipantsSer
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
-import com.gege.ideas.messenger.notifcation.entity.Notification;
 import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
@@ -49,21 +48,22 @@ public class MessageService {
          conversationParticipantsService.getUsersByConversationId(
             message.getConversationId()
          );
-      for (User recipientUser : recipientUsers) {
-         if (recipientUser.getUserId() != message.getSenderId()) {
-            String title = "Message from: " + recipientUser.getDisplayName();
-            notificationService.addNotification(
-               new Notification(
-                  message.getContentEncrypted(),
-                  message.getConversationId(),
-                  true,
-                  message.getTimestamp(),
-                  title,
-                  recipientUser.getUserId()
-               )
-            );
-         }
-      }
+      /*
+	for (User recipientUser : recipientUsers) {
+		if (recipientUser.getUserId() != message.getSenderId()) {
+			String title = "Message from: " + recipientUser.getDisplayName();
+			notificationService.addNotification(
+			new Notification(
+				message.getContentEncrypted(),
+				message.getConversationId(),
+				true,
+				message.getTimestamp(),
+				title,
+				recipientUser.getUserId()
+			)
+			);
+		}
+	}*/
       return messageRepository.save(message);
    }
 
@@ -174,5 +174,13 @@ public class MessageService {
       return messageRepository.findTopByConversationIdOrderByTimestampDesc(
          conversationId
       );
+   }
+
+   public Message getMessageByID(Long messageId) {
+      return messageRepository.findById(messageId).orElse(null);
+   }
+
+   public Message getMessageByUUID(String uuid) {
+      return messageRepository.findByUuid(uuid);
    }
 }

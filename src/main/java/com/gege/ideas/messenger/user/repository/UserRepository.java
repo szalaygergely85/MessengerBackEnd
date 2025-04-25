@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
       "SELECT u FROM User u WHERE u.email LIKE %:searchText% OR u.displayName LIKE %:searchText%"
    )
    List<User> searchUsers(@Param("searchText") String searchText);
+
+   Boolean existsByEmail(String email);
 }

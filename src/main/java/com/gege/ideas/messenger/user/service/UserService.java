@@ -35,7 +35,7 @@ public class UserService {
    }
 
    public User addUser(User user) throws Exception {
-      if (userRepository.findByEmail(user.getEmail()) != null) {
+      if (userRepository.existsByEmail(user.getEmail())) {
          return null;
       }
       user.setToken(TokenGeneratorUtil.generateNewToken());

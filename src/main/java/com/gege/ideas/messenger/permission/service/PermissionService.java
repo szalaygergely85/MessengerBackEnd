@@ -92,9 +92,7 @@ public class PermissionService {
       List<Message> messages
    ) {
       for (Message message : messages) {
-         if (
-            !hasPermissionToConversation(authToken, message.getConversationId())
-         ) {
+         if (hasPermissionToMessage(message, authToken)) {
             return false;
          }
       }
@@ -109,5 +107,12 @@ public class PermissionService {
          userService.getUsersByIds(participantsId),
          authToken
       );
+   }
+
+   public boolean hasPermissionToMessage(Message message, String authToken) {
+      if (hasPermissionToConversation(authToken, message.getConversationId())) {
+         return true;
+      }
+      return false;
    }
 }

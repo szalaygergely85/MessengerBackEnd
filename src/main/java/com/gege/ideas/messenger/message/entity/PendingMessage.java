@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "messagetosend")
-public class MessageToSend implements Serializable {
+@Table(name = "pending_message")
+public class PendingMessage implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long messageToSendId;
 
    @Column(nullable = false)
-   private Long messageId;
+   private String uuid;
 
    @Column(nullable = false)
    private Long userId;
@@ -20,20 +20,20 @@ public class MessageToSend implements Serializable {
    @Column
    private boolean delivered;
 
-   public MessageToSend(Long messageId, Long userId) {
-      this.messageId = messageId;
+   public PendingMessage(String uuid, Long userId, boolean delivered) {
+      this.uuid = uuid;
       this.userId = userId;
-      this.delivered = false;
+      this.delivered = delivered;
    }
 
-   public MessageToSend() {}
+   public PendingMessage() {}
 
-   public Long getMessageId() {
-      return messageId;
+   public String getUuid() {
+      return uuid;
    }
 
-   public void setMessageId(Long messageId) {
-      this.messageId = messageId;
+   public void setUuid(String uuid) {
+      this.uuid = uuid;
    }
 
    public Long getUserId() {
