@@ -4,6 +4,8 @@ import com.gege.ideas.messenger.DTO.LoginRequest;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +45,11 @@ public class UserController {
       if (localUser != null) {
          return ResponseEntity.ok().body(localUser);
       } else {
+         Map<String, String> errorResponse = new HashMap<>();
+         errorResponse.put("error", "Email address already in registered");
          return ResponseEntity
-            .status(HttpStatus.CONFLICT)
-            .body("User already exists");
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(errorResponse);
       }
    }
 
@@ -117,9 +121,11 @@ public class UserController {
       if (user != null) {
          return ResponseEntity.ok().body(user);
       } else {
+         Map<String, String> errorResponse = new HashMap<>();
+         errorResponse.put("error", "Invalid email or password");
          return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body("User not found");
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(errorResponse);
       }
    }
 }
