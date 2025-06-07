@@ -34,14 +34,17 @@ public class ImageEntry {
    @Column(nullable = false)
    private long dateAdded;
 
-   @Column(nullable = false)
+   @Column
    private String status;
 
-   @Column(nullable = false)
+   @Column
    private String tags;
 
-   @Column(nullable = false)
+   @Column
    private String uuid;
+
+   @Column
+   private Long conversationId;
 
    public ImageEntry() {}
 
@@ -57,7 +60,8 @@ public class ImageEntry {
       long dateAdded,
       String status,
       String tags,
-      String uuid
+      String uuid,
+      Long conversationId
    ) {
       this.id = id;
       this.fileName = fileName;
@@ -71,6 +75,15 @@ public class ImageEntry {
       this.status = status;
       this.tags = tags;
       this.uuid = uuid;
+      this.conversationId = conversationId;
+   }
+
+   public Long getConversationId() {
+      return conversationId;
+   }
+
+   public void setConversationId(Long conversationId) {
+      this.conversationId = conversationId;
    }
 
    public Long getId() {

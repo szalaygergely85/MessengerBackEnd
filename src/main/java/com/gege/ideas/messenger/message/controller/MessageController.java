@@ -4,7 +4,6 @@ import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -133,7 +132,6 @@ public class MessageController {
       return ResponseEntity.ok("Messages marked as downloaded");
    }
 
-   @Autowired
    MessageController(
       MessageService _messageService,
       PermissionService _permissionService
@@ -143,5 +141,6 @@ public class MessageController {
    }
 
    private final MessageService _messageService;
+
    private final PermissionService _permissionService;
 }

@@ -6,9 +6,14 @@ import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.repository.ImageRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
+
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -36,24 +41,27 @@ public class ImageService {
       this.userService = userService;
    }
 
-   public ImageEntry addImage(MultipartFile file, ImageEntry imageEntry) {
+   public Resource addImage(MultipartFile file, ImageEntry imageEntry) {
       Long userId = imageEntry.getUserId();
-      fileUploadService.saveFile(file, userId.toString());
+      saveImage(file, imageEntry);
 
       if (ImageConstans.TAG_PROFILE.equals(imageEntry.getTags())) {
          User user = userService.getUserById(userId);
          user.setProfilePictureUuid(imageEntry.getUuid());
          userService.updateUser(user);
       }
-      return imageRepository.save(imageEntry);
+      ImageEntry localImage = imageRepository.save(imageEntry);
+      return getImageAsResourceByUUID(localImage.getUuid());
    }
 
    public Resource getImageAsResource(ImageEntry imageEntry) {
       String imageName = imageEntry.getFileName();
       try {
-         Path userFolderPath = rootLocation
-            .resolve(imageEntry.getUserId().toString())
-            .normalize();
+
+         String folder = getFolder(imageEntry);
+
+         Path userFolderPath = this.rootLocation.resolve(folder).normalize();
+
          Path file = userFolderPath.resolve(imageName).normalize();
          Resource resource = new UrlResource(file.toUri());
          if (resource.exists() || resource.isReadable()) {
@@ -75,5 +83,58 @@ public class ImageService {
    public Resource getImageAsResourceByUUID(String uuid) {
       ImageEntry imageEntry = imageRepository.findByUuid(uuid);
       return getImageAsResource(imageEntry);
+   }
+
+   private void saveImage(MultipartFile file, ImageEntry imageEntry) {
+      try {
+
+         if (file.isEmpty()) {
+            throw new RuntimeException("Failed to store empty file.");
+         }
+
+         String userFolder = getFolder(imageEntry);
+         // Determine target folder based on image tag
+
+
+         Path userFolderPath = this.rootLocation.resolve(userFolder).normalize();
+
+         Path destinationFile = userFolderPath
+                 .resolve(Paths.get(file.getOriginalFilename()))
+                 .normalize()
+                 .toAbsolutePath();
+
+         if (
+                 !destinationFile.getParent().equals(userFolderPath.toAbsolutePath())
+         ) {
+            throw new RuntimeException(
+                    "Cannot store file outside current directory."
+            );
+         }
+
+         Files.createDirectories(userFolderPath);
+
+         try (var inputStream = file.getInputStream()) {
+            Files.copy(
+                    inputStream,
+                    destinationFile,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+         }
+      } catch (IOException e) {
+         throw new RuntimeException("Failed to store file.", e);
+      }
+   }
+
+   private String getFolder(ImageEntry imageEntry) {
+      if (ImageConstans.TAG_MESSAGE.equals(imageEntry.getTags())) {
+         // Store in /images/messages/{conversationId}
+         return Paths.get("messages", String.valueOf(imageEntry.getConversationId())).toString();
+      }
+      if (ImageConstans.TAG_PROFILE.equals(imageEntry.getTags())) {
+         // Store in /images/profile/{userId}
+         return Paths.get("profile", String.valueOf(imageEntry.getUserId())).toString();
+      }
+
+      return null;
    }
 }

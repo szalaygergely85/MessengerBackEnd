@@ -62,6 +62,10 @@ public class UserService {
       return user.getUserId();
    }
 
+   public String getTokenById(Long id) {
+      return userRepository.findById(id).map(User::getToken).orElse(null);
+   }
+
    public List<User> searchUsers(String search) {
       return userRepository.searchUsers(search);
    }
