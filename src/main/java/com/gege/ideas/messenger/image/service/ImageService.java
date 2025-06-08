@@ -6,14 +6,12 @@ import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.repository.ImageRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -57,7 +55,6 @@ public class ImageService {
    public Resource getImageAsResource(ImageEntry imageEntry) {
       String imageName = imageEntry.getFileName();
       try {
-
          String folder = getFolder(imageEntry);
 
          Path userFolderPath = this.rootLocation.resolve(folder).normalize();
@@ -87,7 +84,6 @@ public class ImageService {
 
    private void saveImage(MultipartFile file, ImageEntry imageEntry) {
       try {
-
          if (file.isEmpty()) {
             throw new RuntimeException("Failed to store empty file.");
          }
@@ -95,19 +91,19 @@ public class ImageService {
          String userFolder = getFolder(imageEntry);
          // Determine target folder based on image tag
 
-
-         Path userFolderPath = this.rootLocation.resolve(userFolder).normalize();
+         Path userFolderPath =
+            this.rootLocation.resolve(userFolder).normalize();
 
          Path destinationFile = userFolderPath
-                 .resolve(Paths.get(file.getOriginalFilename()))
-                 .normalize()
-                 .toAbsolutePath();
+            .resolve(Paths.get(file.getOriginalFilename()))
+            .normalize()
+            .toAbsolutePath();
 
          if (
-                 !destinationFile.getParent().equals(userFolderPath.toAbsolutePath())
+            !destinationFile.getParent().equals(userFolderPath.toAbsolutePath())
          ) {
             throw new RuntimeException(
-                    "Cannot store file outside current directory."
+               "Cannot store file outside current directory."
             );
          }
 
@@ -115,9 +111,9 @@ public class ImageService {
 
          try (var inputStream = file.getInputStream()) {
             Files.copy(
-                    inputStream,
-                    destinationFile,
-                    StandardCopyOption.REPLACE_EXISTING
+               inputStream,
+               destinationFile,
+               StandardCopyOption.REPLACE_EXISTING
             );
          }
       } catch (IOException e) {
@@ -128,11 +124,15 @@ public class ImageService {
    private String getFolder(ImageEntry imageEntry) {
       if (ImageConstans.TAG_MESSAGE.equals(imageEntry.getTags())) {
          // Store in /images/messages/{conversationId}
-         return Paths.get("messages", String.valueOf(imageEntry.getConversationId())).toString();
+         return Paths
+            .get("messages", String.valueOf(imageEntry.getConversationId()))
+            .toString();
       }
       if (ImageConstans.TAG_PROFILE.equals(imageEntry.getTags())) {
          // Store in /images/profile/{userId}
-         return Paths.get("profile", String.valueOf(imageEntry.getUserId())).toString();
+         return Paths
+            .get("profile", String.valueOf(imageEntry.getUserId()))
+            .toString();
       }
 
       return null;
