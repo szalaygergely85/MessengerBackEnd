@@ -95,7 +95,7 @@ public class ImageService {
             this.rootLocation.resolve(userFolder).normalize();
 
          Path destinationFile = userFolderPath
-            .resolve(Paths.get(file.getOriginalFilename()))
+            .resolve(Paths.get(imageEntry.getFileName()))
             .normalize()
             .toAbsolutePath();
 

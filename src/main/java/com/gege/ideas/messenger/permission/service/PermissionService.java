@@ -64,7 +64,10 @@ public class PermissionService {
 
    public boolean hasPermissionToUser(String userToken, String authToken) {
       User user = userService.getUserByToken(authToken);
-      return (user != null && userToken == authToken);
+      if (user != null) {
+         return userToken.equals(authToken);
+      }
+      return false;
    }
 
    public boolean isUserRegistered(String authToken) {

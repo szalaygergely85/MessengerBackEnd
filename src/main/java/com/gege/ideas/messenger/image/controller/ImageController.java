@@ -35,7 +35,10 @@ public class ImageController {
       this._userService = userService;
    }
 
-   @PostMapping("/upload")
+   @PostMapping(
+      value = "/upload",
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+   )
    public ResponseEntity<?> handleImageUpload(
       @RequestPart("image") MultipartFile file,
       @RequestPart("imageEntry") ImageEntry imageEntry,
