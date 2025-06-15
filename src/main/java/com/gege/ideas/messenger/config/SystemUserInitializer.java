@@ -19,6 +19,8 @@ public class SystemUserInitializer {
    private static final String SYSTEM_EMAIL = "websocket@zenvy.com";
    private static final String SYSTEM_DISPLAY_NAME = "websocket";
    private static final String SYSTEM_PASSWORD = "123456";
+   private static final String SYSTEM_UUID = "user_123456";
+
 
    @PostConstruct
    public void createSystemUserIfNotExists() throws Exception {
@@ -27,6 +29,7 @@ public class SystemUserInitializer {
          user.setEmail(SYSTEM_EMAIL);
          user.setPassword(SYSTEM_PASSWORD);
          user.setDisplayName(SYSTEM_DISPLAY_NAME);
+         user.setUuid(SYSTEM_UUID);
          userService.addUser(user);
 
          System.out.println("✅ System user created.");

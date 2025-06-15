@@ -43,6 +43,9 @@ public class User {
    @Column
    private Long lastUpdated;
 
+   @Column(nullable = false)
+   private String uuid;
+
    public Long getLastUpdated() {
       return lastUpdated;
    }
@@ -121,6 +124,14 @@ public class User {
 
    public void setToken(String token) {
       this.token = token;
+   }
+
+   public String getUuid() {
+      return uuid;
+   }
+
+   public void setUuid(String uuid) {
+      this.uuid = uuid;
    }
 
    public User() {}
