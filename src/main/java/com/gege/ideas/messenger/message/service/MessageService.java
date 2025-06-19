@@ -184,8 +184,8 @@ public class MessageService {
       return messageRepository.findByUuid(uuid);
    }
 
-    public Object deleteMessage(String uuid) {
+   public Object deleteMessage(String uuid) {
       messageRepository.delete(messageRepository.findByUuid(uuid));
       return true;
-    }
+   }
 }

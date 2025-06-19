@@ -34,7 +34,6 @@ public class SystemUserInitializer {
 
    private static final Long TEST_ID = 9999L;
 
-
    @PersistenceContext
    private EntityManager entityManager;
 
@@ -49,13 +48,11 @@ public class SystemUserInitializer {
          user.setToken(SYSTEM_TOKEN);
          userRepository.save(user);
 
-
          System.out.println("✅ System user created.");
       } else {
          System.out.println("ℹ️ System user already exists.");
       }
       if (!userRepository.existsByEmail(TEST_EMAIL)) {
-
          User testUser = new User();
          testUser.setEmail(TEST_EMAIL);
          testUser.setPassword(TEST_PASSWORD);
@@ -66,11 +63,9 @@ public class SystemUserInitializer {
          testUser.setUserId(TEST_ID);
          userRepository.save(testUser);
 
-
          System.out.println("✅ Test user created.");
       } else {
          System.out.println("ℹ️ Test user already exists.");
       }
-
    }
 }

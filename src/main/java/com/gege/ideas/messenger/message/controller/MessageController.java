@@ -134,17 +134,15 @@ public class MessageController {
 
    @DeleteMapping("remove/{uuid}")
    public ResponseEntity<?> deleteMessage(
-           @PathVariable String uuid,
-           @RequestHeader("Authorization") String authToken
+      @PathVariable String uuid,
+      @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isUserTestUser(authToken)) {
          return ResponseEntity.ok().body(_messageService.deleteMessage(uuid));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
-
-
 
    MessageController(
       MessageService _messageService,
