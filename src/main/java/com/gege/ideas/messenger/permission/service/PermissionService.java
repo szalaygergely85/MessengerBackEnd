@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.permission.service;
 
+import com.gege.ideas.messenger.config.SystemUserInitializer;
 import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
@@ -117,5 +118,9 @@ public class PermissionService {
          return true;
       }
       return false;
+   }
+
+   public boolean isUserTestUser(String authToken) {
+      return authToken.equals(SystemUserInitializer.TEST_UUID);
    }
 }

@@ -109,4 +109,10 @@ public class UserService {
       userRepository.deleteById(id);
       return true;
    }
+
+   public Object deleteUser(String email) {
+      User user = userRepository.findByEmail(email);
+      userRepository.delete(user);
+      return true;
+   }
 }

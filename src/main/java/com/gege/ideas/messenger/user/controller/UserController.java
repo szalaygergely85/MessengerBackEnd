@@ -32,11 +32,23 @@ public class UserController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
+      if (permissionService.isUserTestUser(authToken)) {
          return ResponseEntity.ok().body(userService.deleteUser(id));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
+   }
+
+   @DeleteMapping("remove-user/email/{email}")
+   public ResponseEntity<?> deleteUser(
+           @PathVariable String email,
+           @RequestHeader("Authorization") String authToken
+   ) {
+      if (permissionService.isUserTestUser(authToken)) {
+         return ResponseEntity.ok().body(userService.deleteUser(email));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
    }
 
    @PostMapping
