@@ -145,11 +145,12 @@ public class ConversationService {
       this.messageRepository = messageRepository;
    }
 
-   public void clearConversation(Long conversationId) {
+   public boolean clearConversation(Long conversationId) {
       conversationParticipantsService.deleteByConversationId(conversationId);
       _conversationsRepository.deleteConversationByConversationId(
          conversationId
       );
+      return true;
    }
 
    public List<Conversation> getConversationAndCompareWithLocal(

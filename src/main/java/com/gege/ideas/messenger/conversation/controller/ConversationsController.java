@@ -15,15 +15,15 @@ public class ConversationsController {
 
    private final ConversationService conversationService;
 
-   private final PermissionService permissionService;
+   private final PermissionService _permissionService;
 
    @Autowired
    public ConversationsController(
       ConversationService conversationService,
-      PermissionService permissionService
+      PermissionService _permissionService
    ) {
       this.conversationService = conversationService;
-      this.permissionService = permissionService;
+      this._permissionService = _permissionService;
    }
 
    @PostMapping("add-conversation/conversation")
@@ -31,7 +31,7 @@ public class ConversationsController {
       @RequestBody List<User> participants,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isInParticipants(participants, authToken)) {
+      if (_permissionService.isInParticipants(participants, authToken)) {
          return ResponseEntity
             .ok()
             .body(conversationService.addConversation(participants, authToken));
@@ -45,7 +45,7 @@ public class ConversationsController {
       @RequestBody List<Long> participantsId,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isInParticipantsIds(participantsId, authToken)) {
+      if (_permissionService.isInParticipantsIds(participantsId, authToken)) {
          return ResponseEntity
             .ok()
             .body(
@@ -64,7 +64,7 @@ public class ConversationsController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.hasPermissionToConversation(authToken, id)) {
+      if (_permissionService.hasPermissionToConversation(authToken, id)) {
          return ResponseEntity
             .ok()
             .body(conversationService.getConversationDTOById(id));
@@ -78,7 +78,7 @@ public class ConversationsController {
       @RequestParam("count") int count,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
+      if (_permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
             .ok()
             .body(
@@ -96,10 +96,24 @@ public class ConversationsController {
    public ResponseEntity<?> getConversationsByToken(
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
+      if (_permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
             .ok()
             .body(conversationService.getConversationsByAuthToken(authToken));
+      } else return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
+   }
+
+   @DeleteMapping("remove-conversation/{conversationId}")
+   public ResponseEntity<?> deleteConversation(
+      @PathVariable Long conversationId,
+      @RequestHeader("Authorization") String authToken
+   ) {
+      if (_permissionService.isUserTestUser(authToken)) {
+         return ResponseEntity
+            .ok()
+            .body(conversationService.clearConversation(conversationId));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
