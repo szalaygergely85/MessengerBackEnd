@@ -33,19 +33,6 @@ public class PendingMessageController {
          .body("Unauthorized");
    }
 
-   @GetMapping("get-messages/not-delivered")
-   public ResponseEntity<?> getNotDeliveredMessages(
-      @RequestHeader("Authorization") String authToken
-   ) {
-      if (_permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(_pendingMessageService.getNotDeliveredMessages(authToken));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
-   }
-
    @PostMapping("/{uuid}/delivered")
    public ResponseEntity<?> markAsDelivered(
       @PathVariable String uuid,

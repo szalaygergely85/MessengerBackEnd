@@ -4,6 +4,7 @@ import com.gege.ideas.messenger.DTO.MessageBoard;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
+import com.gege.ideas.messenger.message.entity.PendingMessage;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
@@ -23,7 +24,7 @@ public class MessageService {
    private final ConversationParticipantsService conversationParticipantsService;
    private final PermissionService permissionService;
    private final ConversationService conversationService;
-   private final NotificationService notificationService;
+   private final PendingMessageService pendingMessageService;
 
    @Autowired
    public MessageService(
@@ -32,7 +33,7 @@ public class MessageService {
       ConversationParticipantsService conversationParticipantsService,
       PermissionService permissionService,
       ConversationService conversationService,
-      NotificationService notificationService
+      PendingMessageService pendingMessageService
    ) {
       this.messageRepository = messageRepository;
 
@@ -40,7 +41,7 @@ public class MessageService {
       this.conversationParticipantsService = conversationParticipantsService;
       this.permissionService = permissionService;
       this.conversationService = conversationService;
-      this.notificationService = notificationService;
+      this.pendingMessageService = pendingMessageService;
    }
 
    public Message createMessage(Message message) {
@@ -48,22 +49,12 @@ public class MessageService {
          conversationParticipantsService.getUsersByConversationId(
             message.getConversationId()
          );
-      /*
+
 	for (User recipientUser : recipientUsers) {
 		if (recipientUser.getUserId() != message.getSenderId()) {
-			String title = "Message from: " + recipientUser.getDisplayName();
-			notificationService.addNotification(
-			new Notification(
-				message.getContentEncrypted(),
-				message.getConversationId(),
-				true,
-				message.getTimestamp(),
-				title,
-				recipientUser.getUserId()
-			)
-			);
+			pendingMessageService.createPendingMessage(new PendingMessage(message.getUuid(), recipientUser.getUserId(), false));
 		}
-	}*/
+	}
       return messageRepository.save(message);
    }
 
@@ -158,16 +149,12 @@ public class MessageService {
       return messages;
    }
 
-   public List<Message> markMessagesAsDownloaded(List<Long> messageIds) {
-      List<Message> messages = messageRepository.findAllById(messageIds);
-      if (messages != null) {
-         /*
-		for (Message message : messages) {
-			message.setDownloaded(true);
-		}*/
-         messageRepository.saveAll(messages);
-         return messages;
-      } else return null;
+   public Boolean markMessagesAsDownloaded(List<String> messageUuids, String token) {
+      for (String uuid : messageUuids) {
+       pendingMessageService.markMessageAsDelivered(uuid, token);
+      }
+      return true;
+
    }
 
    public Message getLatestMessageByConversationId(Long conversationId) {
@@ -187,5 +174,19 @@ public class MessageService {
    public Object deleteMessage(String uuid) {
       messageRepository.delete(messageRepository.findByUuid(uuid));
       return true;
+   }
+
+   public Object getNotDeliveredMessages(String authToken) {
+      List<Message> messages = new ArrayList<>();
+      List<PendingMessage> pendingMessages = pendingMessageService.getNotDeliveredMessages(authToken);
+      if (!pendingMessages.isEmpty()) {
+         for (PendingMessage pendingMessage : pendingMessages){
+            Message message = messageRepository.findByUuid(pendingMessage.getUuid());
+            if (message!=null){
+               messages.add(message);
+            }
+         }
+      }
+      return messages;
    }
 }

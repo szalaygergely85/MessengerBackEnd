@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PendingMessageRepository
    extends JpaRepository<PendingMessage, Long> {
+
+   List<PendingMessage> findByUuid(String uuid);
    PendingMessage findByUuidAndUserId(String uuid, Long userId);
    List<PendingMessage> findByUserIdAndDeliveredFalse(Long userId);
 }
