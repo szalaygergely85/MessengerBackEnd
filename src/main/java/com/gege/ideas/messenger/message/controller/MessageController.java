@@ -1,12 +1,10 @@
 package com.gege.ideas.messenger.message.controller;
 
 import com.gege.ideas.messenger.message.entity.Message;
-import com.gege.ideas.messenger.message.entity.PendingMessage;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.message.service.PendingMessageService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +35,15 @@ public class MessageController {
 
    @GetMapping("get-messages/not-delivered")
    public ResponseEntity<?> getNotDeliveredMessages(
-           @RequestHeader("Authorization") String authToken
+      @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
-                 .ok()
-                 .body(_messageService.getNotDeliveredMessages(authToken));
+            .ok()
+            .body(_messageService.getNotDeliveredMessages(authToken));
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @PostMapping("/add-messages")
@@ -106,46 +104,43 @@ public class MessageController {
    }
 
    /*
-   @Deprecated
-   @GetMapping("/validate")
-   public ResponseEntity<?> getMessagesAndCompareWithLocal(
-      @RequestHeader("Authorization") String token,
-      @RequestParam("count") int count
-   ) {
-      if (_permissionService.isUserRegistered(token)) {
-         return ResponseEntity
-            .ok()
-            .body(_messageService.getMessagesAndCompareWithLocal(token, count));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
-   }
+@Deprecated
+@GetMapping("/validate")
+public ResponseEntity<?> getMessagesAndCompareWithLocal(
+	@RequestHeader("Authorization") String token,
+	@RequestParam("count") int count
+) {
+	if (_permissionService.isUserRegistered(token)) {
+		return ResponseEntity
+			.ok()
+			.body(_messageService.getMessagesAndCompareWithLocal(token, count));
+	} else return ResponseEntity
+		.status(HttpStatus.UNAUTHORIZED)
+		.body("Unauthorized");
+}
 
-   @Deprecated
-   @GetMapping("new-message")
-   public ResponseEntity<?> getNewMessagesByUserToken(
-      @RequestHeader("Authorization") String authToken
-   ) {
-      List<Message> messages = _messageService.getNewMessagesByUserToken(
-         authToken
-      );
-      if (_permissionService.hasPermissionToMessages(authToken, messages)) {
-         return ResponseEntity.ok().body(messages);
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
-   }
+@Deprecated
+@GetMapping("new-message")
+public ResponseEntity<?> getNewMessagesByUserToken(
+	@RequestHeader("Authorization") String authToken
+) {
+	List<Message> messages = _messageService.getNewMessagesByUserToken(
+		authToken
+	);
+	if (_permissionService.hasPermissionToMessages(authToken, messages)) {
+		return ResponseEntity.ok().body(messages);
+	} else return ResponseEntity
+		.status(HttpStatus.UNAUTHORIZED)
+		.body("Unauthorized");
+}
 */
 
    @PatchMapping("/mark-as-downloaded")
    public ResponseEntity<String> markMessagesAsDownloaded(
-           @RequestHeader("Authorization") String authToken,
+      @RequestHeader("Authorization") String authToken,
       @RequestBody List<String> messageUuids
    ) {
-
-       _messageService.markMessagesAsDownloaded(
-               messageUuids, authToken
-      );
+      _messageService.markMessagesAsDownloaded(messageUuids, authToken);
 
       return ResponseEntity.ok("Messages marked as downloaded");
    }
@@ -167,16 +162,15 @@ public class MessageController {
    MessageController(
       MessageService _messageService,
       PermissionService _permissionService,
-PendingMessageService pendingMessageService
+      PendingMessageService pendingMessageService
    ) {
       this._messageService = _messageService;
       this._permissionService = _permissionService;
-this._pendingMessageService = pendingMessageService;
+      this._pendingMessageService = pendingMessageService;
    }
 
    private final MessageService _messageService;
 
    private final PermissionService _permissionService;
    private final PendingMessageService _pendingMessageService;
-
 }

@@ -6,7 +6,6 @@ import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.entity.PendingMessage;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
-import com.gege.ideas.messenger.notifcation.service.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
@@ -50,11 +49,17 @@ public class MessageService {
             message.getConversationId()
          );
 
-	for (User recipientUser : recipientUsers) {
-		if (recipientUser.getUserId() != message.getSenderId()) {
-			pendingMessageService.createPendingMessage(new PendingMessage(message.getUuid(), recipientUser.getUserId(), false));
-		}
-	}
+      for (User recipientUser : recipientUsers) {
+         if (recipientUser.getUserId() != message.getSenderId()) {
+            pendingMessageService.createPendingMessage(
+               new PendingMessage(
+                  message.getUuid(),
+                  recipientUser.getUserId(),
+                  false
+               )
+            );
+         }
+      }
       return messageRepository.save(message);
    }
 
@@ -149,12 +154,14 @@ public class MessageService {
       return messages;
    }
 
-   public Boolean markMessagesAsDownloaded(List<String> messageUuids, String token) {
+   public Boolean markMessagesAsDownloaded(
+      List<String> messageUuids,
+      String token
+   ) {
       for (String uuid : messageUuids) {
-       pendingMessageService.markMessageAsDelivered(uuid, token);
+         pendingMessageService.markMessageAsDelivered(uuid, token);
       }
       return true;
-
    }
 
    public Message getLatestMessageByConversationId(Long conversationId) {
@@ -178,11 +185,14 @@ public class MessageService {
 
    public Object getNotDeliveredMessages(String authToken) {
       List<Message> messages = new ArrayList<>();
-      List<PendingMessage> pendingMessages = pendingMessageService.getNotDeliveredMessages(authToken);
+      List<PendingMessage> pendingMessages =
+         pendingMessageService.getNotDeliveredMessages(authToken);
       if (!pendingMessages.isEmpty()) {
-         for (PendingMessage pendingMessage : pendingMessages){
-            Message message = messageRepository.findByUuid(pendingMessage.getUuid());
-            if (message!=null){
+         for (PendingMessage pendingMessage : pendingMessages) {
+            Message message = messageRepository.findByUuid(
+               pendingMessage.getUuid()
+            );
+            if (message != null) {
                messages.add(message);
             }
          }
