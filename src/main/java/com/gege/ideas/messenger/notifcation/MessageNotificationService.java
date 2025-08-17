@@ -24,11 +24,7 @@ public class MessageNotificationService implements NotificationService {
    }
 
    @Override
-   public String sendNotification(
-      long userId,
-      Map<String, String> data,
-      String displayName
-   ) {
+   public String sendNotification(long userId, Map<String, String> data) {
       data.put("type", "message");
       if (data.get("title") == null) {
          data.put("title", "Unknown");
