@@ -24,8 +24,16 @@ public class MessageNotificationService implements NotificationService {
    }
 
    @Override
-   public String sendNotification(long userId, Map<String, String> data) {
+   public String sendNotification(
+      long userId,
+      Map<String, String> data,
+      String displayName
+   ) {
       data.put("type", "message");
+      if (data.get("title") == null) {
+         data.put("title", "Unknown");
+      }
+
       List<Device> deviceList = deviceService.getDevices(userId);
       for (Device device : deviceList) {
          firebaseService.sendDataMessage(device.getDeviceToken(), data);
