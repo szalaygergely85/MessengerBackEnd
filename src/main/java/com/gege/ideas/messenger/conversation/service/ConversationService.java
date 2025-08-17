@@ -28,14 +28,19 @@ public class ConversationService {
       Long conversationId = _getExistingConversationId(participants);
 
       if (conversationId == null) {
+         User user = userService.getUserByToken(authToken);
          Conversation conversation = new Conversation(
             System.currentTimeMillis(),
-            userService.getUserIdByToken(authToken),
+            user.getUserId(),
             participants.size()
          );
          conversation.setLastUpdated(System.currentTimeMillis());
          _conversationsRepository.save(conversation);
+         String title = new String();
          for (User participant : participants) {
+            if (participant.getUserId() != user.getUserId()) {
+               title += participant.getDisplayName() + " ";
+            }
             ConversationParticipant conversationParticipant =
                new ConversationParticipant(
                   conversation.getConversationId(),

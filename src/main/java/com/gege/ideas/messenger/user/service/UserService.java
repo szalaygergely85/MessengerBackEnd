@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.user.service;
 
+import com.gege.ideas.messenger.firebase.FirebaseMessageService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
@@ -15,10 +16,15 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
    private final UserRepository userRepository;
+   private final FirebaseMessageService firebaseMessageService;
 
    @Autowired
-   public UserService(UserRepository userRepository) {
+   public UserService(
+      UserRepository userRepository,
+      FirebaseMessageService firebaseMessageService
+   ) {
       this.userRepository = userRepository;
+      this.firebaseMessageService = firebaseMessageService;
    }
 
    public User logInUser(String email, String password) {

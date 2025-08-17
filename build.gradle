@@ -24,8 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'org.jboss.logging:jboss-logging:3.4.1.Final'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core'
@@ -33,7 +33,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.0'
-    implementation 'org.springframework.boot:spring-boot-starter'
 }
 
 
