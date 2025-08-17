@@ -31,16 +31,15 @@ public class ConversationService {
          User user = userService.getUserByToken(authToken);
          Conversation conversation = new Conversation(
             System.currentTimeMillis(),
-                 user.getUserId(),
+            user.getUserId(),
             participants.size()
          );
          conversation.setLastUpdated(System.currentTimeMillis());
          _conversationsRepository.save(conversation);
          String title = new String();
          for (User participant : participants) {
-            if (participant.getUserId()!=user.getUserId())
-            {
-               title+= participant.getDisplayName()+ " ";
+            if (participant.getUserId() != user.getUserId()) {
+               title += participant.getDisplayName() + " ";
             }
             ConversationParticipant conversationParticipant =
                new ConversationParticipant(
