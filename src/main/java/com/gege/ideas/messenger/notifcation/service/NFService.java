@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotificationService {
+public class NFService {
 
    public List<Notification> getActiveNotifications(String token) {
       List<Notification> notifications =
@@ -31,7 +31,7 @@ public class NotificationService {
    }
 
    @Autowired
-   public NotificationService(
+   public NFService(
       UserService userService,
       NotificationRepository notificationRepository
    ) {
