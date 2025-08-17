@@ -58,7 +58,7 @@ jobs:
           docker rm rest-server || true
           docker rmi gery12492/rest-server:1.0.0
           docker pull gery12492/rest-server:1.0.0
-          docker run -d --name rest-server --network my-network -p 8080:8080 gery12492/rest-server:1.0.0
+          docker run -d  -v /home/pi/config:/app/config/ --name rest-server --network my-network -p 8080:8080 gery12492/rest-server:1.0.0
           EOF
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
