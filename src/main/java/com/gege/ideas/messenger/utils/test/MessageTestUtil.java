@@ -23,7 +23,7 @@ public class MessageTestUtil {
    }
 
    public Message addTestMessage(User user, Long conversationId) {
-      return messageService.createMessage(
+      return messageService.addMessage(
          new Message(
             conversationId,
             user.getUserId(),

@@ -50,7 +50,7 @@ public class FileUploadController {
    ) {
       Long id = message.getSenderId();
       _fileUploadService.saveFile(file, id.toString());
-      _messageService.createMessage(message);
+      _messageService.addMessage(message);
       return "redirect:/";
    }
 }

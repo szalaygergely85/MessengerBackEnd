@@ -25,9 +25,7 @@ public class MessageController {
             message.getConversationId()
          )
       ) {
-         return ResponseEntity
-            .ok()
-            .body(_messageService.createMessage(message));
+         return ResponseEntity.ok().body(_messageService.addMessage(message));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
