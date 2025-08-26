@@ -216,7 +216,7 @@ public class MessageService {
          message.getConversationId()
       );
       Map<String, String> data = new HashMap<>();
-      data.put("content", message.getContentEncrypted());
+      data.put("content", message.getContent());
       String title = conversation.getConversationName();
       if (title == null) {
          User user = userService.getUserById(message.getSenderId());
