@@ -9,7 +9,7 @@ public class Message implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long messageId;
+   private long messageId;
 
    @Column(nullable = false)
    private long conversationId;
@@ -22,7 +22,10 @@ public class Message implements Serializable {
 
    @Lob
    @Column(columnDefinition = "LONGTEXT")
-   private String contentEncrypted;
+   private String content;
+
+   @Column(nullable = false)
+   private boolean isEncrypted;
 
    @Column
    private int type;
@@ -30,7 +33,43 @@ public class Message implements Serializable {
    @Column(columnDefinition = "LONGTEXT")
    private String uuid;
 
-   public Long getMessageId() {
+   public String getContent() {
+      return content;
+   }
+
+   public void setContent(String content) {
+      this.content = content;
+   }
+
+   public boolean isEncrypted() {
+      return isEncrypted;
+   }
+
+   public void setEncrypted(boolean encrypted) {
+      isEncrypted = encrypted;
+   }
+
+   public Message(
+      long messageId,
+      long conversationId,
+      long senderId,
+      long timestamp,
+      String content,
+      boolean isEncrypted,
+      int type,
+      String uuid
+   ) {
+      this.messageId = messageId;
+      this.conversationId = conversationId;
+      this.senderId = senderId;
+      this.timestamp = timestamp;
+      this.content = content;
+      this.isEncrypted = isEncrypted;
+      this.type = type;
+      this.uuid = uuid;
+   }
+
+   public long getMessageId() {
       return messageId;
    }
 
@@ -62,14 +101,6 @@ public class Message implements Serializable {
       this.timestamp = timestamp;
    }
 
-   public String getContentEncrypted() {
-      return contentEncrypted;
-   }
-
-   public void setContentEncrypted(String content) {
-      this.contentEncrypted = content;
-   }
-
    public int getType() {
       return type;
    }
@@ -92,7 +123,7 @@ public class Message implements Serializable {
       long conversationId,
       long senderId,
       long timestamp,
-      String contentEncrypted,
+      String content,
       int type,
       String uuid
    ) {
@@ -100,7 +131,7 @@ public class Message implements Serializable {
       this.conversationId = conversationId;
       this.senderId = senderId;
       this.timestamp = timestamp;
-      this.contentEncrypted = contentEncrypted;
+      this.content = content;
 
       this.type = type;
 
