@@ -101,7 +101,6 @@ public class Message implements Serializable {
       this.timestamp = timestamp;
    }
 
-
    public int getType() {
       return type;
    }
