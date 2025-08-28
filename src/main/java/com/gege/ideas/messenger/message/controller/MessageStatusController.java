@@ -1,9 +1,9 @@
 package com.gege.ideas.messenger.message.controller;
 
 import com.gege.ideas.messenger.message.entity.Message;
-import com.gege.ideas.messenger.message.entity.PendingMessage;
+import com.gege.ideas.messenger.message.entity.MessageStatus;
 import com.gege.ideas.messenger.message.service.MessageService;
-import com.gege.ideas.messenger.message.service.PendingMessageService;
+import com.gege.ideas.messenger.message.service.MessageStatusService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,23 +11,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/pending-message")
-public class PendingMessageController {
+@RequestMapping("/api/message-status")
+public class MessageStatusController {
 
-   @PostMapping("/add-message")
+   @PostMapping("/add")
    public ResponseEntity<?> addMessage(
-      @RequestBody PendingMessage pendingMessage,
+      @RequestBody MessageStatus messageStatus,
       @RequestHeader("Authorization") String token
    ) {
       if (
          _permissionService.hasPermissionToMessage(
-            _messageService.getMessageByUUID(pendingMessage.getUuid()),
+            _messageService.getMessageByUUID(messageStatus.getUuid()),
             token
          )
       ) {
          return ResponseEntity
             .ok()
-            .body(_pendingMessageService.createPendingMessage(pendingMessage));
+            .body(_MessageStatusService.createPendingMessage(messageStatus));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
@@ -46,7 +46,7 @@ public class PendingMessageController {
                authToken
             )
          ) {
-            _pendingMessageService.markMessageAsDelivered(uuid, authToken);
+            _MessageStatusService.markMessageAsDelivered(uuid, authToken);
             return ResponseEntity.noContent().build(); // 204 No Content
          } else return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
@@ -56,18 +56,41 @@ public class PendingMessageController {
          .body("No message");
    }
 
+   @PostMapping("/{uuid}/read")
+   public ResponseEntity<?> markAsRead(
+           @PathVariable String uuid,
+           @RequestHeader("Authorization") String authToken
+   ) {
+      Message message = _messageService.getMessageByUUID(uuid);
+      if (message != null) {
+         if (
+                 _permissionService.hasPermissionToMessage(
+                         _messageService.getMessageByUUID(uuid),
+                         authToken
+                 )
+         ) {
+            _MessageStatusService.markMessageAsRead(uuid, authToken);
+            return ResponseEntity.noContent().build(); // 204 No Content
+         } else return ResponseEntity
+                 .status(HttpStatus.UNAUTHORIZED)
+                 .body("Unauthorized");
+      } else return ResponseEntity
+              .status(HttpStatus.NO_CONTENT)
+              .body("No message");
+   }
+
    @Autowired
-   PendingMessageController(
+   MessageStatusController(
       MessageService _messageService,
       PermissionService _permissionService,
-      PendingMessageService pendingMessageService
+      MessageStatusService messageStatusService
    ) {
-      this._pendingMessageService = pendingMessageService;
+      this._MessageStatusService = messageStatusService;
       this._messageService = _messageService;
       this._permissionService = _permissionService;
    }
 
    private final MessageService _messageService;
-   private final PendingMessageService _pendingMessageService;
+   private final MessageStatusService _MessageStatusService;
    private final PermissionService _permissionService;
 }

@@ -5,7 +5,8 @@ import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.message.entity.Message;
-import com.gege.ideas.messenger.message.entity.PendingMessage;
+import com.gege.ideas.messenger.message.entity.MessageStatus;
+import com.gege.ideas.messenger.message.entity.MessageStatusType;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.notifcation.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
@@ -29,7 +30,7 @@ public class MessageService {
    private final ConversationParticipantsService conversationParticipantsService;
    private final PermissionService permissionService;
    private final ConversationService conversationService;
-   private final PendingMessageService pendingMessageService;
+   private final MessageStatusService messageStatusService;
 
    @Autowired
    public MessageService(
@@ -38,7 +39,7 @@ public class MessageService {
       ConversationParticipantsService conversationParticipantsService,
       PermissionService permissionService,
       ConversationService conversationService,
-      PendingMessageService pendingMessageService,
+      MessageStatusService messageStatusService,
       @Qualifier(
          "messageNotificationService"
       ) NotificationService notificationService
@@ -49,7 +50,7 @@ public class MessageService {
       this.conversationParticipantsService = conversationParticipantsService;
       this.permissionService = permissionService;
       this.conversationService = conversationService;
-      this.pendingMessageService = pendingMessageService;
+      this.messageStatusService = messageStatusService;
       this.notificationService = notificationService;
    }
 
@@ -62,11 +63,11 @@ public class MessageService {
       for (User recipientUser : recipientUsers) {
          if (recipientUser.getUserId() != message.getSenderId()) {
             _sendNotification(recipientUser, message);
-            pendingMessageService.createPendingMessage(
-               new PendingMessage(
+            messageStatusService.createPendingMessage(
+               new MessageStatus(
                   message.getUuid(),
                   recipientUser.getUserId(),
-                  false
+                  MessageStatusType.PENDING
                )
             );
          }
@@ -186,12 +187,12 @@ public class MessageService {
 
    public Object getNotDeliveredMessages(String authToken) {
       List<Message> messages = new ArrayList<>();
-      List<PendingMessage> pendingMessages =
-         pendingMessageService.getNotDeliveredMessages(authToken);
-      if (!pendingMessages.isEmpty()) {
-         for (PendingMessage pendingMessage : pendingMessages) {
+      List<MessageStatus> messageStatuses =
+         messageStatusService.getNotDeliveredMessages(authToken);
+      if (!messageStatuses.isEmpty()) {
+         for (MessageStatus messageStatus : messageStatuses) {
             Message message = messageRepository.findByUuid(
-               pendingMessage.getUuid()
+               messageStatus.getUuid()
             );
             if (message != null) {
                messages.add(message);
@@ -206,7 +207,7 @@ public class MessageService {
       String token
    ) {
       for (String uuid : messageUuids) {
-         pendingMessageService.markMessageAsDelivered(uuid, token);
+         messageStatusService.markMessageAsDelivered(uuid, token);
       }
       return true;
    }

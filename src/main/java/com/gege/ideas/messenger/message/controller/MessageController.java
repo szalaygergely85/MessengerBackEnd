@@ -2,7 +2,7 @@ package com.gege.ideas.messenger.message.controller;
 
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
-import com.gege.ideas.messenger.message.service.PendingMessageService;
+import com.gege.ideas.messenger.message.service.MessageStatusService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +149,7 @@ public ResponseEntity<?> getNewMessagesByUserToken(
       @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isUserTestUser(authToken)) {
-         _pendingMessageService.deletePendingMessages(uuid);
+         _MessageStatusService.deletePendingMessages(uuid);
          return ResponseEntity.ok().body(_messageService.deleteMessage(uuid));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
@@ -160,15 +160,15 @@ public ResponseEntity<?> getNewMessagesByUserToken(
    MessageController(
       MessageService _messageService,
       PermissionService _permissionService,
-      PendingMessageService pendingMessageService
+      MessageStatusService messageStatusService
    ) {
       this._messageService = _messageService;
       this._permissionService = _permissionService;
-      this._pendingMessageService = pendingMessageService;
+      this._MessageStatusService = messageStatusService;
    }
 
    private final MessageService _messageService;
 
    private final PermissionService _permissionService;
-   private final PendingMessageService _pendingMessageService;
+   private final MessageStatusService _MessageStatusService;
 }
