@@ -9,7 +9,7 @@ public class Message implements Serializable {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private long messageId;
+   private Long messageId;
 
    @Column(nullable = false)
    private long conversationId;
@@ -25,7 +25,7 @@ public class Message implements Serializable {
    private String content;
 
    @Column(nullable = false)
-   private boolean isEncrypted;
+   private boolean encrypted;
 
    @Column
    private int type;
@@ -42,15 +42,15 @@ public class Message implements Serializable {
    }
 
    public boolean isEncrypted() {
-      return isEncrypted;
+      return encrypted;
    }
 
    public void setEncrypted(boolean encrypted) {
-      isEncrypted = encrypted;
+      encrypted = encrypted;
    }
 
    public Message(
-      long messageId,
+      Long messageId,
       long conversationId,
       long senderId,
       long timestamp,
@@ -64,7 +64,7 @@ public class Message implements Serializable {
       this.senderId = senderId;
       this.timestamp = timestamp;
       this.content = content;
-      this.isEncrypted = isEncrypted;
+      this.encrypted = isEncrypted;
       this.type = type;
       this.uuid = uuid;
    }
