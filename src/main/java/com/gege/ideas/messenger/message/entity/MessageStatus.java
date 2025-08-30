@@ -17,16 +17,19 @@ public class MessageStatus implements Serializable {
    @Column(nullable = false)
    private Long userId;
 
-   @Column MessageStatusType messageStatusType;
+   @Column
+   MessageStatusType messageStatusType;
 
-   public MessageStatus(String uuid, Long userId, MessageStatusType messageStatusType) {
+   public MessageStatus(
+      String uuid,
+      Long userId,
+      MessageStatusType messageStatusType
+   ) {
       this.uuid = uuid;
       this.userId = userId;
 
       this.messageStatusType = messageStatusType;
    }
-
-
 
    public MessageStatus() {}
 

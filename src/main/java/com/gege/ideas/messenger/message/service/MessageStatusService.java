@@ -39,7 +39,8 @@ public class MessageStatusService {
 
    public List<MessageStatus> getNotDeliveredMessages(String token) {
       return messageStatusRepository.findByUserIdAndMessageStatusType(
-         userService.getUserIdByToken(token), MessageStatusType.PENDING
+         userService.getUserIdByToken(token),
+         MessageStatusType.PENDING
       );
    }
 
@@ -69,8 +70,8 @@ public class MessageStatusService {
       User user = userService.getUserByToken(token);
 
       MessageStatus message = messageStatusRepository.findByUuidAndUserId(
-              uuid,
-              user.getUserId()
+         uuid,
+         user.getUserId()
       );
 
       if (message != null) {
@@ -84,8 +85,9 @@ public class MessageStatusService {
    }
 
    public void deletePendingMessages(String uuid) {
-      List<MessageStatus> messageStatuses =
-         messageStatusRepository.findByUuid(uuid);
+      List<MessageStatus> messageStatuses = messageStatusRepository.findByUuid(
+         uuid
+      );
       for (MessageStatus messageStatus : messageStatuses) {
          messageStatusRepository.delete(messageStatus);
       }

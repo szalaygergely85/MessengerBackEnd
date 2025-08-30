@@ -58,25 +58,25 @@ public class MessageStatusController {
 
    @PostMapping("/{uuid}/read")
    public ResponseEntity<?> markAsRead(
-           @PathVariable String uuid,
-           @RequestHeader("Authorization") String authToken
+      @PathVariable String uuid,
+      @RequestHeader("Authorization") String authToken
    ) {
       Message message = _messageService.getMessageByUUID(uuid);
       if (message != null) {
          if (
-                 _permissionService.hasPermissionToMessage(
-                         _messageService.getMessageByUUID(uuid),
-                         authToken
-                 )
+            _permissionService.hasPermissionToMessage(
+               _messageService.getMessageByUUID(uuid),
+               authToken
+            )
          ) {
             _MessageStatusService.markMessageAsRead(uuid, authToken);
             return ResponseEntity.noContent().build(); // 204 No Content
          } else return ResponseEntity
-                 .status(HttpStatus.UNAUTHORIZED)
-                 .body("Unauthorized");
+            .status(HttpStatus.UNAUTHORIZED)
+            .body("Unauthorized");
       } else return ResponseEntity
-              .status(HttpStatus.NO_CONTENT)
-              .body("No message");
+         .status(HttpStatus.NO_CONTENT)
+         .body("No message");
    }
 
    @Autowired

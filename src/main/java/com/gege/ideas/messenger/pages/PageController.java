@@ -10,21 +10,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class PageController {
 
-    @GetMapping("/forgot-password/{token}")
-    public String changePassword(@PathVariable("token") String token, Model model) {
+   @GetMapping("/forgot-password/{token}")
+   public String changePassword(
+      @PathVariable("token") String token,
+      Model model
+   ) {
+      model.addAttribute("token", token);
+      return "forgot_password";
+   }
 
-        model.addAttribute("token", token);
-        return "forgot_password";
-    }
-
-    @PostMapping("/changePassword")
-    public String changePassword(@RequestParam String newPassword,
-                                 @RequestParam String confirmPassword,
-                                 @RequestParam String token,
-                                 Model model) {
-        // 1. Validate passwords
-        // 2. Change password in DB
-        // 3. Return view name
-        return "changePasswordResult"; // JSP to show after success/fail
-    }
+   @PostMapping("/changePassword")
+   public String changePassword(
+      @RequestParam String newPassword,
+      @RequestParam String confirmPassword,
+      @RequestParam String token,
+      Model model
+   ) {
+      // 1. Validate passwords
+      // 2. Change password in DB
+      // 3. Return view name
+      return "changePasswordResult"; // JSP to show after success/fail
+   }
 }
