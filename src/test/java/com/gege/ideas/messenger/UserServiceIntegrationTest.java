@@ -2,37 +2,30 @@ package com.gege.ideas.messenger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.gege.ideas.messenger.user.repository.UserRepository;
-import com.gege.ideas.messenger.user.service.UserService;
-import com.gege.ideas.messenger.user.service.UserTokenService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
 public class UserServiceIntegrationTest {
-
-   @Autowired
-   private UserService userService;
-
-   @MockBean
-   private UserRepository userRepository;
-
-   @MockBean
-   private UserTokenService userTokenService;
-
-   @BeforeEach
-   public void setUp() {
-      MockitoAnnotations.initMocks(this);
-   }
    /*
+@Autowired
+private UserService userService;
+
+@MockBean
+private UserRepository userRepository;
+
+@MockBean
+private UserTokenService userTokenService;
+
+@BeforeEach
+public void setUp() {
+	MockitoAnnotations.initMocks(this);
+}
+
 @Test
 public void testLogInUser_Success() {
 	String email = "test@example.com";
@@ -102,6 +95,6 @@ public void testAddUser() {
 	assertNotNull(mockUserToken.getUserTokenId());
 	assertEquals("testUser", userRepository.findByUserId(user.getUserId()).getUsername());
 
-}*/
-
+}
+*/
 }

@@ -1,5 +1,7 @@
 package com.gege.ideas.messenger.pages;
 
+import com.gege.ideas.messenger.tokens.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PageController {
+
+   @Autowired
+   private TokenService tokenService;
 
    @GetMapping("/forgot-password/{token}")
    public String changePassword(
