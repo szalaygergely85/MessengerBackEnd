@@ -3,9 +3,8 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 
 COPY src/main/webapp/WEB-INF/jsp/ /BOOT-INF/classes/WEB-INF/jsp/
-COPY src/main/webapp/WEB-INF/css/ /BOOT-INF/classes/WEB-INF/css/
-COPY src/main/webapp/WEB-INF/js/ /BOOT-INF/classes/WEB-INF/js/
-COPY src/main/webapp/WEB-INF/images/ /BOOT-INF/classes/WEB-INF/images/
+COPY src/main/webapp/css/ /BOOT-INF/classes/css/
+
 
 
 ENTRYPOINT ["java", "-jar", "/app.jar"]
