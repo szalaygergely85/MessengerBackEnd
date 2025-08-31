@@ -1,6 +1,8 @@
 package com.gege.ideas.messenger.pages;
 
+import com.gege.ideas.messenger.tokens.Token;
 import com.gege.ideas.messenger.tokens.TokenService;
+import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class PageController {
 
+   private final TokenService tokenService;
+   private final UserService userService;
+
    @Autowired
-   private TokenService tokenService;
+   public PageController(TokenService tokenService, UserService userService) {
+      this.tokenService = tokenService;
+      this.userService = userService;
+   }
 
    @GetMapping("/forgot-password/{token}")
    public String changePassword(
@@ -27,13 +35,11 @@ public class PageController {
    @PostMapping("/changePassword")
    public String changePassword(
       @RequestParam String newPassword,
-      @RequestParam String confirmPassword,
-      @RequestParam String token,
-      Model model
+      @RequestParam String tokenString
    ) {
-      // 1. Validate passwords
-      // 2. Change password in DB
-      // 3. Return view name
+      Token token = tokenService.getTokenByToken(tokenString);
+      userService.getUserById(token.getUserId());
+
       return "changePasswordResult"; // JSP to show after success/fail
    }
 }
