@@ -7,7 +7,7 @@ plugins {
 }
 
 springBoot {
-    mainClass = 'com.gege.ideas.Messengerlication'  // replace with your main class
+    mainClass = 'com.gege.ideas.MessengerApplication'  // replace with your main class
 }
 
 group = 'com.gege.ideas'
