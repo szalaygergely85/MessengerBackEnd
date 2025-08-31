@@ -46,7 +46,7 @@ public class Message implements Serializable {
    }
 
    public void setEncrypted(boolean encrypted) {
-      encrypted = encrypted;
+      this.encrypted = encrypted;
    }
 
    public Message(
