@@ -18,6 +18,7 @@ public class MessageStatus implements Serializable {
    private Long userId;
 
    @Column
+   @Enumerated(EnumType.STRING)
    MessageStatusType messageStatusType;
 
    public MessageStatus(

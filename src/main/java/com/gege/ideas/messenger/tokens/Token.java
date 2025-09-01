@@ -20,13 +20,18 @@ public class Token {
    private String token;
 
    @Column(nullable = false)
-   private long timestamp;
+   private Long timestamp;
 
    @Column(nullable = false)
    private boolean active;
 
-
-   public Token(Long userId, TokenType tokenType, String token, long timestamp, boolean active) {
+   public Token(
+      Long userId,
+      TokenType tokenType,
+      String token,
+      long timestamp,
+      boolean active
+   ) {
       this.userId = userId;
       this.tokenType = tokenType;
       this.token = token;

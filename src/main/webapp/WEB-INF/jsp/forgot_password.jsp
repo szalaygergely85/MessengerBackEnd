@@ -1,7 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
-
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,26 +16,28 @@
 <body>
 
 
-
-
 <div class="container">
 
     <div class="form-container">
         <h2 class="form-title">Change Password</h2>
 
-        <form id="changePasswordForm" class="form" action="changePassword">
+        <form id="changePasswordForm" class="form" action="${pageContext.request.contextPath}/changePassword"
+              method="post">
 
-            <input type="hidden" id="token" value="${token}">
+            <input type="hidden" id="tokenString" name="tokenString" value="${token}">
 
             <div class="input-group">
                 <input
                         type="password"
                         id="newPassword"
+                        name="newPassword"
                         placeholder="New Password"
                         required
                 >
                 <button type="button" class="toggle-password" data-target="newPassword">
-                    <svg width="20" height="20"><use href="#eye-icon"/></svg>
+                    <svg width="20" height="20">
+                        <use href="#eye-icon"/>
+                    </svg>
                 </button>
             </div>
 
@@ -46,11 +45,14 @@
                 <input
                         type="password"
                         id="confirmPassword"
+                        name="confirmPassword"
                         placeholder="Confirm New Password"
                         required
                 >
                 <button type="button" class="toggle-password" data-target="confirmPassword">
-                    <svg width="20" height="20"><use href="#eye-icon"/></svg>
+                    <svg width="20" height="20">
+                        <use href="#eye-icon"/>
+                    </svg>
                 </button>
             </div>
             <!--
@@ -64,19 +66,19 @@
                             </ul>
                         </div>
 -->
-                        <button type="submit" class="submit-btn">Change Password</button>
-                    </form>
-                </div>
-            </div>
+            <button type="submit" class="submit-btn">Change Password</button>
+        </form>
+    </div>
+</div>
 
-            <script>
-                document.querySelectorAll('.toggle-password').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const inputId = button.getAttribute('data-target');
-                        const input = document.getElementById(inputId);
-                        input.type = (input.type === 'password') ? 'text' : 'password';
-                    });
-                });
-            </script>
-            </body>
-            </html>
+<script>
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', () => {
+            const inputId = button.getAttribute('data-target');
+            const input = document.getElementById(inputId);
+            input.type = (input.type === 'password') ? 'text' : 'password';
+        });
+    });
+</script>
+</body>
+</html>

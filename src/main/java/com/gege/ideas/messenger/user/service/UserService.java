@@ -8,13 +8,11 @@ import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
 import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
-
+import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,12 @@ public class UserService {
    private final MailService mailService;
 
    @Autowired
-   public UserService(UserRepository userRepository, FirebaseMessageService firebaseMessageService, TokenService tokenService, MailService mailService) {
+   public UserService(
+      UserRepository userRepository,
+      FirebaseMessageService firebaseMessageService,
+      TokenService tokenService,
+      MailService mailService
+   ) {
       this.userRepository = userRepository;
       this.firebaseMessageService = firebaseMessageService;
       this.tokenService = tokenService;
@@ -66,7 +69,7 @@ public class UserService {
       }
    }
 
-   public boolean changePassword(long userId, String password){
+   public boolean changePassword(long userId, String password) {
       User user = getUserById(userId);
       user.setPassword(password);
       _update(user);
@@ -137,25 +140,34 @@ public class UserService {
       return true;
    }
 
-   public void sendForgotEmail(String email) throws MessagingException, UnsupportedEncodingException {
-      //TODO permission check, user check, token check....
+   public void sendForgotEmail(String email)
+      throws MessagingException, UnsupportedEncodingException {
       User user = getUserByEmail(email);
       Token token = tokenService.generateToken(user.getUserId());
-      mailService.sendSimpleEmail(user.getEmail(), "Password Reset Request", _getEmailBody(token.getToken()));
+      //   mailService.sendSimpleEmail(user.getEmail(), "Password Reset Request", _getEmailBody(token.getToken()));
+      setLastEmailSent(user, System.currentTimeMillis());
    }
 
-   private User getUserByEmail(String email) {
+   private void setLastEmailSent(User user, long timestamp) {
+      int count = user.getSentEmailCount();
+      user.setLastForgotEmailSent(timestamp);
+      user.setSentEmailCount(count + 1);
+      userRepository.save(user);
+   }
+
+   public User getUserByEmail(String email) {
       return userRepository.findByEmail(email);
    }
 
-
-   private String _getEmailBody(String token){
-      String body = " Hello, <br><br>We received a request to reset your password for your Zenvy account. <br><br>"+
-              "To set a new password, please click the link below:<br>" +
-              "https://zen-vy.com/forgot-password/" +token +"<br><br>"+
-              "If you did not request a password reset, please ignore this email. Your account will remain secure.<br><br>" +
-              "Thank you,<br>The Zenvy Team";
+   private String _getEmailBody(String token) {
+      String body =
+         " Hello, <br><br>We received a request to reset your password for your Zenvy account. <br><br>" +
+         "To set a new password, please click the link below:<br>" +
+         "https://zen-vy.com/forgot-password/" +
+         token +
+         "<br><br>" +
+         "If you did not request a password reset, please ignore this email. Your account will remain secure.<br><br>" +
+         "Thank you,<br>The Zenvy Team";
       return body;
    }
-
 }

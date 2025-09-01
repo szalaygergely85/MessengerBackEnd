@@ -36,11 +36,15 @@ public class PageController {
    @PostMapping("/changePassword")
    public String changePassword(
       @RequestParam String newPassword,
+      @RequestParam String confirmPassword,
       @RequestParam String tokenString,
       Model model
    ) {
       Token token = tokenService.getTokenByToken(tokenString);
-      userService.changePassword(token.getUserId(), HashUtil.hashPassword(newPassword));
+      userService.changePassword(
+         token.getUserId(),
+         HashUtil.hashPassword(newPassword)
+      );
 
       return "changePasswordResult"; // JSP to show after success/fail
    }

@@ -43,8 +43,30 @@ public class User {
    @Column
    private Long lastUpdated;
 
+   @Column
+   private Long lastForgotEmailSent;
+
+   @Column(nullable = false)
+   private int sentEmailCount = 0;
+
    @Column(nullable = false)
    private String uuid;
+
+   public int getSentEmailCount() {
+      return sentEmailCount;
+   }
+
+   public void setSentEmailCount(int sentEmailCount) {
+      this.sentEmailCount = sentEmailCount;
+   }
+
+   public Long getLastForgotEmailSent() {
+      return lastForgotEmailSent;
+   }
+
+   public void setLastForgotEmailSent(Long lastForgotEmailSent) {
+      this.lastForgotEmailSent = lastForgotEmailSent;
+   }
 
    public Long getLastUpdated() {
       return lastUpdated;

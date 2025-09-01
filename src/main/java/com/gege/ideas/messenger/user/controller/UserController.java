@@ -4,12 +4,11 @@ import com.gege.ideas.messenger.DTO.LoginRequest;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-
+import com.gege.ideas.messenger.utils.DateTimeUtil;
+import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,7 +128,8 @@ public class UserController {
    }
 
    @PostMapping(value = "/login")
-   public ResponseEntity<?> logInUser(@RequestBody LoginRequest loginRequest) throws MessagingException, UnsupportedEncodingException {
+   public ResponseEntity<?> logInUser(@RequestBody LoginRequest loginRequest)
+      throws MessagingException, UnsupportedEncodingException {
       userService.sendForgotEmail(loginRequest.getEmail());
       User user = userService.logInUser(
          loginRequest.getEmail(),
@@ -147,8 +147,23 @@ public class UserController {
    }
 
    @PostMapping(value = "/forgot-password")
-   public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) throws MessagingException, UnsupportedEncodingException {
-      userService.sendForgotEmail(email);
-      return ResponseEntity.status(HttpStatus.OK).build();
+   public ResponseEntity<?> forgotPassword(@RequestParam("email") String email)
+      throws MessagingException, UnsupportedEncodingException {
+      if (email != null) {
+         User user = userService.getUserByEmail(email);
+         if (user != null) {
+            if (
+               user.getSentEmailCount() < 5 &&
+               (user.getLastForgotEmailSent() == null ||
+                  DateTimeUtil.getDifferenceInMinutesFromNow(
+                        user.getLastForgotEmailSent()
+                     ) >
+                     2)
+            ) userService.sendForgotEmail(email);
+            return ResponseEntity.status(HttpStatus.OK).build();
+         }
+      }
+
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
    }
 }
