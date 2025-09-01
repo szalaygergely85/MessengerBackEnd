@@ -3,6 +3,7 @@ package com.gege.ideas.messenger.pages;
 import com.gege.ideas.messenger.tokens.Token;
 import com.gege.ideas.messenger.tokens.TokenService;
 import com.gege.ideas.messenger.user.service.UserService;
+import com.gege.ideas.messenger.utils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,10 +36,11 @@ public class PageController {
    @PostMapping("/changePassword")
    public String changePassword(
       @RequestParam String newPassword,
-      @RequestParam String tokenString
+      @RequestParam String tokenString,
+      Model model
    ) {
       Token token = tokenService.getTokenByToken(tokenString);
-      userService.getUserById(token.getUserId());
+      userService.changePassword(token.getUserId(), HashUtil.hashPassword(newPassword));
 
       return "changePasswordResult"; // JSP to show after success/fail
    }

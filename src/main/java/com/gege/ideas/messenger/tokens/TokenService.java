@@ -3,6 +3,8 @@ package com.gege.ideas.messenger.tokens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class TokenService {
 
@@ -19,5 +21,10 @@ public class TokenService {
 
    public Token getTokenByToken(String token) {
       return tokenRepository.getTokensByToken(token);
+   }
+
+   public Token generateToken(long userId){
+      Token token =new Token(userId, TokenType.FORGOT_PASSWORD, UUID.randomUUID().toString(), System.currentTimeMillis(), true);
+      return tokenRepository.save(token);
    }
 }

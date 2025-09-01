@@ -1,13 +1,20 @@
 package com.gege.ideas.messenger.user.service;
 
 import com.gege.ideas.messenger.firebase.FirebaseMessageService;
+import com.gege.ideas.messenger.mail.MailService;
+import com.gege.ideas.messenger.tokens.Token;
+import com.gege.ideas.messenger.tokens.TokenService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
 import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -17,14 +24,15 @@ public class UserService {
 
    private final UserRepository userRepository;
    private final FirebaseMessageService firebaseMessageService;
+   private final TokenService tokenService;
+   private final MailService mailService;
 
    @Autowired
-   public UserService(
-      UserRepository userRepository,
-      FirebaseMessageService firebaseMessageService
-   ) {
+   public UserService(UserRepository userRepository, FirebaseMessageService firebaseMessageService, TokenService tokenService, MailService mailService) {
       this.userRepository = userRepository;
       this.firebaseMessageService = firebaseMessageService;
+      this.tokenService = tokenService;
+      this.mailService = mailService;
    }
 
    public User logInUser(String email, String password) {
@@ -56,6 +64,13 @@ public class UserService {
       } else {
          return null;
       }
+   }
+
+   public boolean changePassword(long userId, String password){
+      User user = getUserById(userId);
+      user.setPassword(password);
+      _update(user);
+      return true;
    }
 
    public User getUserByToken(String token) {
@@ -121,4 +136,26 @@ public class UserService {
       userRepository.delete(user);
       return true;
    }
+
+   public void sendForgotEmail(String email) throws MessagingException, UnsupportedEncodingException {
+      //TODO permission check, user check, token check....
+      User user = getUserByEmail(email);
+      Token token = tokenService.generateToken(user.getUserId());
+      mailService.sendSimpleEmail(user.getEmail(), "Password Reset Request", _getEmailBody(token.getToken()));
+   }
+
+   private User getUserByEmail(String email) {
+      return userRepository.findByEmail(email);
+   }
+
+
+   private String _getEmailBody(String token){
+      String body = " Hello, <br><br>We received a request to reset your password for your Zenvy account. <br><br>"+
+              "To set a new password, please click the link below:<br>" +
+              "https://zen-vy.com/forgot-password/" +token +"<br><br>"+
+              "If you did not request a password reset, please ignore this email. Your account will remain secure.<br><br>" +
+              "Thank you,<br>The Zenvy Team";
+      return body;
+   }
+
 }

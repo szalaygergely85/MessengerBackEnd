@@ -19,10 +19,35 @@ public class Token {
    @Column(nullable = false)
    private String token;
 
-   public Token(Long userId, TokenType tokenType, String token) {
+   @Column(nullable = false)
+   private long timestamp;
+
+   @Column(nullable = false)
+   private boolean active;
+
+
+   public Token(Long userId, TokenType tokenType, String token, long timestamp, boolean active) {
       this.userId = userId;
       this.tokenType = tokenType;
       this.token = token;
+      this.timestamp = timestamp;
+      this.active = active;
+   }
+
+   public long getTimestamp() {
+      return timestamp;
+   }
+
+   public void setTimestamp(long timestamp) {
+      this.timestamp = timestamp;
+   }
+
+   public boolean isActive() {
+      return active;
+   }
+
+   public void setActive(boolean active) {
+      this.active = active;
    }
 
    public Token() {}
