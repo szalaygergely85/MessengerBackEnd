@@ -36,8 +36,6 @@ public class MessageStatus implements Serializable {
       this.delivered = delivered;
    }
 
-
-
    public MessageStatus() {}
 
    public String getUuid() {
