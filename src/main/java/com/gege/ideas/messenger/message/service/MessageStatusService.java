@@ -92,4 +92,8 @@ public class MessageStatusService {
          messageStatusRepository.delete(messageStatus);
       }
    }
+
+   public MessageStatus getMessageStatus(String uuid, long userId) {
+      return messageStatusRepository.findByUuidAndUserId(uuid, userId);
+   }
 }

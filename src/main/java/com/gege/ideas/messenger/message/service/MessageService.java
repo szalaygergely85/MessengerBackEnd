@@ -1,6 +1,6 @@
 package com.gege.ideas.messenger.message.service;
 
-import com.gege.ideas.messenger.DTO.MessageBoard;
+import com.gege.ideas.messenger.DTO.MessageDTO;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
@@ -67,7 +67,8 @@ public class MessageService {
                new MessageStatus(
                   message.getUuid(),
                   recipientUser.getUserId(),
-                  MessageStatusType.PENDING
+                  MessageStatusType.PENDING,
+                  false
                )
             );
          }
@@ -90,65 +91,25 @@ public class MessageService {
       );
    }
 
-   public List<Message> getMessagesByConversationIdOrderedByTimestamp(Long id) {
-      return messageRepository.findByConversationIdOrderByTimestampAsc(id);
-   }
-
-   public List<MessageBoard> getMessagesBoardEntriesOrderedByTimestamp(
+   public List<MessageDTO> getMessagesByConversationIdOrderedByTimestamp(
+      Long id,
       String token
    ) {
-      User user = userService.getUserByToken(token);
-      if (user != null) {
-         List<MessageBoard> messageBoard = new ArrayList<>();
-         List<Long> conversationIds =
-            conversationParticipantsService.getConversationIdsByUserId(
-               user.getUserId()
-            );
-         for (int i = 0; i < conversationIds.size(); i++) {
-            List<User> participants =
-               conversationParticipantsService.getUsersByConversationId(
-                  conversationIds.get(i)
-               );
-            Message message =
-               messageRepository.findTopByConversationIdOrderByTimestampDesc(
-                  conversationIds.get(i)
-               );
-            if (message != null) {
-               messageBoard.add(
-                  new MessageBoard(
-                     conversationIds.get(i),
-                     message,
-                     participants
-                  )
-               );
-            }
-         }
-         return messageBoard;
-      }
-      return null;
-   }
-
-   public Object getMessagesAndCompareWithLocal(String token, int count) {
-      User user = userService.getUserByToken(token);
-      List<Long> conversationIds =
-         conversationParticipantsService.getConversationIdsByUserId(
-            user.getUserId()
+      List<MessageDTO> messageDTOS = new ArrayList<>();
+      for (Message message : messageRepository.findByConversationIdOrderByTimestampAsc(
+         id
+      )) {
+         messageDTOS.add(
+            new MessageDTO(
+               message,
+               messageStatusService.getMessageStatus(
+                  message.getUuid(),
+                  userService.getUserIdByToken(token)
+               )
+            )
          );
-
-      List<Message> messages = new ArrayList<>();
-      for (Long conversationId : conversationIds) {
-         List<Message> messagesOfConversation =
-            messageRepository.findByConversationId(conversationId);
-         if (messagesOfConversation != null) {
-            messages.addAll(messagesOfConversation);
-         }
       }
-
-      if (messages.size() == count) {
-         return null;
-      }
-
-      return messages;
+      return messageDTOS;
    }
 
    public Message getMessageByID(Long messageId) {

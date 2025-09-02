@@ -75,7 +75,8 @@ public class MessageController {
             .ok()
             .body(
                _messageService.getMessagesByConversationIdOrderedByTimestamp(
-                  conversationId
+                  conversationId,
+                  token
                )
             );
       } else return ResponseEntity

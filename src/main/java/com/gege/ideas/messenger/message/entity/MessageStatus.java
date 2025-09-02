@@ -21,16 +21,22 @@ public class MessageStatus implements Serializable {
    @Enumerated(EnumType.STRING)
    MessageStatusType messageStatusType;
 
+   @Column(nullable = false)
+   private boolean delivered = false;
+
    public MessageStatus(
       String uuid,
       Long userId,
-      MessageStatusType messageStatusType
+      MessageStatusType messageStatusType,
+      boolean delivered
    ) {
       this.uuid = uuid;
       this.userId = userId;
-
       this.messageStatusType = messageStatusType;
+      this.delivered = delivered;
    }
+
+
 
    public MessageStatus() {}
 
