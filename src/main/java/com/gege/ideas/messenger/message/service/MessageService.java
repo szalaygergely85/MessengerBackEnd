@@ -60,19 +60,24 @@ public class MessageService {
             message.getConversationId()
          );
 
+      Map<Long, MessageStatusType> userStatuses = new HashMap<>();
+
+
+
       for (User recipientUser : recipientUsers) {
          if (recipientUser.getUserId() != message.getSenderId()) {
             _sendNotification(recipientUser, message);
-            messageStatusService.createPendingMessage(
-               new MessageStatus(
-                  message.getUuid(),
-                  recipientUser.getUserId(),
-                  MessageStatusType.PENDING,
-                  false
-               )
-            );
+            userStatuses.put(recipientUser.getUserId(), MessageStatusType.PENDING);
          }
       }
+
+      messageStatusService.createPendingMessage(
+              new MessageStatus(null,
+                      message.getUuid(),
+                      userStatuses,
+                      false
+              )
+      );
       return messageRepository.save(message);
    }
 
@@ -149,7 +154,7 @@ public class MessageService {
    public Object getNotDeliveredMessages(String authToken) {
       List<Message> messages = new ArrayList<>();
       List<MessageStatus> messageStatuses =
-         messageStatusService.getNotDeliveredMessages(authToken);
+         messageStatusService.getMessagesStatusNotDelivered(authToken);
       if (!messageStatuses.isEmpty()) {
          for (MessageStatus messageStatus : messageStatuses) {
             Message message = messageRepository.findByUuid(

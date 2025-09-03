@@ -128,9 +128,7 @@ public class UserController {
    }
 
    @PostMapping(value = "/login")
-   public ResponseEntity<?> logInUser(@RequestBody LoginRequest loginRequest)
-      throws MessagingException, UnsupportedEncodingException {
-      userService.sendForgotEmail(loginRequest.getEmail());
+   public ResponseEntity<?> logInUser(@RequestBody LoginRequest loginRequest) {
       User user = userService.logInUser(
          loginRequest.getEmail(),
          loginRequest.getPassword()

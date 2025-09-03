@@ -30,8 +30,9 @@ public class Message implements Serializable {
    @Column
    private int type;
 
-   @Column(columnDefinition = "LONGTEXT")
+   @Column(nullable = false)
    private String uuid;
+
 
    public String getContent() {
       return content;

@@ -26,19 +26,17 @@ public class MessageStatusService {
    }
 
    public MessageStatus createPendingMessage(MessageStatus messageStatus) {
-      MessageStatus localMessageStatus =
-         messageStatusRepository.findByUuidAndUserId(
-            messageStatus.getUuid(),
-            messageStatus.getUserId()
-         );
-      if (localMessageStatus != null) {
-         return localMessageStatus;
+      MessageStatus status = messageStatusRepository.findByUuid(messageStatus.getUuid())
+              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " +messageStatus.getUuid()));
+
+      if (status != null) {
+         return status;
       }
       return messageStatusRepository.save(messageStatus);
    }
 
-   public List<MessageStatus> getNotDeliveredMessages(String token) {
-      return messageStatusRepository.findByUserIdAndMessageStatusType(
+   public List<MessageStatus> getMessagesStatusNotDelivered(String token) {
+      return messageStatusRepository.findByUserIdAndStatus(
          userService.getUserIdByToken(token),
          MessageStatusType.PENDING
       );
@@ -49,19 +47,16 @@ public class MessageStatusService {
       // Fetch the message by its ID
       User user = userService.getUserByToken(token);
 
-      MessageStatus message = messageStatusRepository.findByUuidAndUserId(
-         uuid,
-         user.getUserId()
-      );
+      MessageStatus status = messageStatusRepository.findByUuid(uuid)
+              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
 
-      if (message != null) {
-         System.out.println(message.toString());
-         // Set the delivered flag to true
-         message.setMessageStatusType(MessageStatusType.DELIVERED);
+
+         status.getUserStatuses().put(user.getUserId(), MessageStatusType.DELIVERED);
+          status.setDelivered(true);
 
          // Save the updated message
-         messageStatusRepository.save(message);
-      }
+         messageStatusRepository.save(status);
+
    }
 
    @Transactional
@@ -69,31 +64,34 @@ public class MessageStatusService {
       // Fetch the message by its ID
       User user = userService.getUserByToken(token);
 
-      MessageStatus message = messageStatusRepository.findByUuidAndUserId(
-         uuid,
-         user.getUserId()
-      );
+        MessageStatus status = messageStatusRepository.findByUuid(uuid)
+                .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
 
-      if (message != null) {
-         System.out.println(message.toString());
-         // Set the delivered flag to true
-         message.setMessageStatusType(MessageStatusType.READ);
 
+         status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
+         status.setDelivered(true);
          // Save the updated message
-         messageStatusRepository.save(message);
-      }
+         messageStatusRepository.save(status);
+
    }
 
-   public void deletePendingMessages(String uuid) {
-      List<MessageStatus> messageStatuses = messageStatusRepository.findByUuid(
-         uuid
-      );
-      for (MessageStatus messageStatus : messageStatuses) {
-         messageStatusRepository.delete(messageStatus);
-      }
+   public void deleteMessageStatus(String uuid) {
+      MessageStatus status = messageStatusRepository.findByUuid(uuid)
+              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
+
+         messageStatusRepository.delete(status);
+
    }
 
    public MessageStatus getMessageStatus(String uuid, long userId) {
-      return messageStatusRepository.findByUuidAndUserId(uuid, userId);
+      return messageStatusRepository
+              .findByUuidAndUserId(uuid, userId)
+              .orElseThrow(() -> new RuntimeException("MessageStatus not found for user " + userId));
+   }
+
+   public List<MessageStatus> getMessageStatusByDelivered(String authToken, boolean b) {
+      User user = userService.getUserByToken(authToken);
+      return messageStatusRepository.findByUserIdAndDelivered(user.getUserId(), b);
+
    }
 }

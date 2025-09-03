@@ -1,7 +1,10 @@
 package com.gege.ideas.messenger.message.entity;
 
+import com.gege.ideas.messenger.message.constans.MessageConstans;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "message_status")
@@ -11,32 +14,44 @@ public class MessageStatus implements Serializable {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long messageStatusId;
 
-   @Column(nullable = false)
+   @Column
    private String uuid;
 
-   @Column(nullable = false)
-   private Long userId;
+   @ElementCollection(fetch = FetchType.EAGER)
+   @CollectionTable(
+           name = "message_status_user",
+           joinColumns = @JoinColumn(name = "message_status_id")
+   )
+   @MapKeyColumn(name = "user_id")
+   @Column(name = "status")
+   @Enumerated(EnumType.STRING)  // Store enum as string
+   private Map<Long, MessageStatusType> userStatuses = new HashMap<>();
 
    @Column
-   @Enumerated(EnumType.STRING)
-   MessageStatusType messageStatusType;
+   private  boolean delivered;
 
-   @Column(nullable = false)
-   private boolean delivered = false;
+   private final int type = MessageConstans.MESSAGE_STATUS;
 
-   public MessageStatus(
-      String uuid,
-      Long userId,
-      MessageStatusType messageStatusType,
-      boolean delivered
-   ) {
+   // getters/setters
+
+
+   public MessageStatus(Long messageStatusId, String uuid, Map<Long, MessageStatusType> userStatuses, boolean delivered) {
+      this.messageStatusId = messageStatusId;
       this.uuid = uuid;
-      this.userId = userId;
-      this.messageStatusType = messageStatusType;
+      this.userStatuses = userStatuses;
       this.delivered = delivered;
    }
 
+
    public MessageStatus() {}
+
+   public Long getMessageStatusId() {
+      return messageStatusId;
+   }
+
+   public void setMessageStatusId(Long messageStatusId) {
+      this.messageStatusId = messageStatusId;
+   }
 
    public String getUuid() {
       return uuid;
@@ -46,27 +61,23 @@ public class MessageStatus implements Serializable {
       this.uuid = uuid;
    }
 
-   public Long getUserId() {
-      return userId;
+   public Map<Long, MessageStatusType> getUserStatuses() {
+      return userStatuses;
    }
 
-   public void setUserId(Long userId) {
-      this.userId = userId;
+   public void setUserStatuses(Map<Long, MessageStatusType> userStatuses) {
+      this.userStatuses = userStatuses;
    }
 
-   public Long getMessageStatusId() {
-      return messageStatusId;
+   public boolean isDelivered() {
+      return delivered;
    }
 
-   public void setMessageStatusId(Long messageToSendId) {
-      this.messageStatusId = messageToSendId;
+   public void setDelivered(boolean delivered) {
+      this.delivered = delivered;
    }
 
-   public MessageStatusType getMessageStatusType() {
-      return messageStatusType;
-   }
-
-   public void setMessageStatusType(MessageStatusType messageStatusType) {
-      this.messageStatusType = messageStatusType;
+   public int getType() {
+      return type;
    }
 }

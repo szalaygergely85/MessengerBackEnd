@@ -150,7 +150,7 @@ public ResponseEntity<?> getNewMessagesByUserToken(
       @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isUserTestUser(authToken)) {
-         _MessageStatusService.deletePendingMessages(uuid);
+         _MessageStatusService.deleteMessageStatus(uuid);
          return ResponseEntity.ok().body(_messageService.deleteMessage(uuid));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)

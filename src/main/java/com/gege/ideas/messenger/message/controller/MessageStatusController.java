@@ -27,7 +27,7 @@ public class MessageStatusController {
       ) {
          return ResponseEntity
             .ok()
-            .body(_MessageStatusService.createPendingMessage(messageStatus));
+            .body(_messageStatusService.createPendingMessage(messageStatus));
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
@@ -46,7 +46,7 @@ public class MessageStatusController {
                authToken
             )
          ) {
-            _MessageStatusService.markMessageAsDelivered(uuid, authToken);
+            _messageStatusService.markMessageAsDelivered(uuid, authToken);
             return ResponseEntity.noContent().build(); // 204 No Content
          } else return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
@@ -69,7 +69,7 @@ public class MessageStatusController {
                authToken
             )
          ) {
-            _MessageStatusService.markMessageAsRead(uuid, authToken);
+            _messageStatusService.markMessageAsRead(uuid, authToken);
             return ResponseEntity.noContent().build(); // 204 No Content
          } else return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
@@ -79,18 +79,31 @@ public class MessageStatusController {
          .body("No message");
    }
 
+   @GetMapping("get-messages-status/not-delivered")
+   public ResponseEntity<?> getNotDeliveredMessages(
+           @RequestHeader("Authorization") String authToken
+   ) {
+      if (_permissionService.isUserRegistered(authToken)) {
+         return ResponseEntity
+                 .ok()
+                 .body(_messageStatusService.getMessageStatusByDelivered(authToken, false));
+      } else return ResponseEntity
+              .status(HttpStatus.UNAUTHORIZED)
+              .body("Unauthorized");
+   }
+
    @Autowired
    MessageStatusController(
       MessageService _messageService,
       PermissionService _permissionService,
       MessageStatusService messageStatusService
    ) {
-      this._MessageStatusService = messageStatusService;
+      this._messageStatusService = messageStatusService;
       this._messageService = _messageService;
       this._permissionService = _permissionService;
    }
 
    private final MessageService _messageService;
-   private final MessageStatusService _MessageStatusService;
+   private final MessageStatusService _messageStatusService;
    private final PermissionService _permissionService;
 }
