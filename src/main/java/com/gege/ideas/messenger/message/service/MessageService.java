@@ -62,12 +62,17 @@ public class MessageService {
 
       Map<Long, MessageStatusType> userStatuses = new HashMap<>();
 
+      Map<Long, Boolean> deliveredStatuses = new HashMap<>();
+
 
 
       for (User recipientUser : recipientUsers) {
          if (recipientUser.getUserId() != message.getSenderId()) {
             _sendNotification(recipientUser, message);
             userStatuses.put(recipientUser.getUserId(), MessageStatusType.PENDING);
+            deliveredStatuses.put(recipientUser.getUserId(), false);
+         }else {
+            deliveredStatuses.put(recipientUser.getUserId(), true);
          }
       }
 
@@ -75,7 +80,7 @@ public class MessageService {
               new MessageStatus(null,
                       message.getUuid(),
                       userStatuses,
-                      false
+                      deliveredStatuses
               )
       );
       return messageRepository.save(message);

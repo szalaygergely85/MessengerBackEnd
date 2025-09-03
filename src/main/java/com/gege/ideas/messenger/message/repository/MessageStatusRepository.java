@@ -13,9 +13,8 @@ public interface MessageStatusRepository
    extends JpaRepository<MessageStatus, Long> {
     Optional<MessageStatus> findByUuid(String uuid);
 
-
-    @Query("SELECT ms FROM MessageStatus ms JOIN ms.userStatuses us " +
-            "WHERE KEY(us) = :userId AND ms.delivered = :delivered")
+    @Query("SELECT ms FROM MessageStatus ms JOIN ms.deliveredStatuses ds " +
+            "WHERE KEY(ds) = :userId AND ds = :delivered")
     List<MessageStatus> findByUserIdAndDelivered(
             @Param("userId") Long userId,
             @Param("delivered") boolean delivered

@@ -52,7 +52,7 @@ public class MessageStatusService {
 
 
          status.getUserStatuses().put(user.getUserId(), MessageStatusType.DELIVERED);
-          status.setDelivered(true);
+          status.getDeliveredStatuses().put(user.getUserId(), true);
 
          // Save the updated message
          messageStatusRepository.save(status);
@@ -69,7 +69,7 @@ public class MessageStatusService {
 
 
          status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
-         status.setDelivered(true);
+         status.getDeliveredStatuses().put(user.getUserId(), true);
          // Save the updated message
          messageStatusRepository.save(status);
 

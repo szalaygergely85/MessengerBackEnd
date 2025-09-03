@@ -27,21 +27,26 @@ public class MessageStatus implements Serializable {
    @Enumerated(EnumType.STRING)  // Store enum as string
    private Map<Long, MessageStatusType> userStatuses = new HashMap<>();
 
-   @Column
-   private  boolean delivered;
+   @ElementCollection(fetch = FetchType.EAGER)
+   @CollectionTable(
+           name = "message_status_delivered",
+           joinColumns = @JoinColumn(name = "message_status_id")
+   )
+   @MapKeyColumn(name = "user_id")
+   @Column(name = "delivered")
+   private Map<Long, Boolean> deliveredStatuses = new HashMap<>();
 
    private final int type = MessageConstans.MESSAGE_STATUS;
 
    // getters/setters
 
 
-   public MessageStatus(Long messageStatusId, String uuid, Map<Long, MessageStatusType> userStatuses, boolean delivered) {
+   public MessageStatus(Long messageStatusId, String uuid, Map<Long, MessageStatusType> userStatuses, Map<Long, Boolean> deliveredStatuses) {
       this.messageStatusId = messageStatusId;
       this.uuid = uuid;
       this.userStatuses = userStatuses;
-      this.delivered = delivered;
+      this.deliveredStatuses = deliveredStatuses;
    }
-
 
    public MessageStatus() {}
 
@@ -69,12 +74,12 @@ public class MessageStatus implements Serializable {
       this.userStatuses = userStatuses;
    }
 
-   public boolean isDelivered() {
-      return delivered;
+   public Map<Long, Boolean> getDeliveredStatuses() {
+      return deliveredStatuses;
    }
 
-   public void setDelivered(boolean delivered) {
-      this.delivered = delivered;
+   public void setDeliveredStatuses(Map<Long, Boolean> deliveredStatuses) {
+      this.deliveredStatuses = deliveredStatuses;
    }
 
    public int getType() {
