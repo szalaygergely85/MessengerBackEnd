@@ -69,12 +69,14 @@ public class MessageService {
       for (User recipientUser : recipientUsers) {
          if (recipientUser.getUserId() != message.getSenderId()) {
             _sendNotification(recipientUser, message);
-            userStatuses.put(recipientUser.getUserId(), MessageStatusType.PENDING);
+         userStatuses.put(recipientUser.getUserId(), MessageStatusType.PENDING);
             deliveredStatuses.put(recipientUser.getUserId(), false);
          }else {
             deliveredStatuses.put(recipientUser.getUserId(), true);
-         }
+           userStatuses.put(recipientUser.getUserId(), MessageStatusType.READ);
       }
+         }
+
 
       messageStatusService.createPendingMessage(
               new MessageStatus(null,
@@ -115,7 +117,7 @@ public class MessageService {
                messageStatusService.getMessageStatus(
                   message.getUuid(),
                   userService.getUserIdByToken(token)
-               )
+               ), message.getTimestamp()
             )
          );
       }

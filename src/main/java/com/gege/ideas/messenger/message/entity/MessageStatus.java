@@ -36,6 +36,8 @@ public class MessageStatus implements Serializable {
    @Column(name = "delivered")
    private Map<Long, Boolean> deliveredStatuses = new HashMap<>();
 
+
+   @Transient
    private final int type = MessageConstans.MESSAGE_STATUS;
 
    // getters/setters

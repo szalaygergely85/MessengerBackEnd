@@ -9,9 +9,21 @@ public class MessageDTO {
 
    private MessageStatus status;
 
-   public MessageDTO(Message message, MessageStatus status) {
+   private long timestamp;
+
+
+   public MessageDTO(Message message, MessageStatus status, long timestamp) {
       this.message = message;
       this.status = status;
+      this.timestamp = timestamp;
+   }
+
+   public long getTimestamp() {
+      return timestamp;
+   }
+
+   public void setTimestamp(long timestamp) {
+      this.timestamp = timestamp;
    }
 
    public MessageDTO() {}

@@ -27,7 +27,7 @@ public class MessageStatusService {
 
    public MessageStatus createPendingMessage(MessageStatus messageStatus) {
       MessageStatus status = messageStatusRepository.findByUuid(messageStatus.getUuid())
-              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " +messageStatus.getUuid()));
+              .orElse(null);
 
       if (status != null) {
          return status;
