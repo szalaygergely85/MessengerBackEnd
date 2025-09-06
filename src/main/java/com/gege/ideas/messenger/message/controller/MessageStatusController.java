@@ -81,15 +81,20 @@ public class MessageStatusController {
 
    @GetMapping("get-messages-status/not-delivered")
    public ResponseEntity<?> getNotDeliveredMessages(
-           @RequestHeader("Authorization") String authToken
+      @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isUserRegistered(authToken)) {
          return ResponseEntity
-                 .ok()
-                 .body(_messageStatusService.getMessageStatusByDelivered(authToken, false));
+            .ok()
+            .body(
+               _messageStatusService.getMessageStatusByDelivered(
+                  authToken,
+                  false
+               )
+            );
       } else return ResponseEntity
-              .status(HttpStatus.UNAUTHORIZED)
-              .body("Unauthorized");
+         .status(HttpStatus.UNAUTHORIZED)
+         .body("Unauthorized");
    }
 
    @Autowired

@@ -11,7 +11,6 @@ public class MessageDTO {
 
    private long timestamp;
 
-
    public MessageDTO(Message message, MessageStatus status, long timestamp) {
       this.message = message;
       this.status = status;

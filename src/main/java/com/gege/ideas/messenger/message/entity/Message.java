@@ -33,7 +33,6 @@ public class Message implements Serializable {
    @Column(nullable = false)
    private String uuid;
 
-
    public String getContent() {
       return content;
    }

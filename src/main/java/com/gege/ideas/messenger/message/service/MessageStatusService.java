@@ -26,8 +26,9 @@ public class MessageStatusService {
    }
 
    public MessageStatus createPendingMessage(MessageStatus messageStatus) {
-      MessageStatus status = messageStatusRepository.findByUuid(messageStatus.getUuid())
-              .orElse(null);
+      MessageStatus status = messageStatusRepository
+         .findByUuid(messageStatus.getUuid())
+         .orElse(null);
 
       if (status != null) {
          return status;
@@ -47,16 +48,19 @@ public class MessageStatusService {
       // Fetch the message by its ID
       User user = userService.getUserByToken(token);
 
-      MessageStatus status = messageStatusRepository.findByUuid(uuid)
-              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
 
+      status
+         .getUserStatuses()
+         .put(user.getUserId(), MessageStatusType.DELIVERED);
+      status.getDeliveredStatuses().put(user.getUserId(), true);
 
-         status.getUserStatuses().put(user.getUserId(), MessageStatusType.DELIVERED);
-          status.getDeliveredStatuses().put(user.getUserId(), true);
-
-         // Save the updated message
-         messageStatusRepository.save(status);
-
+      // Save the updated message
+      messageStatusRepository.save(status);
    }
 
    @Transactional
@@ -64,34 +68,44 @@ public class MessageStatusService {
       // Fetch the message by its ID
       User user = userService.getUserByToken(token);
 
-        MessageStatus status = messageStatusRepository.findByUuid(uuid)
-                .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
 
-
-         status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
-         status.getDeliveredStatuses().put(user.getUserId(), true);
-         // Save the updated message
-         messageStatusRepository.save(status);
-
+      status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
+      status.getDeliveredStatuses().put(user.getUserId(), true);
+      // Save the updated message
+      messageStatusRepository.save(status);
    }
 
    public void deleteMessageStatus(String uuid) {
-      MessageStatus status = messageStatusRepository.findByUuid(uuid)
-              .orElseThrow(() -> new RuntimeException("Message status not found for uuid: " + uuid));
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
 
-         messageStatusRepository.delete(status);
-
+      messageStatusRepository.delete(status);
    }
 
    public MessageStatus getMessageStatus(String uuid, long userId) {
       return messageStatusRepository
-              .findByUuidAndUserId(uuid, userId)
-              .orElseThrow(() -> new RuntimeException("MessageStatus not found for user " + userId));
+         .findByUuidAndUserId(uuid, userId)
+         .orElseThrow(() ->
+            new RuntimeException("MessageStatus not found for user " + userId)
+         );
    }
 
-   public List<MessageStatus> getMessageStatusByDelivered(String authToken, boolean b) {
+   public List<MessageStatus> getMessageStatusByDelivered(
+      String authToken,
+      boolean b
+   ) {
       User user = userService.getUserByToken(authToken);
-      return messageStatusRepository.findByUserIdAndDelivered(user.getUserId(), b);
-
+      return messageStatusRepository.findByUserIdAndDelivered(
+         user.getUserId(),
+         b
+      );
    }
 }

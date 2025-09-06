@@ -19,31 +19,34 @@ public class MessageStatus implements Serializable {
 
    @ElementCollection(fetch = FetchType.EAGER)
    @CollectionTable(
-           name = "message_status_user",
-           joinColumns = @JoinColumn(name = "message_status_id")
+      name = "message_status_user",
+      joinColumns = @JoinColumn(name = "message_status_id")
    )
    @MapKeyColumn(name = "user_id")
    @Column(name = "status")
-   @Enumerated(EnumType.STRING)  // Store enum as string
+   @Enumerated(EnumType.STRING) // Store enum as string
    private Map<Long, MessageStatusType> userStatuses = new HashMap<>();
 
    @ElementCollection(fetch = FetchType.EAGER)
    @CollectionTable(
-           name = "message_status_delivered",
-           joinColumns = @JoinColumn(name = "message_status_id")
+      name = "message_status_delivered",
+      joinColumns = @JoinColumn(name = "message_status_id")
    )
    @MapKeyColumn(name = "user_id")
    @Column(name = "delivered")
    private Map<Long, Boolean> deliveredStatuses = new HashMap<>();
-
 
    @Transient
    private final int type = MessageConstans.MESSAGE_STATUS;
 
    // getters/setters
 
-
-   public MessageStatus(Long messageStatusId, String uuid, Map<Long, MessageStatusType> userStatuses, Map<Long, Boolean> deliveredStatuses) {
+   public MessageStatus(
+      Long messageStatusId,
+      String uuid,
+      Map<Long, MessageStatusType> userStatuses,
+      Map<Long, Boolean> deliveredStatuses
+   ) {
       this.messageStatusId = messageStatusId;
       this.uuid = uuid;
       this.userStatuses = userStatuses;

@@ -64,26 +64,27 @@ public class MessageService {
 
       Map<Long, Boolean> deliveredStatuses = new HashMap<>();
 
-
-
       for (User recipientUser : recipientUsers) {
          if (recipientUser.getUserId() != message.getSenderId()) {
             _sendNotification(recipientUser, message);
-         userStatuses.put(recipientUser.getUserId(), MessageStatusType.PENDING);
+            userStatuses.put(
+               recipientUser.getUserId(),
+               MessageStatusType.PENDING
+            );
             deliveredStatuses.put(recipientUser.getUserId(), false);
-         }else {
+         } else {
             deliveredStatuses.put(recipientUser.getUserId(), true);
-           userStatuses.put(recipientUser.getUserId(), MessageStatusType.READ);
-      }
+            userStatuses.put(recipientUser.getUserId(), MessageStatusType.READ);
          }
-
+      }
 
       messageStatusService.createPendingMessage(
-              new MessageStatus(null,
-                      message.getUuid(),
-                      userStatuses,
-                      deliveredStatuses
-              )
+         new MessageStatus(
+            null,
+            message.getUuid(),
+            userStatuses,
+            deliveredStatuses
+         )
       );
       return messageRepository.save(message);
    }
@@ -117,7 +118,8 @@ public class MessageService {
                messageStatusService.getMessageStatus(
                   message.getUuid(),
                   userService.getUserIdByToken(token)
-               ), message.getTimestamp()
+               ),
+               message.getTimestamp()
             )
          );
       }
