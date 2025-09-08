@@ -44,11 +44,6 @@ public class MessageController {
          .body("Unauthorized");
    }
 
-   @PostMapping("/add-messages")
-   public ResponseEntity<?> addMessage() {
-      //TODO finish this if needed
-      return null;
-   }
 
    @GetMapping("/get-message/{uuid}")
    public ResponseEntity<?> getConversationMessages(

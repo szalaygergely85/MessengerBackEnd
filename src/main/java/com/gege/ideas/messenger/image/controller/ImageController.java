@@ -102,43 +102,56 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
 } */
 
    @GetMapping("/userid/{userId}")
-   public ResponseEntity<Resource> getImage(
+   public ResponseEntity<?> getImage(
       @PathVariable Long userId,
       @RequestHeader("Authorization") String token
    ) {
       try {
-         Resource file = imageService.getImageAsResourceByUserID(userId);
 
-         if (file.exists()) {
-            return ResponseEntity
-               .ok()
-               .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-               .body(file);
-         } else {
-            return ResponseEntity.notFound().build();
-         }
+         if (
+                 _permissionService.isUserRegistered(
+                         token))
+         {
+            Resource file = imageService.getImageAsResourceByUserID(userId);
+
+            if (file.exists()) {
+               return ResponseEntity
+                       .ok()
+                       .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
+                       .body(file);
+            } else {
+               return ResponseEntity.notFound().build();
+            }
+         }else return ResponseEntity
+                 .status(HttpStatus.UNAUTHORIZED)
+                 .body("Unauthorized");
       } catch (Exception e) {
          return ResponseEntity.badRequest().build();
       }
    }
 
    @GetMapping("/uuid/{uuid}")
-   public ResponseEntity<Resource> getImage(
+   public ResponseEntity<?> getImage(
       @PathVariable String uuid,
       @RequestHeader("Authorization") String token
    ) {
       try {
-         //TODO permissions
-         Resource file = imageService.getImageAsResourceByUUID(uuid);
+         if (
+                 _permissionService.isUserRegistered(
+                         token)) {
+            Resource file = imageService.getImageAsResourceByUUID(uuid);
 
-         if (file.exists()) {
-            return ResponseEntity
-               .ok()
-               .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-               .body(file);
-         } else {
-            return ResponseEntity.notFound().build();
-         }
+            if (file.exists()) {
+               return ResponseEntity
+                       .ok()
+                       .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
+                       .body(file);
+            } else {
+               return ResponseEntity.notFound().build();
+            }
+         } else return ResponseEntity
+                 .status(HttpStatus.UNAUTHORIZED)
+                 .body("Unauthorized");
       } catch (Exception e) {
          return ResponseEntity.badRequest().build();
       }
