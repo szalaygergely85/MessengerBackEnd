@@ -44,7 +44,6 @@ public class MessageController {
          .body("Unauthorized");
    }
 
-
    @GetMapping("/get-message/{uuid}")
    public ResponseEntity<?> getConversationMessages(
       @RequestHeader("Authorization") String token,

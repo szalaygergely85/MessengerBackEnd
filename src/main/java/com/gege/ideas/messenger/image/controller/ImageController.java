@@ -107,24 +107,20 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       @RequestHeader("Authorization") String token
    ) {
       try {
-
-         if (
-                 _permissionService.isUserRegistered(
-                         token))
-         {
+         if (_permissionService.isUserRegistered(token)) {
             Resource file = imageService.getImageAsResourceByUserID(userId);
 
             if (file.exists()) {
                return ResponseEntity
-                       .ok()
-                       .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-                       .body(file);
+                  .ok()
+                  .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
+                  .body(file);
             } else {
                return ResponseEntity.notFound().build();
             }
-         }else return ResponseEntity
-                 .status(HttpStatus.UNAUTHORIZED)
-                 .body("Unauthorized");
+         } else return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body("Unauthorized");
       } catch (Exception e) {
          return ResponseEntity.badRequest().build();
       }
@@ -136,22 +132,20 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       @RequestHeader("Authorization") String token
    ) {
       try {
-         if (
-                 _permissionService.isUserRegistered(
-                         token)) {
+         if (_permissionService.isUserRegistered(token)) {
             Resource file = imageService.getImageAsResourceByUUID(uuid);
 
             if (file.exists()) {
                return ResponseEntity
-                       .ok()
-                       .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-                       .body(file);
+                  .ok()
+                  .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
+                  .body(file);
             } else {
                return ResponseEntity.notFound().build();
             }
          } else return ResponseEntity
-                 .status(HttpStatus.UNAUTHORIZED)
-                 .body("Unauthorized");
+            .status(HttpStatus.UNAUTHORIZED)
+            .body("Unauthorized");
       } catch (Exception e) {
          return ResponseEntity.badRequest().build();
       }

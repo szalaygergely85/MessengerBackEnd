@@ -170,7 +170,7 @@ public class UserController {
       @RequestParam("old-pass") String oldPassword,
       @RequestParam("new-pass") String newPassword,
       @RequestHeader("Authorization") String authToken
-   ){
+   ) {
       User user = userService.getUserByToken(authToken);
       if (user != null) {
          if (user.getPassword().equals(oldPassword)) {
