@@ -164,4 +164,24 @@ public class UserController {
 
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
    }
+
+   @PostMapping(value = "/change-password")
+   public ResponseEntity<?> forgotPassword(
+      @RequestParam("old-pass") String oldPassword,
+      @RequestParam("new-pass") String newPassword,
+      @RequestHeader("Authorization") String authToken
+   ){
+      User user = userService.getUserByToken(authToken);
+      if (user != null) {
+         if (user.getPassword().equals(oldPassword)) {
+            userService.changePassword(user.getUserId(), newPassword);
+         }
+
+         return ResponseEntity.status(HttpStatus.OK).build();
+      }
+
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "Invalid password");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+   }
 }
