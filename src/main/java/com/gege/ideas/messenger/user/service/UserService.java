@@ -144,7 +144,7 @@ public class UserService {
       throws MessagingException, UnsupportedEncodingException {
       User user = getUserByEmail(email);
       Token token = tokenService.generateToken(user.getUserId());
-      //   mailService.sendSimpleEmail(user.getEmail(), "Password Reset Request", _getEmailBody(token.getToken()));
+      mailService.sendSimpleEmail(user.getEmail(), "Password Reset Request", _getEmailBody(token.getToken()));
       setLastEmailSent(user, System.currentTimeMillis());
    }
 
