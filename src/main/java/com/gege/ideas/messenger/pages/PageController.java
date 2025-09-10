@@ -35,18 +35,15 @@ public class PageController {
 
    //TODO important for google play
    @GetMapping("/request-account-deletion")
-   public String changePassword(
-   ) {
+   public String changePassword() {
       return "request_delete"; // JSP to show after success/fail
    }
 
    @PostMapping("/delete-request")
    public String changePassword(
-           @RequestParam String username,
-           @RequestParam String password
+      @RequestParam String username,
+      @RequestParam String password
    ) {
-
-
       return "delete-request-result";
    }
 
