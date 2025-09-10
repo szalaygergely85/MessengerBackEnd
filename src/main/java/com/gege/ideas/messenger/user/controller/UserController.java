@@ -184,4 +184,10 @@ public class UserController {
       errorResponse.put("error", "Invalid password");
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
    }
+
+   @GetMapping("/test")
+   @ResponseBody
+   public String test() {
+      return "ok";
+   }
 }
