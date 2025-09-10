@@ -3,6 +3,7 @@ package com.gege.ideas.messenger.config;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.user.service.UserService;
+import com.gege.ideas.messenger.utils.HashUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,6 +18,12 @@ public class SystemUserInitializer {
 
    @Autowired
    private UserService userService;
+
+   private static final String AD_EMAIL = "admin@zenvy.com";
+   private static final String AD_DISPLAY_NAME = "Admin";
+   private static final String AD_PASSWORD = HashUtil.hashPassword("123456");
+   private static final String AD_TOKEN = "123456";
+   private static final String AD_UUID = "ad_123456";
 
    private static final String SYSTEM_EMAIL = "websocket@zenvy.com";
    private static final String SYSTEM_DISPLAY_NAME = "websocket";
@@ -66,6 +73,20 @@ public class SystemUserInitializer {
          System.out.println("✅ Test user created.");
       } else {
          System.out.println("ℹ️ Test user already exists.");
+      }
+
+      if (!userRepository.existsByEmail(AD_EMAIL)) {
+         User testUser = new User();
+         testUser.setEmail(AD_EMAIL);
+         testUser.setPassword(AD_PASSWORD);
+         testUser.setDisplayName(AD_DISPLAY_NAME);
+         testUser.setUuid(AD_UUID);
+         testUser.setToken(AD_TOKEN);
+         userRepository.save(testUser);
+
+         System.out.println("✅ Admin user created.");
+      } else {
+         System.out.println("ℹ️ Admin user already exists.");
       }
    }
 }
