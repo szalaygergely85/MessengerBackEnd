@@ -33,12 +33,28 @@ public class PageController {
       return "forgot_password";
    }
 
+   //TODO important for google play
+   @GetMapping("/request-account-deletion")
+   public String changePassword(
+   ) {
+      return "request_delete"; // JSP to show after success/fail
+   }
+
+   @PostMapping("/delete-request")
+   public String changePassword(
+           @RequestParam String username,
+           @RequestParam String password
+   ) {
+
+
+      return "delete-request-result";
+   }
+
    @PostMapping("/changePassword")
    public String changePassword(
       @RequestParam String newPassword,
       @RequestParam String confirmPassword,
-      @RequestParam String tokenString,
-      Model model
+      @RequestParam String tokenString
    ) {
       Token token = tokenService.getTokenByToken(tokenString);
       userService.changePassword(
