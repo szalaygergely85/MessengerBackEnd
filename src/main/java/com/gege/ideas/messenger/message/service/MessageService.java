@@ -86,6 +86,14 @@ public class MessageService {
             deliveredStatuses
          )
       );
+      Message latestMessageInConversation = messageRepository.findTopByConversationIdOrderByConversationOrderIdDesc(message.getConversationOrderId());
+      if(latestMessageInConversation.getConversationOrderId()!=null){
+         message.setConversationOrderId(latestMessageInConversation.getConversationOrderId()+1);
+      }else {
+         message.setConversationOrderId(1L);
+      }
+
+
       return messageRepository.save(message);
    }
 

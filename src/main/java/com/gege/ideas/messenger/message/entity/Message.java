@@ -33,6 +33,17 @@ public class Message implements Serializable {
    @Column(nullable = false)
    private String uuid;
 
+   @Column
+   private Long conversationOrderId;
+
+   public Long getConversationOrderId() {
+      return conversationOrderId;
+   }
+
+   public void setConversationOrderId(Long conversationOrderId) {
+      this.conversationOrderId = conversationOrderId;
+   }
+
    public String getContent() {
       return content;
    }
@@ -57,7 +68,8 @@ public class Message implements Serializable {
       String content,
       boolean isEncrypted,
       int type,
-      String uuid
+      String uuid,
+      Long conversationOrderId
    ) {
       this.messageId = messageId;
       this.conversationId = conversationId;
@@ -67,6 +79,7 @@ public class Message implements Serializable {
       this.encrypted = isEncrypted;
       this.type = type;
       this.uuid = uuid;
+      this.conversationOrderId = conversationOrderId;
    }
 
    public long getMessageId() {
