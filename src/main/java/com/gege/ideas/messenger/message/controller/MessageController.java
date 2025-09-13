@@ -63,7 +63,7 @@ public class MessageController {
    public ResponseEntity<?> getConversationMessages(
       @RequestHeader("Authorization") String token,
       @RequestParam("conversationId") Long conversationId,
-      @RequestParam("timestamp") Long timestamp
+      @RequestParam(value = "timestamp", required = false) Long timestamp
    ) {
       if (
          _permissionService.hasPermissionToConversation(token, conversationId)
@@ -71,7 +71,7 @@ public class MessageController {
          List<MessageDTO> messageDTOS =
             _messageService.getMessagesByConversationIdOrderedByTimestamp(
                conversationId,
-               timestamp - 10,
+               timestamp,
                token
             );
          if (messageDTOS.isEmpty()) {

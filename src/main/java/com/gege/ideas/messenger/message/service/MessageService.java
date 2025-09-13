@@ -12,10 +12,7 @@ import com.gege.ideas.messenger.notifcation.NotificationService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -129,7 +126,7 @@ public class MessageService {
          messages =
          messageRepository.findByConversationIdAndTimestampAfterOrderByTimestampAsc(
             id,
-            timestamp
+            timestamp - 10
          );
       } else {
          messages =
@@ -150,7 +147,7 @@ public class MessageService {
          }
          return messageDTOS;
       }
-      return null;
+      return Collections.emptyList();
    }
 
    public Message getMessageByID(Long messageId) {
