@@ -1,9 +1,11 @@
 package com.gege.ideas.messenger.message.controller;
 
+import com.gege.ideas.messenger.DTO.MessageDTO;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.message.service.MessageStatusService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,15 +68,16 @@ public class MessageController {
       if (
          _permissionService.hasPermissionToConversation(token, conversationId)
       ) {
-         return ResponseEntity
-            .ok()
-            .body(
-               _messageService.getMessagesByConversationIdOrderedByTimestamp(
-                  conversationId,
-                  timestamp - 10,
-                  token
-               )
+         List<MessageDTO> messageDTOS =
+            _messageService.getMessagesByConversationIdOrderedByTimestamp(
+               conversationId,
+               timestamp - 10,
+               token
             );
+         if (messageDTOS.isEmpty()) {
+            return ResponseEntity.ok().body(Collections.emptyList());
+         }
+         return ResponseEntity.ok().body(messageDTOS);
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
