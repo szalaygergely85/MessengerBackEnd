@@ -60,7 +60,8 @@ public class MessageController {
    @GetMapping("/get-messages")
    public ResponseEntity<?> getConversationMessages(
       @RequestHeader("Authorization") String token,
-      @RequestParam("conversationId") Long conversationId
+      @RequestParam("conversationId") Long conversationId,
+      @RequestParam("timestamp") Long timestamp
    ) {
       if (
          _permissionService.hasPermissionToConversation(token, conversationId)
@@ -70,6 +71,7 @@ public class MessageController {
             .body(
                _messageService.getMessagesByConversationIdOrderedByTimestamp(
                   conversationId,
+                  timestamp - 10,
                   token
                )
             );

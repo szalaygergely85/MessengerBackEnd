@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
    List<Message> findByConversationIdOrderByTimestampAsc(long id);
+   List<Message> findByConversationIdAndTimestampAfterOrderByTimestampAsc(
+      long id,
+      long timestamp
+   );
 
    Message findTopByConversationIdOrderByTimestampDesc(long id);
 

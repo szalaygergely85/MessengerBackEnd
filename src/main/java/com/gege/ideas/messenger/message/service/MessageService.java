@@ -106,24 +106,37 @@ public class MessageService {
 
    public List<MessageDTO> getMessagesByConversationIdOrderedByTimestamp(
       Long id,
+      Long timestamp,
       String token
    ) {
       List<MessageDTO> messageDTOS = new ArrayList<>();
-      for (Message message : messageRepository.findByConversationIdOrderByTimestampAsc(
-         id
-      )) {
-         messageDTOS.add(
-            new MessageDTO(
-               message,
-               messageStatusService.getMessageStatus(
-                  message.getUuid(),
-                  userService.getUserIdByToken(token)
-               ),
-               message.getTimestamp()
-            )
+      List<Message> messages = new ArrayList<>();
+      if (timestamp != null) {
+         messages =
+         messageRepository.findByConversationIdAndTimestampAfterOrderByTimestampAsc(
+            id,
+            timestamp
          );
+      } else {
+         messages =
+         messageRepository.findByConversationIdOrderByTimestampAsc(id);
       }
-      return messageDTOS;
+      if (!messages.isEmpty()) {
+         for (Message message : messages) {
+            messageDTOS.add(
+               new MessageDTO(
+                  message,
+                  messageStatusService.getMessageStatus(
+                     message.getUuid(),
+                     userService.getUserIdByToken(token)
+                  ),
+                  message.getTimestamp()
+               )
+            );
+         }
+         return messageDTOS;
+      }
+      return null;
    }
 
    public Message getMessageByID(Long messageId) {
