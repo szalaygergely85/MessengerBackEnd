@@ -17,16 +17,14 @@ public class DeviceService {
    }
 
    public Object addDevice(Device device) {
-      List<Device> localDevices = deviceRepository.findDevicesByDeviceToken(
-         device.getDeviceToken()
+      Device localDevice = deviceRepository.findDeviceByUserId(
+         device.getUserId()
       );
-      if (!localDevices.isEmpty()) {
-         for (Device localDevice : localDevices) {
-            if (localDevice.getUserId() == device.getUserId()) {
-               return localDevice;
-            }
-         }
+      if (localDevice != null) {
+         localDevice.setDeviceToken(device.getDeviceToken());
+         return deviceRepository.save(localDevice);
       }
+
       return deviceRepository.save(device);
    }
 
