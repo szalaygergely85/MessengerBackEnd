@@ -60,6 +60,7 @@ jobs:
           docker pull gery12492/rest-server:1.0.0
           docker run -d \
             -v /home/pi/config:/app/config/ \
+            -v /mnt/hdd/messenger/images:/images/ \
             --name rest-server \
             -e SMTP_USERNAME=${SMTP_USERNAME} \
             -e SMTP_PASSWORD=${SMTP_PASSWORD} \

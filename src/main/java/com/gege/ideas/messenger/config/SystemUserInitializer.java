@@ -22,13 +22,13 @@ public class SystemUserInitializer {
    private static final String AD_EMAIL = "admin@zenvy.com";
    private static final String AD_DISPLAY_NAME = "Admin";
    private static final String AD_PASSWORD = HashUtil.hashPassword("123456");
-   private static final String AD_TOKEN = "123456";
+   private static final String AD_TOKEN = "ad_123456";
    private static final String AD_UUID = "ad_123456";
 
    private static final String SYSTEM_EMAIL = "websocket@zenvy.com";
    private static final String SYSTEM_DISPLAY_NAME = "websocket";
    private static final String SYSTEM_PASSWORD = "123456";
-   private static final String SYSTEM_TOKEN = "123456";
+   private static final String SYSTEM_TOKEN = "user_123456";
    private static final String SYSTEM_UUID = "user_123456";
 
    private static final String TEST_EMAIL = "test@zenvy.com";

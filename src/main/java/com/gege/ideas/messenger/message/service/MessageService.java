@@ -224,6 +224,10 @@ public class MessageService {
       } else {
          data.put("title", title);
       }
-      notificationService.sendNotification(recipientUser.getUserId(), data);
+      notificationService.sendNotification(
+         recipientUser.getUserId(),
+         data,
+         message.getConversationId()
+      );
    }
 }
