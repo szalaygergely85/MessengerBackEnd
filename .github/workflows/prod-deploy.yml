@@ -56,7 +56,7 @@ jobs:
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          printf "%s" "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       # 🔟 Deploy to k3s cluster
       - name: Deploy REST API to k3s
