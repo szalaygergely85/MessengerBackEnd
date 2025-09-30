@@ -108,4 +108,17 @@ public class MessageStatusService {
          b
       );
    }
+
+   public void markMessageStatusAsDelivered(String uuid, String authToken) {
+      User user = userService.getUserByToken(authToken);
+
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
+
+      status.getDeliveredStatuses().put(user.getUserId(), true);
+      messageStatusRepository.save(status);
+   }
 }

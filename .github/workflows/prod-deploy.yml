@@ -1,0 +1,65 @@
+name: CI/CD for RestServer App
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3️⃣ Make Gradle executable
+      - name: Give executable permissions to gradlew
+        run: chmod +x ./gradlew
+
+      # 4️⃣ Build the project
+      - name: Build the project
+        run: ./gradlew clean build -x test
+
+      # 5️⃣ Set up Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      # 6️⃣ Login to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 7️⃣ Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          docker buildx create --use
+          docker buildx build --no-cache -t gery12492/rest-server:latest --push .
+
+      # 8️⃣ Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      # 9️⃣ Configure kubeconfig from GitHub Secret
+      - name: Configure kubeconfig
+        run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      # 🔟 Deploy to k3s cluster
+      - name: Deploy REST API to k3s
+        run: |
+          # Update the deployment image
+          kubectl set image deployment/rest-server rest-server=gery12492/rest-server:latest
+          # Apply any YAMLs in k8s/ (Deployment, Service, Secrets)
+          kubectl apply -f k8s/

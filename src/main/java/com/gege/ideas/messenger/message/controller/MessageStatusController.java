@@ -56,6 +56,29 @@ public class MessageStatusController {
          .body("No message");
    }
 
+   @PostMapping("/{uuid}/status-delivered")
+   public ResponseEntity<?> markStatusAsDelivered(
+      @PathVariable String uuid,
+      @RequestHeader("Authorization") String authToken
+   ) {
+      Message message = _messageService.getMessageByUUID(uuid);
+      if (message != null) {
+         if (
+            _permissionService.hasPermissionToMessage(
+               _messageService.getMessageByUUID(uuid),
+               authToken
+            )
+         ) {
+            _messageStatusService.markMessageStatusAsDelivered(uuid, authToken);
+            return ResponseEntity.noContent().build(); // 204 No Content
+         } else return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body("Unauthorized");
+      } else return ResponseEntity
+         .status(HttpStatus.NO_CONTENT)
+         .body("No message");
+   }
+
    @PostMapping("/{uuid}/read")
    public ResponseEntity<?> markAsRead(
       @PathVariable String uuid,
