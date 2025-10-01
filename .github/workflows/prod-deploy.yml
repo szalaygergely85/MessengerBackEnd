@@ -44,7 +44,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker buildx create --use
-          docker buildx build --no-cache -t gery12492/rest-server:latest --push .
+          docker buildx build --no-cache --no-cache --platform linux/arm/v7,linux/amd64 -t gery12492/rest-server:latest --push .
 
       # 8️⃣ Set up kubectl
       - name: Set up kubectl
