@@ -29,3 +29,13 @@ spec:
                 secretKeyRef:
                   name: rest-server-secret
                   key: smtp-password
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: DB_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: DB_PASSWORD

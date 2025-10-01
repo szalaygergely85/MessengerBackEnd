@@ -58,6 +58,13 @@ jobs:
           mkdir -p $HOME/.kube
           printf "%s" "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
+      - name: Create Kubernetes Secret from GitHub Secrets
+        run: |
+          kubectl create secret generic rest-server-secret \
+            --from-literal=DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
       # 🔟 Deploy to k3s cluster
       - name: Deploy REST API to k3s
         run: |
