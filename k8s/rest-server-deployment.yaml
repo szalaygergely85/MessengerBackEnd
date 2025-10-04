@@ -33,9 +33,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: rest-server-secret
-                  key: DB_USERNAME
+                  key: SPRING_DATASOURCE_USERNAME
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: rest-server-secret
-                  key: DB_PASSWORD
+                  key: SPRING_DATASOURCE_PASSWORD

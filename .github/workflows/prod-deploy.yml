@@ -61,8 +61,8 @@ jobs:
       - name: Create Kubernetes Secret from GitHub Secrets
         run: |
           kubectl create secret generic rest-server-secret \
-            --from-literal=DB_USERNAME=${{ secrets.DB_USERNAME }} \
-            --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --from-literal=SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+            --from-literal=SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
             --from-literal=smtp-username=${{ secrets.SMTP_USERNAME }} \
             --from-literal=smtp-password=${{ secrets.SMTP_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
