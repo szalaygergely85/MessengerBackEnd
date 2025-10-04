@@ -72,3 +72,4 @@ jobs:
           kubectl set image deployment/rest-server rest-server=gery12492/rest-server:latest
           # Apply any YAMLs in k8s/ (Deployment, Service, Secrets)
           kubectl apply -f k8s/
+          kubectl rollout restart deployment/rest-server
