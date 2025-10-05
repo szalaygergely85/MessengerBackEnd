@@ -39,3 +39,12 @@ spec:
                 secretKeyRef:
                   name: rest-server-secret
                   key: SPRING_DATASOURCE_PASSWORD
+          volumeMounts:
+            - name: firebase-credentials
+              mountPath: /app/config/serviceAccountKey.json
+              subPath: serviceAccountKey.json
+              readOnly: true
+      volumes:
+        - name: firebase-credentials
+          secret:
+            secretName: firebase-credentials
