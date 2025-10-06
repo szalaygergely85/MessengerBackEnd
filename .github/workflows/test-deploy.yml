@@ -64,6 +64,7 @@ jobs:
             -v /home/pi/config:/app/config/ \
             -v /mnt/hdd/messenger/images:/images/ \
             --name rest-server \
+            -e SPRING_PROFILES_ACTIVE=test \
             -e SMTP_USERNAME=${SMTP_USERNAME} \
             -e SMTP_PASSWORD=${SMTP_PASSWORD} \
             --network my-network \
