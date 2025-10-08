@@ -44,7 +44,12 @@ spec:
               mountPath: /app/config/serviceAccountKey.json
               subPath: serviceAccountKey.json
               readOnly: true
+            - name: image-storage
+              mountPath: /images
       volumes:
         - name: firebase-credentials
           secret:
             secretName: firebase-credentials
+        - name: image-storage
+          persistentVolumeClaim:
+            claimName: rest-server-pvc
