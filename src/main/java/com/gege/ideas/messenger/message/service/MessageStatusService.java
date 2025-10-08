@@ -36,50 +36,6 @@ public class MessageStatusService {
       return messageStatusRepository.save(messageStatus);
    }
 
-   public List<MessageStatus> getMessagesStatusNotDelivered(String token) {
-      return messageStatusRepository.findByUserIdAndStatus(
-         userService.getUserIdByToken(token),
-         MessageStatusType.PENDING
-      );
-   }
-
-   @Transactional
-   public void markMessageAsDelivered(String uuid, String token) {
-      // Fetch the message by its ID
-      User user = userService.getUserByToken(token);
-
-      MessageStatus status = messageStatusRepository
-         .findByUuid(uuid)
-         .orElseThrow(() ->
-            new RuntimeException("Message status not found for uuid: " + uuid)
-         );
-
-      status
-         .getUserStatuses()
-         .put(user.getUserId(), MessageStatusType.DELIVERED);
-      status.getDeliveredStatuses().put(user.getUserId(), true);
-
-      // Save the updated message
-      messageStatusRepository.save(status);
-   }
-
-   @Transactional
-   public void markMessageAsRead(String uuid, String token) {
-      // Fetch the message by its ID
-      User user = userService.getUserByToken(token);
-
-      MessageStatus status = messageStatusRepository
-         .findByUuid(uuid)
-         .orElseThrow(() ->
-            new RuntimeException("Message status not found for uuid: " + uuid)
-         );
-
-      status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
-      status.getDeliveredStatuses().put(user.getUserId(), true);
-      // Save the updated message
-      messageStatusRepository.save(status);
-   }
-
    public void deleteMessageStatus(String uuid) {
       MessageStatus status = messageStatusRepository
          .findByUuid(uuid)
@@ -107,6 +63,47 @@ public class MessageStatusService {
          user.getUserId(),
          b
       );
+   }
+
+   public List<MessageStatus> getMessagesStatusNotDelivered(String token) {
+      return messageStatusRepository.findByUserIdAndStatus(
+         userService.getUserIdByToken(token),
+         MessageStatusType.PENDING
+      );
+   }
+
+   @Transactional
+   public void markMessageAsDelivered(String uuid, String token) {
+      User user = userService.getUserByToken(token);
+
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
+
+      status
+         .getUserStatuses()
+         .put(user.getUserId(), MessageStatusType.DELIVERED);
+      status.getDeliveredStatuses().put(user.getUserId(), true);
+
+      messageStatusRepository.save(status);
+   }
+
+   @Transactional
+   public void markMessageAsRead(String uuid, String token) {
+      User user = userService.getUserByToken(token);
+
+      MessageStatus status = messageStatusRepository
+         .findByUuid(uuid)
+         .orElseThrow(() ->
+            new RuntimeException("Message status not found for uuid: " + uuid)
+         );
+
+      status.getUserStatuses().put(user.getUserId(), MessageStatusType.READ);
+      status.getDeliveredStatuses().put(user.getUserId(), true);
+
+      messageStatusRepository.save(status);
    }
 
    public void markMessageStatusAsDelivered(String uuid, String authToken) {
