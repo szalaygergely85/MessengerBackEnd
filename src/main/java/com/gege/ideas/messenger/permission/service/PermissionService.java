@@ -9,6 +9,8 @@ import com.gege.ideas.messenger.message.repository.MessageRepository;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,17 +75,14 @@ public class PermissionService {
 
    public boolean isUserRegistered(String authToken) {
       User user = userService.getUserByToken(authToken);
-      if (user != null) {
-         return true;
-      }
-      return false;
+       return user != null;
    }
 
    public boolean isInParticipants(List<User> participants, String authToken) {
       User user = userService.getUserByToken(authToken);
       if (user != null) {
          for (User participant : participants) {
-            if (user.getUserId() == participant.getUserId()) {
+            if (Objects.equals(user.getUserId(), participant.getUserId())) {
                return true;
             }
          }
@@ -114,13 +113,15 @@ public class PermissionService {
    }
 
    public boolean hasPermissionToMessage(Message message, String authToken) {
-      if (hasPermissionToConversation(authToken, message.getConversationId())) {
-         return true;
-      }
-      return false;
+       return hasPermissionToConversation(authToken, message.getConversationId());
    }
 
    public boolean isUserTestUser(String authToken) {
       return authToken.equals(SystemUserInitializer.TEST_UUID);
+   }
+
+   public boolean hasPermissionToSendAsUser(String authToken, Long senderId) {
+      User user = userService.getUserByToken(authToken);
+      return user != null && user.getUserId().equals(senderId);
    }
 }
