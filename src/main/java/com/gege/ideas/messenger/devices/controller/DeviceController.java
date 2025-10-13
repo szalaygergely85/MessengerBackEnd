@@ -2,7 +2,7 @@ package com.gege.ideas.messenger.devices.controller;
 
 import com.gege.ideas.messenger.devices.entity.Device;
 import com.gege.ideas.messenger.devices.service.DeviceService;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

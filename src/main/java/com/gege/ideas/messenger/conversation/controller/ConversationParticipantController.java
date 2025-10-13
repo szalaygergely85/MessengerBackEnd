@@ -3,7 +3,7 @@ package com.gege.ideas.messenger.conversation.controller;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.exception.UnauthorizedException;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,11 @@ public class ConversationParticipantController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationParticipantsService.addConversationParticipants(participants));
+         .body(
+            conversationParticipantsService.addConversationParticipants(
+               participants
+            )
+         );
    }
 
    @GetMapping("get-participants")
@@ -49,6 +53,11 @@ public class ConversationParticipantController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationParticipantsService.getParticipants(authToken, conversationId));
+         .body(
+            conversationParticipantsService.getParticipants(
+               authToken,
+               conversationId
+            )
+         );
    }
 }

@@ -1,13 +1,13 @@
 package com.gege.ideas.messenger.user.service;
 
-import com.gege.ideas.messenger.firebase.FirebaseMessageService;
-import com.gege.ideas.messenger.mail.MailService;
-import com.gege.ideas.messenger.tokens.Token;
-import com.gege.ideas.messenger.tokens.TokenService;
+import com.gege.ideas.messenger.common.FileUtil;
+import com.gege.ideas.messenger.common.TokenGeneratorUtil;
+import com.gege.ideas.messenger.infrastructure.firebase.FirebaseMessageService;
+import com.gege.ideas.messenger.infrastructure.mail.MailService;
+import com.gege.ideas.messenger.security.tokens.Token;
+import com.gege.ideas.messenger.security.tokens.TokenService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
-import com.gege.ideas.messenger.utils.FileUtil;
-import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

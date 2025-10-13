@@ -1,15 +1,15 @@
 package com.gege.ideas.messenger.message.service;
 
-import com.gege.ideas.messenger.DTO.MessageDTO;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
 import com.gege.ideas.messenger.conversation.service.ConversationService;
+import com.gege.ideas.messenger.dto.MessageDTO;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.entity.MessageStatus;
 import com.gege.ideas.messenger.message.entity.MessageStatusType;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
-import com.gege.ideas.messenger.notifcation.NotificationService;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.notification.NotificationService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.*;

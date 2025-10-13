@@ -1,11 +1,10 @@
 package com.gege.ideas.messenger.conversation.service;
 
-import com.gege.ideas.messenger.DTO.ConversationDTO;
 import com.gege.ideas.messenger.conversation.entity.Conversation;
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.repository.ConversationsRepository;
+import com.gege.ideas.messenger.dto.ConversationDTO;
 import com.gege.ideas.messenger.message.repository.MessageRepository;
-
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class ConversationService {
    private UserService userService;
    private ConversationParticipantsService conversationParticipantsService;
    private ConversationsRepository _conversationsRepository;
-
 
    public Long addConversation(List<User> participants, String authToken) {
       Long conversationId = _getExistingConversationId(participants);
@@ -139,7 +137,6 @@ public class ConversationService {
    public ConversationService(
       UserService userService,
       ConversationParticipantsService conversationParticipantsService,
-
       ConversationsRepository _conversationsRepository,
       MessageRepository messageRepository
    ) {

@@ -2,7 +2,7 @@ package com.gege.ideas.messenger.conversation.controller;
 
 import com.gege.ideas.messenger.conversation.service.ConversationService;
 import com.gege.ideas.messenger.exception.UnauthorizedException;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,9 @@ public class ConversationsController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationService.addConversationById(participantsId, authToken));
+         .body(
+            conversationService.addConversationById(participantsId, authToken)
+         );
    }
 
    @GetMapping("get-conversation/{id}")
@@ -75,7 +77,12 @@ public class ConversationsController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationService.getConversationAndCompareWithLocal(count, authToken));
+         .body(
+            conversationService.getConversationAndCompareWithLocal(
+               count,
+               authToken
+            )
+         );
    }
 
    @GetMapping("get-conversations")

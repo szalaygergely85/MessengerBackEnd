@@ -1,10 +1,10 @@
 package com.gege.ideas.messenger.image.controller;
 
 import com.gege.ideas.messenger.exception.UnauthorizedException;
-import com.gege.ideas.messenger.image.constans.ImageConstans;
+import com.gege.ideas.messenger.image.constants.ImageConstans;
 import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.service.ImageService;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -46,7 +46,12 @@ public class ImageController {
    ) {
       switch (imageEntry.getTags()) {
          case ImageConstans.TAG_PROFILE:
-            if (!_permissionService.hasPermissionToUser(token, _userService.getTokenById(imageEntry.getUserId()))) {
+            if (
+               !_permissionService.hasPermissionToUser(
+                  token,
+                  _userService.getTokenById(imageEntry.getUserId())
+               )
+            ) {
                throw new UnauthorizedException();
             }
             Resource resourceFile = imageService.addImage(file, imageEntry);
@@ -55,7 +60,12 @@ public class ImageController {
                .contentType(MediaType.IMAGE_JPEG)
                .body(resourceFile);
          case ImageConstans.TAG_MESSAGE:
-            if (!_permissionService.hasPermissionToConversation(token, imageEntry.getConversationId())) {
+            if (
+               !_permissionService.hasPermissionToConversation(
+                  token,
+                  imageEntry.getConversationId()
+               )
+            ) {
                throw new UnauthorizedException();
             }
             Resource resourceFile2 = imageService.addImage(file, imageEntry);
@@ -98,10 +108,7 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       if (!file.exists()) {
          return ResponseEntity.notFound().build();
       }
-      return ResponseEntity
-         .ok()
-         .contentType(MediaType.IMAGE_JPEG)
-         .body(file);
+      return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
    }
 
    @GetMapping("/uuid/{uuid}")
@@ -117,9 +124,6 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       if (!file.exists()) {
          return ResponseEntity.notFound().build();
       }
-      return ResponseEntity
-         .ok()
-         .contentType(MediaType.IMAGE_JPEG)
-         .body(file);
+      return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
    }
 }

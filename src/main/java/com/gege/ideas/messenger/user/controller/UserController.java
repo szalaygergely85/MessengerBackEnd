@@ -1,12 +1,12 @@
 package com.gege.ideas.messenger.user.controller;
 
-import com.gege.ideas.messenger.DTO.LoginRequest;
+import com.gege.ideas.messenger.common.DateTimeUtil;
+import com.gege.ideas.messenger.dto.LoginRequest;
 import com.gege.ideas.messenger.exception.ResourceAlreadyExistsException;
 import com.gege.ideas.messenger.exception.UnauthorizedException;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
-import com.gege.ideas.messenger.utils.DateTimeUtil;
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,9 @@ public class UserController {
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
       User localUser = userService.addUser(user);
       if (localUser == null) {
-         throw new ResourceAlreadyExistsException("Email address already registered");
+         throw new ResourceAlreadyExistsException(
+            "Email address already registered"
+         );
       }
       return ResponseEntity.ok().body(localUser);
    }

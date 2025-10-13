@@ -3,7 +3,7 @@ package com.gege.ideas.messenger.contacts.controller;
 import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.exception.UnauthorizedException;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,9 @@ public class ContactsController {
       }
       return ResponseEntity
          .ok()
-         .body(contactsService.getContactsAndCompareWithLocal(authToken, count));
+         .body(
+            contactsService.getContactsAndCompareWithLocal(authToken, count)
+         );
    }
 
    @DeleteMapping("/delete-contact")
@@ -80,7 +82,12 @@ public class ContactsController {
       @RequestBody Contact contact,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {
+      if (
+         !permissionService.hasPermissionToAddContact(
+            authToken,
+            contact.getOwnerId()
+         )
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity.ok().body(contactsService.addContact(contact));

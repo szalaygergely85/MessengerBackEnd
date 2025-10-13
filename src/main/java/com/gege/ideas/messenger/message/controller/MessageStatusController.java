@@ -5,7 +5,7 @@ import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.entity.MessageStatus;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.message.service.MessageStatusService;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,12 @@ public class MessageStatusController {
       @RequestBody MessageStatus messageStatus,
       @RequestHeader("Authorization") String token
    ) {
-      if (!_permissionService.hasPermissionToMessage(_messageService.getMessageByUUID(messageStatus.getUuid()), token)) {
+      if (
+         !_permissionService.hasPermissionToMessage(
+            _messageService.getMessageByUUID(messageStatus.getUuid()),
+            token
+         )
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity
@@ -84,7 +89,9 @@ public class MessageStatusController {
       }
       return ResponseEntity
          .ok()
-         .body(_messageStatusService.getMessageStatusByDelivered(authToken, false));
+         .body(
+            _messageStatusService.getMessageStatusByDelivered(authToken, false)
+         );
    }
 
    @Autowired

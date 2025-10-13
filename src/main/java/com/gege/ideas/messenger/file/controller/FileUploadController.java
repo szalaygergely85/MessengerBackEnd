@@ -4,7 +4,7 @@ import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.file.service.FileUploadService;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
-import com.gege.ideas.messenger.permission.service.PermissionService;
+import com.gege.ideas.messenger.security.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -46,10 +46,15 @@ public class FileUploadController {
 
       // User can download their own files
       if (!_permissionService.hasPermissionToSendAsUser(token, userId)) {
-         throw new SecurityException("You do not have permission to access this file");
+         throw new SecurityException(
+            "You do not have permission to access this file"
+         );
       }
 
-      Resource file = _fileUploadService.loadAsResource(filename, userId.toString());
+      Resource file = _fileUploadService.loadAsResource(
+         filename,
+         userId.toString()
+      );
       if (file == null) {
          return ResponseEntity.notFound().build();
       }
@@ -70,13 +75,27 @@ public class FileUploadController {
       @RequestHeader("Authorization") String token
    ) {
       // Verify user is authenticated and matches the sender
-      if (!_permissionService.hasPermissionToSendAsUser(token, message.getSenderId())) {
-         throw new SecurityException("You cannot send messages as another user");
+      if (
+         !_permissionService.hasPermissionToSendAsUser(
+            token,
+            message.getSenderId()
+         )
+      ) {
+         throw new SecurityException(
+            "You cannot send messages as another user"
+         );
       }
 
       // Verify user has permission to send to this conversation
-      if (!_permissionService.hasPermissionToConversation(token, message.getConversationId())) {
-         throw new SecurityException("You are not a participant in this conversation");
+      if (
+         !_permissionService.hasPermissionToConversation(
+            token,
+            message.getConversationId()
+         )
+      ) {
+         throw new SecurityException(
+            "You are not a participant in this conversation"
+         );
       }
 
       Long id = message.getSenderId();

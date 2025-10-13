@@ -1,7 +1,7 @@
 package com.gege.ideas.messenger.image.service;
 
 import com.gege.ideas.messenger.file.service.FileUploadService;
-import com.gege.ideas.messenger.image.constans.ImageConstans;
+import com.gege.ideas.messenger.image.constants.ImageConstans;
 import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.repository.ImageRepository;
 import com.gege.ideas.messenger.user.entity.User;
