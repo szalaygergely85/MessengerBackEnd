@@ -2,10 +2,10 @@ package com.gege.ideas.messenger.conversation.controller;
 
 import com.gege.ideas.messenger.conversation.entity.ConversationParticipant;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,17 +31,12 @@ public class ConversationParticipantController {
       @RequestBody List<ConversationParticipant> participants,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(
-               conversationParticipantsService.addConversationParticipants(
-                  participants
-               )
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(conversationParticipantsService.addConversationParticipants(participants));
    }
 
    @GetMapping("get-participants")
@@ -49,17 +44,11 @@ public class ConversationParticipantController {
       @RequestParam("conversationId") Long conversationId,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(
-               conversationParticipantsService.getParticipants(
-                  authToken,
-                  conversationId
-               )
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(conversationParticipantsService.getParticipants(authToken, conversationId));
    }
 }

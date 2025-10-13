@@ -1,6 +1,7 @@
 package com.gege.ideas.messenger.message.controller;
 
 import com.gege.ideas.messenger.DTO.MessageDTO;
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.message.service.MessageStatusService;
@@ -8,7 +9,6 @@ import com.gege.ideas.messenger.permission.service.PermissionService;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,29 +21,20 @@ public class MessageController {
       @RequestBody Message message,
       @RequestHeader("Authorization") String token
    ) {
-      if (
-         _permissionService.hasPermissionToConversation(
-            token,
-            message.getConversationId()
-         )
-      ) {
-         return ResponseEntity.ok().body(_messageService.addMessage(message));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.hasPermissionToConversation(token, message.getConversationId())) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(_messageService.addMessage(message));
    }
 
    @GetMapping("get-messages/not-delivered")
    public ResponseEntity<?> getNotDeliveredMessages(
       @RequestHeader("Authorization") String authToken
    ) {
-      if (_permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(_messageService.getNotDeliveredMessages(authToken));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(_messageService.getNotDeliveredMessages(authToken));
    }
 
    @GetMapping("/get-message/{uuid}")
@@ -52,11 +43,10 @@ public class MessageController {
       @PathVariable String uuid
    ) {
       Message message = _messageService.getMessageByUUID(uuid);
-      if (_permissionService.hasPermissionToMessage(message, token)) {
-         return ResponseEntity.ok().body(message);
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.hasPermissionToMessage(message, token)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(message);
    }
 
    @GetMapping("/get-messages")
@@ -65,22 +55,19 @@ public class MessageController {
       @RequestParam("conversationId") Long conversationId,
       @RequestParam(value = "timestamp", required = false) Long timestamp
    ) {
-      if (
-         _permissionService.hasPermissionToConversation(token, conversationId)
-      ) {
-         List<MessageDTO> messageDTOS =
-            _messageService.getMessagesByConversationIdOrderedByTimestamp(
-               conversationId,
-               timestamp,
-               token
-            );
-         if (messageDTOS.isEmpty()) {
-            return ResponseEntity.ok().body(Collections.emptyList());
-         }
-         return ResponseEntity.ok().body(messageDTOS);
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.hasPermissionToConversation(token, conversationId)) {
+         throw new UnauthorizedException();
+      }
+      List<MessageDTO> messageDTOS =
+         _messageService.getMessagesByConversationIdOrderedByTimestamp(
+            conversationId,
+            timestamp,
+            token
+         );
+      if (messageDTOS.isEmpty()) {
+         return ResponseEntity.ok().body(Collections.emptyList());
+      }
+      return ResponseEntity.ok().body(messageDTOS);
    }
 
    @GetMapping("/get-latest-message")
@@ -88,17 +75,12 @@ public class MessageController {
       @RequestHeader("Authorization") String token,
       @RequestParam("conversationId") Long conversationId
    ) {
-      if (
-         _permissionService.hasPermissionToConversation(token, conversationId)
-      ) {
-         return ResponseEntity
-            .ok()
-            .body(
-               _messageService.getLatestMessageByConversationId(conversationId)
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.hasPermissionToConversation(token, conversationId)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(_messageService.getLatestMessageByConversationId(conversationId));
    }
 
    /*
@@ -148,12 +130,11 @@ public ResponseEntity<?> getNewMessagesByUserToken(
       @PathVariable String uuid,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (_permissionService.isUserTestUser(authToken)) {
-         _MessageStatusService.deleteMessageStatus(uuid);
-         return ResponseEntity.ok().body(_messageService.deleteMessage(uuid));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.isUserTestUser(authToken)) {
+         throw new UnauthorizedException();
+      }
+      _MessageStatusService.deleteMessageStatus(uuid);
+      return ResponseEntity.ok().body(_messageService.deleteMessage(uuid));
    }
 
    @Autowired

@@ -1,5 +1,6 @@
 package com.gege.ideas.messenger.image.controller;
 
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.image.constans.ImageConstans;
 import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.service.ImageService;
@@ -7,7 +8,6 @@ import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,41 +46,25 @@ public class ImageController {
    ) {
       switch (imageEntry.getTags()) {
          case ImageConstans.TAG_PROFILE:
-            if (
-               _permissionService.hasPermissionToUser(
-                  token,
-                  _userService.getTokenById(imageEntry.getUserId())
-               )
-            ) {
-               Resource resourceFile = imageService.addImage(file, imageEntry);
-
-               return ResponseEntity
-                  .ok()
-                  .contentType(MediaType.IMAGE_JPEG)
-                  .body(resourceFile);
-            } else return ResponseEntity
-               .status(HttpStatus.UNAUTHORIZED)
-               .body("Unauthorized");
-         case ImageConstans.TAG_MESSAGE:
-            if (
-               _permissionService.hasPermissionToConversation(
-                  token,
-                  imageEntry.getConversationId()
-               )
-            ) {
-               Resource resourceFile = imageService.addImage(file, imageEntry);
-
-               return ResponseEntity
-                  .ok()
-                  .contentType(MediaType.IMAGE_JPEG)
-                  .body(resourceFile);
-            } else return ResponseEntity
-               .status(HttpStatus.UNAUTHORIZED)
-               .body("Unauthorized");
-         default:
+            if (!_permissionService.hasPermissionToUser(token, _userService.getTokenById(imageEntry.getUserId()))) {
+               throw new UnauthorizedException();
+            }
+            Resource resourceFile = imageService.addImage(file, imageEntry);
             return ResponseEntity
-               .status(HttpStatus.BAD_REQUEST)
-               .body("Unknown image tag");
+               .ok()
+               .contentType(MediaType.IMAGE_JPEG)
+               .body(resourceFile);
+         case ImageConstans.TAG_MESSAGE:
+            if (!_permissionService.hasPermissionToConversation(token, imageEntry.getConversationId())) {
+               throw new UnauthorizedException();
+            }
+            Resource resourceFile2 = imageService.addImage(file, imageEntry);
+            return ResponseEntity
+               .ok()
+               .contentType(MediaType.IMAGE_JPEG)
+               .body(resourceFile2);
+         default:
+            throw new IllegalArgumentException("Unknown image tag");
       }
    }
 
@@ -106,24 +90,18 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       @PathVariable Long userId,
       @RequestHeader("Authorization") String token
    ) {
-      try {
-         if (_permissionService.isUserRegistered(token)) {
-            Resource file = imageService.getImageAsResourceByUserID(userId);
-
-            if (file.exists()) {
-               return ResponseEntity
-                  .ok()
-                  .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-                  .body(file);
-            } else {
-               return ResponseEntity.notFound().build();
-            }
-         } else return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Unauthorized");
-      } catch (Exception e) {
-         return ResponseEntity.badRequest().build();
+      if (!_permissionService.isUserRegistered(token)) {
+         throw new UnauthorizedException();
       }
+      Resource file = imageService.getImageAsResourceByUserID(userId);
+
+      if (!file.exists()) {
+         return ResponseEntity.notFound().build();
+      }
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.IMAGE_JPEG)
+         .body(file);
    }
 
    @GetMapping("/uuid/{uuid}")
@@ -131,23 +109,17 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       @PathVariable String uuid,
       @RequestHeader("Authorization") String token
    ) {
-      try {
-         if (_permissionService.isUserRegistered(token)) {
-            Resource file = imageService.getImageAsResourceByUUID(uuid);
-
-            if (file.exists()) {
-               return ResponseEntity
-                  .ok()
-                  .contentType(MediaType.IMAGE_JPEG) // or MediaType.IMAGE_PNG depending on your image type
-                  .body(file);
-            } else {
-               return ResponseEntity.notFound().build();
-            }
-         } else return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Unauthorized");
-      } catch (Exception e) {
-         return ResponseEntity.badRequest().build();
+      if (!_permissionService.isUserRegistered(token)) {
+         throw new UnauthorizedException();
       }
+      Resource file = imageService.getImageAsResourceByUUID(uuid);
+
+      if (!file.exists()) {
+         return ResponseEntity.notFound().build();
+      }
+      return ResponseEntity
+         .ok()
+         .contentType(MediaType.IMAGE_JPEG)
+         .body(file);
    }
 }

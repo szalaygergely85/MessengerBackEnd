@@ -2,10 +2,10 @@ package com.gege.ideas.messenger.contacts.controller;
 
 import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,15 +33,12 @@ public class ContactsController {
       @RequestHeader("Authorization") String authToken,
       @RequestParam("count") int count
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(
-               contactsService.getContactsAndCompareWithLocal(authToken, count)
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(contactsService.getContactsAndCompareWithLocal(authToken, count));
    }
 
    @DeleteMapping("/delete-contact")
@@ -49,13 +46,12 @@ public class ContactsController {
       @RequestParam("ContactUserId") Long userId,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.hasPermissionToDeleteContact(authToken, userId)) {
-         return ResponseEntity
-            .ok()
-            .body(contactsService.deleteContact(authToken, userId));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.hasPermissionToDeleteContact(authToken, userId)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(contactsService.deleteContact(authToken, userId));
    }
 
    @GetMapping("/get-contact/{id}")
@@ -63,24 +59,20 @@ public class ContactsController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity.ok().body(contactsService.getContactById(id));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(contactsService.getContactById(id));
    }
 
    @GetMapping("/get-contacts")
    public ResponseEntity<?> searchContacts(
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(contactsService.getContacts(authToken));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(contactsService.getContacts(authToken));
    }
 
    @PostMapping("/add-contact")
@@ -88,15 +80,9 @@ public class ContactsController {
       @RequestBody Contact contact,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (
-         permissionService.hasPermissionToAddContact(
-            authToken,
-            contact.getOwnerId()
-         )
-      ) {
-         return ResponseEntity.ok().body(contactsService.addContact(contact));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(contactsService.addContact(contact));
    }
 }

@@ -1,12 +1,12 @@
 package com.gege.ideas.messenger.message.controller;
 
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.message.entity.Message;
 import com.gege.ideas.messenger.message.entity.MessageStatus;
 import com.gege.ideas.messenger.message.service.MessageService;
 import com.gege.ideas.messenger.message.service.MessageStatusService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +19,12 @@ public class MessageStatusController {
       @RequestBody MessageStatus messageStatus,
       @RequestHeader("Authorization") String token
    ) {
-      if (
-         _permissionService.hasPermissionToMessage(
-            _messageService.getMessageByUUID(messageStatus.getUuid()),
-            token
-         )
-      ) {
-         return ResponseEntity
-            .ok()
-            .body(_messageStatusService.createPendingMessage(messageStatus));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.hasPermissionToMessage(_messageService.getMessageByUUID(messageStatus.getUuid()), token)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(_messageStatusService.createPendingMessage(messageStatus));
    }
 
    @PostMapping("/{uuid}/delivered")
@@ -39,21 +33,14 @@ public class MessageStatusController {
       @RequestHeader("Authorization") String authToken
    ) {
       Message message = _messageService.getMessageByUUID(uuid);
-      if (message != null) {
-         if (
-            _permissionService.hasPermissionToMessage(
-               _messageService.getMessageByUUID(uuid),
-               authToken
-            )
-         ) {
-            _messageStatusService.markMessageAsDelivered(uuid, authToken);
-            return ResponseEntity.noContent().build(); // 204 No Content
-         } else return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Unauthorized");
-      } else return ResponseEntity
-         .status(HttpStatus.NO_CONTENT)
-         .body("No message");
+      if (message == null) {
+         return ResponseEntity.noContent().build();
+      }
+      if (!_permissionService.hasPermissionToMessage(message, authToken)) {
+         throw new UnauthorizedException();
+      }
+      _messageStatusService.markMessageAsDelivered(uuid, authToken);
+      return ResponseEntity.noContent().build();
    }
 
    @PostMapping("/{uuid}/status-delivered")
@@ -62,21 +49,14 @@ public class MessageStatusController {
       @RequestHeader("Authorization") String authToken
    ) {
       Message message = _messageService.getMessageByUUID(uuid);
-      if (message != null) {
-         if (
-            _permissionService.hasPermissionToMessage(
-               _messageService.getMessageByUUID(uuid),
-               authToken
-            )
-         ) {
-            _messageStatusService.markMessageStatusAsDelivered(uuid, authToken);
-            return ResponseEntity.noContent().build(); // 204 No Content
-         } else return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Unauthorized");
-      } else return ResponseEntity
-         .status(HttpStatus.NO_CONTENT)
-         .body("No message");
+      if (message == null) {
+         return ResponseEntity.noContent().build();
+      }
+      if (!_permissionService.hasPermissionToMessage(message, authToken)) {
+         throw new UnauthorizedException();
+      }
+      _messageStatusService.markMessageStatusAsDelivered(uuid, authToken);
+      return ResponseEntity.noContent().build();
    }
 
    @PostMapping("/{uuid}/read")
@@ -85,39 +65,26 @@ public class MessageStatusController {
       @RequestHeader("Authorization") String authToken
    ) {
       Message message = _messageService.getMessageByUUID(uuid);
-      if (message != null) {
-         if (
-            _permissionService.hasPermissionToMessage(
-               _messageService.getMessageByUUID(uuid),
-               authToken
-            )
-         ) {
-            _messageStatusService.markMessageAsRead(uuid, authToken);
-            return ResponseEntity.noContent().build(); // 204 No Content
-         } else return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Unauthorized");
-      } else return ResponseEntity
-         .status(HttpStatus.NO_CONTENT)
-         .body("No message");
+      if (message == null) {
+         return ResponseEntity.noContent().build();
+      }
+      if (!_permissionService.hasPermissionToMessage(message, authToken)) {
+         throw new UnauthorizedException();
+      }
+      _messageStatusService.markMessageAsRead(uuid, authToken);
+      return ResponseEntity.noContent().build();
    }
 
    @GetMapping("get-messages-status/not-delivered")
    public ResponseEntity<?> getNotDeliveredMessages(
       @RequestHeader("Authorization") String authToken
    ) {
-      if (_permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(
-               _messageStatusService.getMessageStatusByDelivered(
-                  authToken,
-                  false
-               )
-            );
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!_permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity
+         .ok()
+         .body(_messageStatusService.getMessageStatusByDelivered(authToken, false));
    }
 
    @Autowired

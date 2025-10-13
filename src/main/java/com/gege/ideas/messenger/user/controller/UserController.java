@@ -1,14 +1,14 @@
 package com.gege.ideas.messenger.user.controller;
 
 import com.gege.ideas.messenger.DTO.LoginRequest;
+import com.gege.ideas.messenger.exception.ResourceAlreadyExistsException;
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import com.gege.ideas.messenger.utils.DateTimeUtil;
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +35,10 @@ public class UserController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserTestUser(authToken)) {
-         return ResponseEntity.ok().body(userService.deleteUser(id));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserTestUser(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.deleteUser(id));
    }
 
    @DeleteMapping("remove-user/email/{email}")
@@ -47,25 +46,19 @@ public class UserController {
       @PathVariable String email,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserTestUser(authToken)) {
-         return ResponseEntity.ok().body(userService.deleteUser(email));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserTestUser(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.deleteUser(email));
    }
 
    @PostMapping
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
       User localUser = userService.addUser(user);
-      if (localUser != null) {
-         return ResponseEntity.ok().body(localUser);
-      } else {
-         Map<String, String> errorResponse = new HashMap<>();
-         errorResponse.put("error", "Email address already in registered");
-         return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body(errorResponse);
+      if (localUser == null) {
+         throw new ResourceAlreadyExistsException("Email address already registered");
       }
+      return ResponseEntity.ok().body(localUser);
    }
 
    @GetMapping("/id/{id}")
@@ -73,11 +66,10 @@ public class UserController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity.ok().body(userService.getUserById(id));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.getUserById(id));
    }
 
    @GetMapping("/search/{search}")
@@ -85,20 +77,18 @@ public class UserController {
       @PathVariable String search,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity.ok().body(userService.search(search));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.search(search));
    }
 
    @GetMapping("/token/{token}")
    public ResponseEntity<?> getUserByToken(@PathVariable String token) {
-      if (permissionService.isUserRegistered(token)) {
-         return ResponseEntity.ok().body(userService.getUserByToken(token));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(token)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.getUserByToken(token));
    }
 
    @GetMapping("/publickey/{userId}")
@@ -106,13 +96,10 @@ public class UserController {
       @PathVariable Long userId,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.isUserRegistered(authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(userService.getPublicKeyByToken(userId));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.getPublicKeyByToken(userId));
    }
 
    @PatchMapping
@@ -120,11 +107,10 @@ public class UserController {
       @RequestBody User user,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (permissionService.hasPermissionToUser(user.getToken(), authToken)) {
-         return ResponseEntity.ok().body(userService.updateUser(user));
-      } else return ResponseEntity
-         .status(HttpStatus.UNAUTHORIZED)
-         .body("Unauthorized");
+      if (!permissionService.hasPermissionToUser(user.getToken(), authToken)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(userService.updateUser(user));
    }
 
    @PostMapping(value = "/login")
@@ -133,15 +119,10 @@ public class UserController {
          loginRequest.getEmail(),
          loginRequest.getPassword()
       );
-      if (user != null) {
-         return ResponseEntity.ok().body(user);
-      } else {
-         Map<String, String> errorResponse = new HashMap<>();
-         errorResponse.put("error", "Invalid email or password");
-         return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body(errorResponse);
+      if (user == null) {
+         throw new UnauthorizedException("Invalid email or password");
       }
+      return ResponseEntity.ok().body(user);
    }
 
    @PostMapping(value = "/forgot-password")
@@ -166,23 +147,22 @@ public class UserController {
    }
 
    @PostMapping(value = "/change-password")
-   public ResponseEntity<?> forgotPassword(
+   public ResponseEntity<?> changePassword(
       @RequestParam("old-pass") String oldPassword,
       @RequestParam("new-pass") String newPassword,
       @RequestHeader("Authorization") String authToken
    ) {
       User user = userService.getUserByToken(authToken);
-      if (user != null) {
-         if (user.getPassword().equals(oldPassword)) {
-            userService.changePassword(user.getUserId(), newPassword);
-         }
-
-         return ResponseEntity.status(HttpStatus.OK).build();
+      if (user == null) {
+         throw new UnauthorizedException("Invalid authentication token");
       }
 
-      Map<String, String> errorResponse = new HashMap<>();
-      errorResponse.put("error", "Invalid password");
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+      if (!user.getPassword().equals(oldPassword)) {
+         throw new UnauthorizedException("Invalid password");
+      }
+
+      userService.changePassword(user.getUserId(), newPassword);
+      return ResponseEntity.ok().build();
    }
 
    @GetMapping("/test")
