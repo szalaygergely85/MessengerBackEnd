@@ -32,9 +32,11 @@ public class ConversationsController {
       @RequestHeader("Authorization") String authToken
    ) {
       if (_permissionService.isInParticipants(participants, authToken)) {
-         return ResponseEntity
-            .ok()
-            .body(conversationService.addConversation(participants, authToken));
+         if (participants.size()>1) {
+            return ResponseEntity
+                    .ok()
+                    .body(conversationService.addConversation(participants, authToken));
+         }else return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No conversation participants arrived");
       } else return ResponseEntity
          .status(HttpStatus.UNAUTHORIZED)
          .body("Unauthorized");
