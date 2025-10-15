@@ -1,8 +1,8 @@
 package com.gege.ideas.messenger.contacts.service;
 
+import com.gege.ideas.messenger.DTO.ContactsDTO;
 import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.repository.ContactsRepository;
-import com.gege.ideas.messenger.dto.ContactsDTO;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.ArrayList;

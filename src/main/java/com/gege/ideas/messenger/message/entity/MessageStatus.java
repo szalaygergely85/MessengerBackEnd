@@ -1,6 +1,6 @@
 package com.gege.ideas.messenger.message.entity;
 
-import com.gege.ideas.messenger.message.constants.MessageConstans;
+import com.gege.ideas.messenger.message.constans.MessageConstans;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashMap;

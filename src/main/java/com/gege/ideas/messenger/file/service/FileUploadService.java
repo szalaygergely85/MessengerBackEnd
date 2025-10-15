@@ -21,27 +21,10 @@ public class FileUploadService {
 
    // Allowed file extensions for security
    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
-      "jpg",
-      "jpeg",
-      "png",
-      "gif",
-      "bmp",
-      "webp", // Images
-      "pdf",
-      "doc",
-      "docx",
-      "txt",
-      "xls",
-      "xlsx", // Documents
-      "mp4",
-      "avi",
-      "mov",
-      "mkv",
-      "webm", // Videos
-      "mp3",
-      "wav",
-      "ogg",
-      "m4a" // Audio
+      "jpg", "jpeg", "png", "gif", "bmp", "webp",  // Images
+      "pdf", "doc", "docx", "txt", "xls", "xlsx",  // Documents
+      "mp4", "avi", "mov", "mkv", "webm",          // Videos
+      "mp3", "wav", "ogg", "m4a"                   // Audio
    );
 
    @Value("${spring.servlet.multipart.max-file-size:50MB}")
@@ -64,14 +47,8 @@ public class FileUploadService {
       }
 
       // Check for path traversal attempts
-      if (
-         filename.contains("..") ||
-         filename.contains("/") ||
-         filename.contains("\\")
-      ) {
-         throw new SecurityException(
-            "Invalid filename: path traversal attempt detected"
-         );
+      if (filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
+         throw new SecurityException("Invalid filename: path traversal attempt detected");
       }
 
       // Check for null bytes
@@ -83,8 +60,7 @@ public class FileUploadService {
       String extension = getFileExtension(filename).toLowerCase();
       if (!ALLOWED_EXTENSIONS.contains(extension)) {
          throw new IllegalArgumentException(
-            "File type not allowed. Allowed types: " +
-            String.join(", ", ALLOWED_EXTENSIONS)
+            "File type not allowed. Allowed types: " + String.join(", ", ALLOWED_EXTENSIONS)
          );
       }
    }
@@ -108,9 +84,7 @@ public class FileUploadService {
 
          // Validate file size (Spring already enforces max-file-size, but double check)
          if (file.getSize() > 50 * 1024 * 1024) { // 50MB
-            throw new IllegalArgumentException(
-               "File size exceeds maximum allowed size of 50MB"
-            );
+            throw new IllegalArgumentException("File size exceeds maximum allowed size of 50MB");
          }
 
          // Validate filename
@@ -119,18 +93,13 @@ public class FileUploadService {
 
          // Validate content type
          String contentType = file.getContentType();
-         if (
-            contentType == null ||
-            (!contentType.startsWith("image/") &&
-               !contentType.startsWith("video/") &&
-               !contentType.startsWith("audio/") &&
-               !contentType.equals("application/pdf") &&
-               !contentType.startsWith("application/vnd.") &&
-               !contentType.equals("text/plain"))
-         ) {
-            throw new IllegalArgumentException(
-               "Invalid content type: " + contentType
-            );
+         if (contentType == null || (!contentType.startsWith("image/") &&
+             !contentType.startsWith("video/") &&
+             !contentType.startsWith("audio/") &&
+             !contentType.equals("application/pdf") &&
+             !contentType.startsWith("application/vnd.") &&
+             !contentType.equals("text/plain"))) {
+            throw new IllegalArgumentException("Invalid content type: " + contentType);
          }
 
          Path userFolderPath =
@@ -168,16 +137,11 @@ public class FileUploadService {
          validateFilename(filename);
 
          Path userFolderPath = rootLocation.resolve(userFolder).normalize();
-         Path file = userFolderPath
-            .resolve(filename)
-            .normalize()
-            .toAbsolutePath();
+         Path file = userFolderPath.resolve(filename).normalize().toAbsolutePath();
 
          // Ensure the resolved path is still within the allowed directory
          if (!file.startsWith(userFolderPath.toAbsolutePath())) {
-            throw new SecurityException(
-               "Cannot access file outside user directory"
-            );
+            throw new SecurityException("Cannot access file outside user directory");
          }
 
          Resource resource = new UrlResource(file.toUri());
