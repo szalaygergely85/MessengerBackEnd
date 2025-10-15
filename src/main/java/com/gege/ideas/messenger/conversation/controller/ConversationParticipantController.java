@@ -36,7 +36,11 @@ public class ConversationParticipantController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationParticipantsService.addConversationParticipants(participants));
+         .body(
+            conversationParticipantsService.addConversationParticipants(
+               participants
+            )
+         );
    }
 
    @GetMapping("get-participants")
@@ -49,6 +53,11 @@ public class ConversationParticipantController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationParticipantsService.getParticipants(authToken, conversationId));
+         .body(
+            conversationParticipantsService.getParticipants(
+               authToken,
+               conversationId
+            )
+         );
    }
 }

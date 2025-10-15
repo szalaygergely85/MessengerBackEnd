@@ -5,11 +5,8 @@ import com.gege.ideas.messenger.exception.BadRequestException;
 import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
-
-import java.util.IllegalFormatConversionException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,11 +35,11 @@ public class ConversationsController {
       if (!_permissionService.isInParticipants(participants, authToken)) {
          throw new UnauthorizedException();
       }
-              if (participants.size()>1) {
+      if (participants.size() > 1) {
          return ResponseEntity
-                 .ok()
-                 .body(conversationService.addConversation(participants, authToken));
-      }else throw new BadRequestException();
+            .ok()
+            .body(conversationService.addConversation(participants, authToken));
+      } else throw new BadRequestException();
    }
 
    @PostMapping("add-conversation/user-ids")
@@ -55,7 +52,9 @@ public class ConversationsController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationService.addConversationById(participantsId, authToken));
+         .body(
+            conversationService.addConversationById(participantsId, authToken)
+         );
    }
 
    @GetMapping("get-conversation/{id}")
@@ -81,7 +80,12 @@ public class ConversationsController {
       }
       return ResponseEntity
          .ok()
-         .body(conversationService.getConversationAndCompareWithLocal(count, authToken));
+         .body(
+            conversationService.getConversationAndCompareWithLocal(
+               count,
+               authToken
+            )
+         );
    }
 
    @GetMapping("get-conversations")

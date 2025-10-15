@@ -10,7 +10,6 @@ import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import java.util.List;
 import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +74,7 @@ public class PermissionService {
 
    public boolean isUserRegistered(String authToken) {
       User user = userService.getUserByToken(authToken);
-       return user != null;
+      return user != null;
    }
 
    public boolean isInParticipants(List<User> participants, String authToken) {
@@ -113,7 +112,10 @@ public class PermissionService {
    }
 
    public boolean hasPermissionToMessage(Message message, String authToken) {
-       return hasPermissionToConversation(authToken, message.getConversationId());
+      return hasPermissionToConversation(
+         authToken,
+         message.getConversationId()
+      );
    }
 
    public boolean isUserTestUser(String authToken) {

@@ -38,7 +38,9 @@ public class ContactsController {
       }
       return ResponseEntity
          .ok()
-         .body(contactsService.getContactsAndCompareWithLocal(authToken, count));
+         .body(
+            contactsService.getContactsAndCompareWithLocal(authToken, count)
+         );
    }
 
    @DeleteMapping("/delete-contact")
@@ -80,7 +82,12 @@ public class ContactsController {
       @RequestBody Contact contact,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!permissionService.hasPermissionToAddContact(authToken, contact.getOwnerId())) {
+      if (
+         !permissionService.hasPermissionToAddContact(
+            authToken,
+            contact.getOwnerId()
+         )
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity.ok().body(contactsService.addContact(contact));

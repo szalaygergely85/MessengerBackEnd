@@ -19,7 +19,12 @@ public class MessageStatusController {
       @RequestBody MessageStatus messageStatus,
       @RequestHeader("Authorization") String token
    ) {
-      if (!_permissionService.hasPermissionToMessage(_messageService.getMessageByUUID(messageStatus.getUuid()), token)) {
+      if (
+         !_permissionService.hasPermissionToMessage(
+            _messageService.getMessageByUUID(messageStatus.getUuid()),
+            token
+         )
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity
@@ -84,7 +89,9 @@ public class MessageStatusController {
       }
       return ResponseEntity
          .ok()
-         .body(_messageStatusService.getMessageStatusByDelivered(authToken, false));
+         .body(
+            _messageStatusService.getMessageStatusByDelivered(authToken, false)
+         );
    }
 
    @Autowired

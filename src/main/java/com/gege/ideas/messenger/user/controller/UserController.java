@@ -56,7 +56,9 @@ public class UserController {
    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
       User localUser = userService.addUser(user);
       if (localUser == null) {
-         throw new ResourceAlreadyExistsException("Email address already registered");
+         throw new ResourceAlreadyExistsException(
+            "Email address already registered"
+         );
       }
       return ResponseEntity.ok().body(localUser);
    }

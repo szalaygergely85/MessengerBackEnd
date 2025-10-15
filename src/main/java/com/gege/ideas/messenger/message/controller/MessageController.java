@@ -21,7 +21,12 @@ public class MessageController {
       @RequestBody Message message,
       @RequestHeader("Authorization") String token
    ) {
-      if (!_permissionService.hasPermissionToConversation(token, message.getConversationId())) {
+      if (
+         !_permissionService.hasPermissionToConversation(
+            token,
+            message.getConversationId()
+         )
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity.ok().body(_messageService.addMessage(message));
@@ -34,7 +39,9 @@ public class MessageController {
       if (!_permissionService.isUserRegistered(authToken)) {
          throw new UnauthorizedException();
       }
-      return ResponseEntity.ok().body(_messageService.getNotDeliveredMessages(authToken));
+      return ResponseEntity
+         .ok()
+         .body(_messageService.getNotDeliveredMessages(authToken));
    }
 
    @GetMapping("/get-message/{uuid}")
@@ -55,7 +62,9 @@ public class MessageController {
       @RequestParam("conversationId") Long conversationId,
       @RequestParam(value = "timestamp", required = false) Long timestamp
    ) {
-      if (!_permissionService.hasPermissionToConversation(token, conversationId)) {
+      if (
+         !_permissionService.hasPermissionToConversation(token, conversationId)
+      ) {
          throw new UnauthorizedException();
       }
       List<MessageDTO> messageDTOS =
@@ -75,12 +84,16 @@ public class MessageController {
       @RequestHeader("Authorization") String token,
       @RequestParam("conversationId") Long conversationId
    ) {
-      if (!_permissionService.hasPermissionToConversation(token, conversationId)) {
+      if (
+         !_permissionService.hasPermissionToConversation(token, conversationId)
+      ) {
          throw new UnauthorizedException();
       }
       return ResponseEntity
          .ok()
-         .body(_messageService.getLatestMessageByConversationId(conversationId));
+         .body(
+            _messageService.getLatestMessageByConversationId(conversationId)
+         );
    }
 
    /*
