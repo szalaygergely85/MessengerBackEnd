@@ -6,6 +6,8 @@ import com.gege.ideas.messenger.image.entity.ImageEntry;
 import com.gege.ideas.messenger.image.service.ImageService;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -103,6 +105,16 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       if (!_permissionService.isUserRegistered(token)) {
          throw new UnauthorizedException();
       }
+      logger.info(
+         "getImage(\n" +
+         "      @PathVariable " +
+         userId +
+         ",\n" +
+         "      @RequestHeader(\"Authorization\") " +
+         token +
+         "\n" +
+         "   )"
+      );
       Resource file = imageService.getImageAsResourceByUserID(userId);
 
       if (!file.exists()) {
@@ -126,4 +138,6 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       }
       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
    }
+
+   public final Logger logger = LoggerFactory.getLogger(ImageController.class);
 }
