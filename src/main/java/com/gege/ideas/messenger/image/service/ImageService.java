@@ -74,14 +74,11 @@ public class ImageService {
    }
 
    public Resource getImageAsResourceByUserID(Long userId) {
-      logger.info("getImageAsResourceByUserID(" + userId + " )");
       User user = userService.getUserById(userId);
-      logger.info(
-         "getImageAsResourceByUserID: - " + user.getProfilePictureUuid()
-      );
-      logger.info("getImageAsResourceByUserID: - " + user.getDisplayName());
       String uuid = user.getProfilePictureUuid();
-      return getImageAsResourceByUUID(uuid);
+      if (uuid != null) {
+         return getImageAsResourceByUUID(uuid);
+      } else return null;
    }
 
    public Resource getImageAsResourceByUUID(String uuid) {
