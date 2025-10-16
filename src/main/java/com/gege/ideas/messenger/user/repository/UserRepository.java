@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
    User findByEmail(String email);
    User findByToken(String token);
+   User findByUserId(Long userId);
 
    @Query(
       "SELECT u FROM User u WHERE u.email LIKE %:searchText% OR u.displayName LIKE %:searchText%"
