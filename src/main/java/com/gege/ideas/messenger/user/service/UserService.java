@@ -12,6 +12,7 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -60,9 +61,9 @@ public class UserService {
    }
 
    public User getUserById(Long id) {
-      User user = userRepository.findByUserId(id);
-      if (user != null) {
-         return user;
+      Optional<User> userOptional = userRepository.findById(id);
+      if (userOptional.isPresent()) {
+         return userOptional.get();
       } else {
          return null;
       }
