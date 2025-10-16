@@ -79,7 +79,11 @@ public class ImageService {
 
    public Resource getImageAsResourceByUUID(String uuid) {
       ImageEntry imageEntry = imageRepository.findByUuid(uuid);
-      return getImageAsResource(imageEntry);
+      if (imageEntry != null) {
+         return getImageAsResource(imageEntry);
+      } else {
+         return null;
+      }
    }
 
    private void saveImage(MultipartFile file, ImageEntry imageEntry) {
