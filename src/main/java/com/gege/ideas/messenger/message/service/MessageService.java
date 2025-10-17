@@ -224,6 +224,7 @@ public class MessageService {
       } else {
          data.put("title", title);
       }
+      data.put("type", String.valueOf(message.getType()));
       notificationService.sendNotification(
          recipientUser.getUserId(),
          data,
