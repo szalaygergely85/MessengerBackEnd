@@ -163,6 +163,17 @@ public class UserService {
       return userRepository.findByEmail(email);
    }
 
+   public void sendDeleteAccountEmail(String email)
+      throws MessagingException, UnsupportedEncodingException {
+      User user = getUserByEmail(email);
+      Token token = tokenService.generateDeleteAccountToken(user.getUserId());
+      mailService.sendSimpleEmail(
+         user.getEmail(),
+         "Account Deletion Request",
+         _getDeleteAccountEmailBody(token.getToken())
+      );
+   }
+
    private String _getEmailBody(String token) {
       String body =
          " Hello, <br><br>We received a request to reset your password for your Zenvy account. <br><br>" +
@@ -171,6 +182,20 @@ public class UserService {
          token +
          "<br><br>" +
          "If you did not request a password reset, please ignore this email. Your account will remain secure.<br><br>" +
+         "Thank you,<br>The Zenvy Team";
+      return body;
+   }
+
+   private String _getDeleteAccountEmailBody(String token) {
+      String body =
+         " Hello, <br><br>We received a request to delete your Zenvy account. <br><br>" +
+         "<strong>IMPORTANT: This link will expire in 5 minutes.</strong><br><br>" +
+         "To confirm account deletion, please click the link below:<br>" +
+         "https://zen-vy.com/delete-account/" +
+         token +
+         "<br><br>" +
+         "<strong style='color: red;'>WARNING: This action is permanent and cannot be undone. All your data, messages, and contacts will be permanently deleted.</strong><br><br>" +
+         "If you did not request account deletion, please ignore this email and your account will remain secure.<br><br>" +
          "Thank you,<br>The Zenvy Team";
       return body;
    }

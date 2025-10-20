@@ -21,7 +21,7 @@
     <div class="form-container">
         <h2 class="form-title">Delete Account</h2>
 
-        <form id="delete-request-form" class="form" action="${pageContext.request.contextPath}/delete-request"
+        <form id="delete-request-form" class="form" action="${pageContext.request.contextPath}/request-account-deletion"
               method="post">
 
             <div class="input-group">
@@ -39,10 +39,10 @@
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Passord"
+                        placeholder="Password"
                         required
                 >
-                <button type="button" class="toggle-password" data-target="confirmPassword">
+                <button type="button" class="toggle-password" data-target="password">
                     <svg width="20" height="20">
                         <use href="#eye-icon"/>
                     </svg>

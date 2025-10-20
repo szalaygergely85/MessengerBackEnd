@@ -44,4 +44,22 @@ public class TokenService {
       }
       return token;
    }
+
+   public Token generateDeleteAccountToken(long userId) {
+      // Always generate a new token for account deletion
+      Token token = tokenRepository.save(
+         new Token(
+            userId,
+            TokenType.DELETE_ACCOUNT,
+            UUID.randomUUID().toString(),
+            System.currentTimeMillis(),
+            true
+         )
+      );
+      return token;
+   }
+
+   public void saveToken(Token token) {
+      tokenRepository.save(token);
+   }
 }
