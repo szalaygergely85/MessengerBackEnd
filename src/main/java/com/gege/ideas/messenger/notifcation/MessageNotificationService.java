@@ -29,7 +29,6 @@ public class MessageNotificationService implements NotificationService {
       Map<String, String> data,
       long conversationId
    ) {
-      data.put("type", "message");
       data.put("conversationId", String.valueOf(conversationId));
       if (data.get("title") == null) {
          data.put("title", "Unknown");
