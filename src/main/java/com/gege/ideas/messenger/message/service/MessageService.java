@@ -225,6 +225,8 @@ public class MessageService {
          data.put("title", title);
       }
 
+      data.put("timestamp", String.valueOf(message.getTimestamp()));
+
       data.put("conversationId", String.valueOf(message.getConversationId()));
 
       data.put("type", String.valueOf(message.getType()));
