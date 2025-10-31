@@ -121,6 +121,14 @@ public class UserController {
          loginRequest.getEmail(),
          loginRequest.getPassword()
       );
+
+      System.out.println("🔍 Using email: " + loginRequest.getEmail());
+      System.out.println(
+         "🔍 Password length: " +
+         (loginRequest.getPassword() != null
+               ? loginRequest.getPassword().length()
+               : "null")
+      );
       if (user == null) {
          throw new UnauthorizedException("Invalid email or password");
       }
