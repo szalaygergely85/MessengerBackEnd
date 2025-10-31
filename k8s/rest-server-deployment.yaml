@@ -39,6 +39,56 @@ spec:
                 secretKeyRef:
                   name: rest-server-secret
                   key: SPRING_DATASOURCE_PASSWORD
+            - name: SYSTEM_USER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: system-user-email
+            - name: SYSTEM_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: system-user-password
+            - name: SYSTEM_USER_DISPLAY_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: system-user-display-name
+            - name: SYSTEM_USER_UUID
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: system-user-uuid
+            - name: SYSTEM_USER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: system-user-token
+            - name: ADMIN_USER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: admin-user-email
+            - name: ADMIN_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: admin-user-password
+            - name: ADMIN_USER_DISPLAY_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: admin-user-display-name
+            - name: ADMIN_USER_UUID
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: admin-user-uuid
+            - name: ADMIN_USER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: rest-server-secret
+                  key: admin-user-token
           volumeMounts:
             - name: firebase-credentials
               mountPath: /app/config/serviceAccountKey.json
