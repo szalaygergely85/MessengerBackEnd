@@ -67,6 +67,18 @@ jobs:
             -e SPRING_PROFILES_ACTIVE=test \
             -e SMTP_USERNAME=${SMTP_USERNAME} \
             -e SMTP_PASSWORD=${SMTP_PASSWORD} \
+            -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME} \
+            -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD} \
+            -e SYSTEM_USER_EMAIL=${SYSTEM_USER_EMAIL} \
+            -e SYSTEM_USER_PASSWORD=${SYSTEM_USER_PASSWORD} \
+            -e SYSTEM_USER_DISPLAY_NAME=${SYSTEM_USER_DISPLAY_NAME} \
+            -e SYSTEM_USER_UUID=${SYSTEM_USER_UUID} \
+            -e SYSTEM_USER_TOKEN=${SYSTEM_USER_TOKEN} \
+            -e ADMIN_USER_EMAIL=${ADMIN_USER_EMAIL} \
+            -e ADMIN_USER_PASSWORD=${ADMIN_USER_PASSWORD} \
+            -e ADMIN_USER_DISPLAY_NAME=${ADMIN_USER_DISPLAY_NAME} \
+            -e ADMIN_USER_UUID=${ADMIN_USER_UUID} \
+            -e ADMIN_USER_TOKEN=${ADMIN_USER_TOKEN} \
             --network my-network \
             -p 8080:8080 \
             gery12492/rest-server:1.0.0
@@ -75,3 +87,15 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SYSTEM_USER_EMAIL: ${{ secrets.SYSTEM_USER_EMAIL }}
+          SYSTEM_USER_PASSWORD: ${{ secrets.SYSTEM_USER_PASSWORD }}
+          SYSTEM_USER_DISPLAY_NAME: ${{ secrets.SYSTEM_USER_DISPLAY_NAME }}
+          SYSTEM_USER_UUID: ${{ secrets.SYSTEM_USER_UUID }}
+          SYSTEM_USER_TOKEN: ${{ secrets.SYSTEM_USER_TOKEN }}
+          ADMIN_USER_EMAIL: ${{ secrets.ADMIN_USER_EMAIL }}
+          ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASSWORD }}
+          ADMIN_USER_DISPLAY_NAME: ${{ secrets.ADMIN_USER_DISPLAY_NAME }}
+          ADMIN_USER_UUID: ${{ secrets.ADMIN_USER_UUID }}
+          ADMIN_USER_TOKEN: ${{ secrets.ADMIN_USER_TOKEN }}

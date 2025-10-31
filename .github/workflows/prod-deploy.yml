@@ -65,6 +65,16 @@ jobs:
             --from-literal=SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
             --from-literal=smtp-username=${{ secrets.SMTP_USERNAME }} \
             --from-literal=smtp-password=${{ secrets.SMTP_PASSWORD }} \
+            --from-literal=system-user-email=${{ secrets.SYSTEM_USER_EMAIL }} \
+            --from-literal=system-user-password=${{ secrets.SYSTEM_USER_PASSWORD }} \
+            --from-literal=system-user-display-name=${{ secrets.SYSTEM_USER_DISPLAY_NAME }} \
+            --from-literal=system-user-uuid=${{ secrets.SYSTEM_USER_UUID }} \
+            --from-literal=system-user-token=${{ secrets.SYSTEM_USER_TOKEN }} \
+            --from-literal=admin-user-email=${{ secrets.ADMIN_USER_EMAIL }} \
+            --from-literal=admin-user-password=${{ secrets.ADMIN_USER_PASSWORD }} \
+            --from-literal=admin-user-display-name=${{ secrets.ADMIN_USER_DISPLAY_NAME }} \
+            --from-literal=admin-user-uuid=${{ secrets.ADMIN_USER_UUID }} \
+            --from-literal=admin-user-token=${{ secrets.ADMIN_USER_TOKEN }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Create Kubernetes Secret from Firebase credentials
