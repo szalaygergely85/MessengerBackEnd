@@ -1,6 +1,5 @@
 package com.gege.ideas.messenger.permission.service;
 
-import com.gege.ideas.messenger.config.SystemUserInitializer;
 import com.gege.ideas.messenger.contacts.entity.Contact;
 import com.gege.ideas.messenger.contacts.service.ContactsService;
 import com.gege.ideas.messenger.conversation.service.ConversationParticipantsService;
@@ -19,6 +18,7 @@ public class PermissionService {
 
    @Value("${system.user.uuid}")
    private String systemUuid;
+
    private final MessageRepository messageRepository;
    private final ContactsService contactsService;
    private final UserService userService;
