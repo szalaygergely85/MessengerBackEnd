@@ -11,11 +11,14 @@ import com.gege.ideas.messenger.user.service.UserService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionService {
 
+   @Value("${system.user.uuid}")
+   private String systemUuid;
    private final MessageRepository messageRepository;
    private final ContactsService contactsService;
    private final UserService userService;
@@ -119,7 +122,7 @@ public class PermissionService {
    }
 
    public boolean isUserTestUser(String authToken) {
-      return authToken.equals(SystemUserInitializer.TEST_UUID);
+      return authToken.equals(systemUuid);
    }
 
    public boolean hasPermissionToSendAsUser(String authToken, Long senderId) {
