@@ -3,6 +3,7 @@ package com.gege.ideas.messenger.config;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.user.service.UserService;
+import com.gege.ideas.messenger.utils.HashUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -71,7 +72,7 @@ public class SystemUserInitializer {
       if (!userRepository.existsByEmail(adminEmail)) {
          User adminUser = new User();
          adminUser.setEmail(adminEmail);
-         adminUser.setPassword(adminPassword);
+         adminUser.setPassword(HashUtil.hashPassword(adminPassword));
          adminUser.setDisplayName(adminDisplayName);
          adminUser.setUuid(adminUuid);
          adminUser.setToken(adminToken);
