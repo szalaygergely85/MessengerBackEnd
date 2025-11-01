@@ -121,8 +121,39 @@ public class UserService {
    }
 
    public User updateUser(User user) {
-      user.setLastUpdated(System.currentTimeMillis());
-      return userRepository.save(user);
+      User existingUser = getUserById(user.getUserId());
+      if (existingUser == null) {
+         return null;
+      }
+
+      // Only update non-null fields
+      if (user.getDisplayName() != null) {
+         existingUser.setDisplayName(user.getDisplayName());
+      }
+      if (user.getEmail() != null) {
+         existingUser.setEmail(user.getEmail());
+      }
+      if (user.getPassword() != null) {
+         existingUser.setPassword(user.getPassword());
+      }
+      if (user.getPublicKey() != null) {
+         existingUser.setPublicKey(user.getPublicKey());
+      }
+      if (user.getProfilePictureUuid() != null) {
+         existingUser.setProfilePictureUuid(user.getProfilePictureUuid());
+      }
+      if (user.getStatus() != null) {
+         existingUser.setStatus(user.getStatus());
+      }
+      if (user.getTags() != null) {
+         existingUser.setTags(user.getTags());
+      }
+      if (user.getToken() != null) {
+         existingUser.setToken(user.getToken());
+      }
+
+      existingUser.setLastUpdated(System.currentTimeMillis());
+      return userRepository.save(existingUser);
    }
 
    public List<User> search(String search) {
