@@ -141,4 +141,12 @@ public class PermissionService {
 
       return isUserTestUser(authToken) || user.getToken().equals(authToken);
    }
+
+   public boolean hasPermissionToDeleteMessage(String authToken, String uuid) {
+      User user = userService.getUserByToken(authToken);
+      Message message = messageRepository.findByUuid(uuid);
+      return (
+         message.getSenderId() == user.getUserId() || isUserTestUser(authToken)
+      );
+   }
 }

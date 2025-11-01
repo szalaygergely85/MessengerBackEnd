@@ -143,7 +143,7 @@ public ResponseEntity<?> getNewMessagesByUserToken(
       @PathVariable String uuid,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!_permissionService.isUserTestUser(authToken)) {
+      if (!_permissionService.hasPermissionToDeleteMessage(authToken, uuid)) {
          throw new UnauthorizedException();
       }
       _MessageStatusService.deleteMessageStatus(uuid);
