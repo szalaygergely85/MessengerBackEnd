@@ -129,4 +129,16 @@ public class PermissionService {
       User user = userService.getUserByToken(authToken);
       return user != null && user.getUserId().equals(senderId);
    }
+
+   public boolean hasPermissionToDeleteUser(String authToken, Long id) {
+      User user = userService.getUserById(id);
+
+      return isUserTestUser(authToken) || user.getUserId().equals(id);
+   }
+
+   public boolean hasPermissionToDeleteUser(String authToken, String email) {
+      User user = userService.getUserByEmail(email);
+
+      return isUserTestUser(authToken) || user.getToken().equals(authToken);
+   }
 }

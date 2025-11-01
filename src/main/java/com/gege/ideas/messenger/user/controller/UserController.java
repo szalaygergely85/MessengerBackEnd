@@ -35,10 +35,11 @@ public class UserController {
       @PathVariable Long id,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!permissionService.isUserTestUser(authToken)) {
+      if (permissionService.hasPermissionToDeleteUser(authToken, id)) {
+         return ResponseEntity.ok().body(userService.deleteUser(id));
+      } else {
          throw new UnauthorizedException();
       }
-      return ResponseEntity.ok().body(userService.deleteUser(id));
    }
 
    @DeleteMapping("remove-user/email/{email}")
@@ -46,7 +47,7 @@ public class UserController {
       @PathVariable String email,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!permissionService.isUserTestUser(authToken)) {
+      if (!permissionService.hasPermissionToDeleteUser(authToken, email)) {
          throw new UnauthorizedException();
       }
       return ResponseEntity.ok().body(userService.deleteUser(email));
