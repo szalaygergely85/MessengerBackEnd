@@ -63,7 +63,9 @@ public class ConversationParticipantsService {
          User user = userService.getUserById(
             conversationParticipant.getUserId()
          );
-         users.add(user);
+         if (user != null) {
+            users.add(user);
+         }
       }
       return users;
    }

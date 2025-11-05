@@ -70,14 +70,22 @@ public class ConversationService {
    }
 
    public ConversationDTO getConversationDTOById(Long conversationId) {
-      return new ConversationDTO(
-         getConversationById(conversationId),
+      List<ConversationParticipant> conversationParticipants =
          conversationParticipantsService.getParticipantsByConversationId(
             conversationId
-         ),
+         );
+
+      List<User> users =
          conversationParticipantsService.getUsersByConversationId(
             conversationId
-         ),
+         );
+      if (conversationParticipants.size() != users.size()) {
+         return null;
+      }
+      return new ConversationDTO(
+         getConversationById(conversationId),
+         conversationParticipants,
+         users,
          messageRepository.findTopByConversationIdOrderByTimestampDesc(
             conversationId
          )
@@ -185,7 +193,12 @@ public class ConversationService {
 
       List<ConversationDTO> conversationDTOS = new ArrayList<>();
       for (Long conversationId : conversationIds) {
-         conversationDTOS.add(getConversationDTOById(conversationId));
+         ConversationDTO conversationDTO = getConversationDTOById(
+            conversationId
+         );
+         if (conversationDTO != null) {
+            conversationDTOS.add(getConversationDTOById(conversationId));
+         }
       }
       return conversationDTOS;
    }
