@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,6 +41,17 @@ public class GlobalExceptionHandler {
       return ResponseEntity
          .status(HttpStatus.BAD_REQUEST)
          .body(Map.of("error", ex.getMessage()));
+   }
+
+   @ExceptionHandler(NoResourceFoundException.class)
+   public ResponseEntity<Map<String, String>> handleNoResource(
+      NoResourceFoundException ex
+   ) {
+      // Routine 404 — client hit a path that doesn't exist; not worth an ERROR log.
+      log.debug("No resource found: {}", ex.getMessage());
+      return ResponseEntity
+         .status(HttpStatus.NOT_FOUND)
+         .body(Map.of("error", "Not found"));
    }
 
    @ExceptionHandler(Exception.class)
