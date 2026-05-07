@@ -58,7 +58,9 @@ public class SystemUserInitializer {
       if (!userRepository.existsByEmail(systemEmail)) {
          User user = new User();
          user.setEmail(systemEmail);
-         user.setPassword(HashUtil.hashPassword(HashUtil.sha256(systemPassword)));
+         user.setPassword(
+            HashUtil.hashPassword(HashUtil.sha256(systemPassword))
+         );
          user.setDisplayName(systemDisplayName);
          user.setUuid(systemUuid);
          user.setToken(systemToken);
@@ -68,7 +70,9 @@ public class SystemUserInitializer {
       if (!userRepository.existsByEmail(adminEmail)) {
          User adminUser = new User();
          adminUser.setEmail(adminEmail);
-         adminUser.setPassword(HashUtil.hashPassword(HashUtil.sha256(adminPassword)));
+         adminUser.setPassword(
+            HashUtil.hashPassword(HashUtil.sha256(adminPassword))
+         );
          adminUser.setDisplayName(adminDisplayName);
          adminUser.setUuid(adminUuid);
          adminUser.setToken(adminToken);

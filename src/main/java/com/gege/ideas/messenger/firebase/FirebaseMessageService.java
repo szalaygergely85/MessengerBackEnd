@@ -11,35 +11,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class FirebaseMessageService {
 
-	private static final Logger log = LoggerFactory.getLogger(FirebaseMessageService.class);
+   private static final Logger log = LoggerFactory.getLogger(
+      FirebaseMessageService.class
+   );
 
-	public String sendDataMessage(String token, Map<String, String> data) {
-		try {
-			Message message = Message
-				.builder()
-				.setToken(token)
-				.putAllData(data)
-				.build();
-			return FirebaseMessaging.getInstance().send(message);
-		} catch (Exception e) {
-			log.error("Failed to send FCM data message to token {}", token, e);
-			return null;
-		}
-	}
+   public String sendDataMessage(String token, Map<String, String> data) {
+      try {
+         Message message = Message
+            .builder()
+            .setToken(token)
+            .putAllData(data)
+            .build();
+         return FirebaseMessaging.getInstance().send(message);
+      } catch (Exception e) {
+         log.error("Failed to send FCM data message to token {}", token, e);
+         return null;
+      }
+   }
 
-	public String sendMessage(String token, String title, String body) {
-		try {
-			Message message = Message
-				.builder()
-				.setToken(token)
-				.setNotification(
-					Notification.builder().setTitle(title).setBody(body).build()
-				)
-				.build();
-			return FirebaseMessaging.getInstance().send(message);
-		} catch (Exception e) {
-			log.error("Failed to send FCM notification to token {}", token, e);
-			return null;
-		}
-	}
+   public String sendMessage(String token, String title, String body) {
+      try {
+         Message message = Message
+            .builder()
+            .setToken(token)
+            .setNotification(
+               Notification.builder().setTitle(title).setBody(body).build()
+            )
+            .build();
+         return FirebaseMessaging.getInstance().send(message);
+      } catch (Exception e) {
+         log.error("Failed to send FCM notification to token {}", token, e);
+         return null;
+      }
+   }
 }

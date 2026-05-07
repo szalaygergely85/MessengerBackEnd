@@ -11,30 +11,42 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+   private static final Logger log = LoggerFactory.getLogger(
+      GlobalExceptionHandler.class
+   );
 
-	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<Map<String, String>> handleUnauthorized(UnauthorizedException ex) {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-			.body(Map.of("error", ex.getMessage()));
-	}
+   @ExceptionHandler(UnauthorizedException.class)
+   public ResponseEntity<Map<String, String>> handleUnauthorized(
+      UnauthorizedException ex
+   ) {
+      return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body(Map.of("error", ex.getMessage()));
+   }
 
-	@ExceptionHandler(ResourceAlreadyExistsException.class)
-	public ResponseEntity<Map<String, String>> handleConflict(ResourceAlreadyExistsException ex) {
-		return ResponseEntity.status(HttpStatus.CONFLICT)
-			.body(Map.of("error", ex.getMessage()));
-	}
+   @ExceptionHandler(ResourceAlreadyExistsException.class)
+   public ResponseEntity<Map<String, String>> handleConflict(
+      ResourceAlreadyExistsException ex
+   ) {
+      return ResponseEntity
+         .status(HttpStatus.CONFLICT)
+         .body(Map.of("error", ex.getMessage()));
+   }
 
-	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<Map<String, String>> handleBadRequest(BadRequestException ex) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-			.body(Map.of("error", ex.getMessage()));
-	}
+   @ExceptionHandler(BadRequestException.class)
+   public ResponseEntity<Map<String, String>> handleBadRequest(
+      BadRequestException ex
+   ) {
+      return ResponseEntity
+         .status(HttpStatus.BAD_REQUEST)
+         .body(Map.of("error", ex.getMessage()));
+   }
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
-		log.error("Unhandled exception", ex);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-			.body(Map.of("error", "An unexpected error occurred"));
-	}
+   @ExceptionHandler(Exception.class)
+   public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+      log.error("Unhandled exception", ex);
+      return ResponseEntity
+         .status(HttpStatus.INTERNAL_SERVER_ERROR)
+         .body(Map.of("error", "An unexpected error occurred"));
+   }
 }
