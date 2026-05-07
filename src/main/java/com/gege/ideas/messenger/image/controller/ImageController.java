@@ -117,7 +117,7 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       );
       Resource file = imageService.getImageAsResourceByUserID(userId);
 
-      if (!file.exists()) {
+      if (file == null || !file.exists()) {
          return ResponseEntity.notFound().build();
       }
       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
@@ -133,7 +133,7 @@ public ResponseEntity<Resource> getImage(@PathVariable String uuid) {
       }
       Resource file = imageService.getImageAsResourceByUUID(uuid);
 
-      if (!file.exists()) {
+      if (file == null || !file.exists()) {
          return ResponseEntity.notFound().build();
       }
       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
