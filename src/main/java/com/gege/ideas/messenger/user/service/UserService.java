@@ -7,6 +7,7 @@ import com.gege.ideas.messenger.tokens.TokenService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.repository.UserRepository;
 import com.gege.ideas.messenger.utils.FileUtil;
+import com.gege.ideas.messenger.utils.HashUtil;
 import com.gege.ideas.messenger.utils.TokenGeneratorUtil;
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -40,20 +41,35 @@ public class UserService {
 
    public User logInUser(String email, String password) {
       User user = userRepository.findByEmail(email);
+      if (user == null || user.getPassword() == null) return null;
 
-      if (user != null && user.getPassword().equals(password)) {
-         if (user.getToken() == null) {
-            user.setToken(TokenGeneratorUtil.generateNewToken());
-            return userRepository.save(user);
+      String stored = user.getPassword();
+      boolean valid;
+      if (stored.startsWith("$2")) {
+         valid = HashUtil.verifyPassword(password, stored);
+      } else {
+         // Legacy SHA-256 entry — verify then upgrade to BCrypt
+         valid = stored.equals(password);
+         if (valid) {
+            user.setPassword(HashUtil.hashPassword(password));
+            userRepository.save(user);
          }
-         return user;
       }
-      return null;
+
+      if (!valid) return null;
+      if (user.getToken() == null) {
+         user.setToken(TokenGeneratorUtil.generateNewToken());
+         return userRepository.save(user);
+      }
+      return user;
    }
 
    public User addUser(User user) throws Exception {
       if (userRepository.existsByEmail(user.getEmail())) {
          return null;
+      }
+      if (user.getPassword() != null) {
+         user.setPassword(HashUtil.hashPassword(user.getPassword()));
       }
       user.setToken(TokenGeneratorUtil.generateNewToken());
       user.setLastUpdated(System.currentTimeMillis());
@@ -71,7 +87,7 @@ public class UserService {
 
    public boolean changePassword(long userId, String password) {
       User user = getUserById(userId);
-      user.setPassword(password);
+      user.setPassword(HashUtil.hashPassword(password));
       _update(user);
       return true;
    }
@@ -134,7 +150,7 @@ public class UserService {
          existingUser.setEmail(user.getEmail());
       }
       if (user.getPassword() != null) {
-         existingUser.setPassword(user.getPassword());
+         existingUser.setPassword(HashUtil.hashPassword(user.getPassword()));
       }
       if (user.getPublicKey() != null) {
          existingUser.setPublicKey(user.getPublicKey());

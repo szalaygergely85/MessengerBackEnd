@@ -15,7 +15,6 @@ public class ContactsService {
 
    private ContactsRepository contactsRepository;
    private UserService userService;
-   List<User> contactUsers = new ArrayList<>();
 
    @Autowired
    public ContactsService(
@@ -28,6 +27,7 @@ public class ContactsService {
 
    public List<User> getContactUserByOwnerId(Long id) {
       List<Contact> contactList = contactsRepository.findByOwnerId(id);
+      List<User> contactUsers = new ArrayList<>();
       for (Contact contact : contactList) {
          User user = userService.getUserById(contact.getContactUserId());
          contactUsers.add(user);
@@ -77,6 +77,7 @@ public class ContactsService {
          return null;
       }
 
+      List<User> contactUsers = new ArrayList<>();
       for (Contact contact : contactList) {
          User user = userService.getUserById(contact.getContactUserId());
          contactUsers.add(user);

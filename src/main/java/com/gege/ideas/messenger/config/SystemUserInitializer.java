@@ -58,29 +58,21 @@ public class SystemUserInitializer {
       if (!userRepository.existsByEmail(systemEmail)) {
          User user = new User();
          user.setEmail(systemEmail);
-         user.setPassword(systemPassword);
+         user.setPassword(HashUtil.hashPassword(HashUtil.sha256(systemPassword)));
          user.setDisplayName(systemDisplayName);
          user.setUuid(systemUuid);
          user.setToken(systemToken);
          userRepository.save(user);
-
-         System.out.println("✅ System user created.");
-      } else {
-         System.out.println("ℹ️ System user already exists.");
       }
 
       if (!userRepository.existsByEmail(adminEmail)) {
          User adminUser = new User();
          adminUser.setEmail(adminEmail);
-         adminUser.setPassword(HashUtil.hashPassword(adminPassword));
+         adminUser.setPassword(HashUtil.hashPassword(HashUtil.sha256(adminPassword)));
          adminUser.setDisplayName(adminDisplayName);
          adminUser.setUuid(adminUuid);
          adminUser.setToken(adminToken);
          userRepository.save(adminUser);
-
-         System.out.println("✅ Admin user created.");
-      } else {
-         System.out.println("ℹ️ Admin user already exists.");
       }
    }
 }

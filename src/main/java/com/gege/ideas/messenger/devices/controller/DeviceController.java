@@ -2,6 +2,7 @@ package com.gege.ideas.messenger.devices.controller;
 
 import com.gege.ideas.messenger.devices.entity.Device;
 import com.gege.ideas.messenger.devices.service.DeviceService;
+import com.gege.ideas.messenger.exception.UnauthorizedException;
 import com.gege.ideas.messenger.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class DeviceController {
       @RequestBody Device device,
       @RequestHeader("Authorization") String authToken
    ) {
+      if (!permissionService.isUserRegistered(authToken)) {
+         throw new UnauthorizedException();
+      }
       return ResponseEntity.ok().body(deviceService.addDevice(device));
    }
 

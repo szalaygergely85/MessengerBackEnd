@@ -7,6 +7,7 @@ import com.gege.ideas.messenger.permission.service.PermissionService;
 import com.gege.ideas.messenger.user.entity.User;
 import com.gege.ideas.messenger.user.service.UserService;
 import com.gege.ideas.messenger.utils.DateTimeUtil;
+import com.gege.ideas.messenger.utils.HashUtil;
 import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,13 +124,6 @@ public class UserController {
          loginRequest.getPassword()
       );
 
-      System.out.println("🔍 Using email: " + loginRequest.getEmail());
-      System.out.println(
-         "🔍 Password length: " +
-         (loginRequest.getPassword() != null
-               ? loginRequest.getPassword().length()
-               : "null")
-      );
       if (user == null) {
          throw new UnauthorizedException("Invalid email or password");
       }
@@ -168,7 +162,7 @@ public class UserController {
          throw new UnauthorizedException("Invalid authentication token");
       }
 
-      if (!user.getPassword().equals(oldPassword)) {
+      if (!HashUtil.verifyPassword(oldPassword, user.getPassword())) {
          throw new UnauthorizedException("Invalid password");
       }
 
