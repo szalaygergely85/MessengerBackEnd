@@ -111,9 +111,11 @@ public class UserController {
       @RequestBody User user,
       @RequestHeader("Authorization") String authToken
    ) {
-      if (!permissionService.hasPermissionToUser(user.getToken(), authToken)) {
+      User authenticatedUser = userService.getUserByToken(authToken);
+      if (authenticatedUser == null) {
          throw new UnauthorizedException();
       }
+      user.setUserId(authenticatedUser.getUserId());
       return ResponseEntity.ok().body(userService.updateUser(user));
    }
 
