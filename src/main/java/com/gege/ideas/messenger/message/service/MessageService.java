@@ -100,6 +100,16 @@ public class MessageService {
       return messageRepository.save(message);
    }
 
+   public Message updateMessage(Message message) {
+      Message existing = messageRepository.findByUuid(message.getUuid());
+      if (existing == null) {
+         throw new RuntimeException("Message not found: " + message.getUuid());
+      }
+      existing.setContent(message.getContent());
+      existing.setEncrypted(message.isEncrypted());
+      return messageRepository.save(existing);
+   }
+
    public void deleteMessage(Message message) {
       messageRepository.delete(message);
    }

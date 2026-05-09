@@ -16,6 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/message")
 public class MessageController {
 
+   @PatchMapping("/update-message")
+   public ResponseEntity<?> updateMessage(
+      @RequestBody Message message,
+      @RequestHeader("Authorization") String token
+   ) {
+      Message existing = _messageService.getMessageByUUID(message.getUuid());
+      if (!_permissionService.hasPermissionToMessage(existing, token)) {
+         throw new UnauthorizedException();
+      }
+      return ResponseEntity.ok().body(_messageService.updateMessage(message));
+   }
+
    @PostMapping("/add-message")
    public ResponseEntity<?> addMessage(
       @RequestBody Message message,

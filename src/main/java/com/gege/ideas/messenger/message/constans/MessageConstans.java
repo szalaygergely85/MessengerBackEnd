@@ -9,4 +9,6 @@ public class MessageConstans {
    public static final int PING = 4;
 
    public static final int MESSAGE_STATUS = 5;
+
+   public static final int MESSAGE_RESEND = 8;
 }
