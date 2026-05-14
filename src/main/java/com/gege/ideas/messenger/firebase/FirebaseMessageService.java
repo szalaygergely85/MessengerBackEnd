@@ -1,5 +1,7 @@
 package com.gege.ideas.messenger.firebase;
 
+import com.google.firebase.messaging.AndroidConfig;
+import com.google.firebase.messaging.AndroidConfig.Priority;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
@@ -25,6 +27,21 @@ public class FirebaseMessageService {
          return FirebaseMessaging.getInstance().send(message);
       } catch (Exception e) {
          log.error("Failed to send FCM data message to token {}", token, e);
+         return null;
+      }
+   }
+
+   public String sendHighPriorityDataMessage(String token, Map<String, String> data) {
+      try {
+         Message message = Message
+            .builder()
+            .setToken(token)
+            .putAllData(data)
+            .setAndroidConfig(AndroidConfig.builder().setPriority(Priority.HIGH).build())
+            .build();
+         return FirebaseMessaging.getInstance().send(message);
+      } catch (Exception e) {
+         log.error("Failed to send high-priority FCM data message to token {}", token, e);
          return null;
       }
    }
