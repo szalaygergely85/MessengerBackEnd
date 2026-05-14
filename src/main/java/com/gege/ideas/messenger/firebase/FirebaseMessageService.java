@@ -31,17 +31,26 @@ public class FirebaseMessageService {
       }
    }
 
-   public String sendHighPriorityDataMessage(String token, Map<String, String> data) {
+   public String sendHighPriorityDataMessage(
+      String token,
+      Map<String, String> data
+   ) {
       try {
          Message message = Message
             .builder()
             .setToken(token)
             .putAllData(data)
-            .setAndroidConfig(AndroidConfig.builder().setPriority(Priority.HIGH).build())
+            .setAndroidConfig(
+               AndroidConfig.builder().setPriority(Priority.HIGH).build()
+            )
             .build();
          return FirebaseMessaging.getInstance().send(message);
       } catch (Exception e) {
-         log.error("Failed to send high-priority FCM data message to token {}", token, e);
+         log.error(
+            "Failed to send high-priority FCM data message to token {}",
+            token,
+            e
+         );
          return null;
       }
    }

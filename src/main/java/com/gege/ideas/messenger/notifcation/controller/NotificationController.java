@@ -25,7 +25,9 @@ public class NotificationController {
    ) {
       NotificationService service = factory.getService(type);
       if (service == null) {
-         throw new IllegalArgumentException("Unknown notification type: " + type);
+         throw new IllegalArgumentException(
+            "Unknown notification type: " + type
+         );
       }
       return service.sendNotification(userId, data);
    }

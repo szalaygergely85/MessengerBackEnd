@@ -27,7 +27,10 @@ public class CallNotificationService implements NotificationService {
    public String sendNotification(long userId, Map<String, String> data) {
       List<Device> devices = deviceService.getDevices(userId);
       for (Device device : devices) {
-         firebaseService.sendHighPriorityDataMessage(device.getDeviceToken(), data);
+         firebaseService.sendHighPriorityDataMessage(
+            device.getDeviceToken(),
+            data
+         );
       }
       return "OK";
    }
